@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://www.jeanrobertou.com/sitemap.xml
