@@ -1,4 +1,5 @@
-import { KingdomCell, KingdomCellInterface } from "./kingdomCell";
+import { KingdomCell } from "./kingdomCell";
+import { KingdomCellInterface } from "../interfaces";
 
 const kingdom: (KingdomCellInterface | undefined)[] = [
   undefined,

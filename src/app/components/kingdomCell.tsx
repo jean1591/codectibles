@@ -1,5 +1,6 @@
 "use client";
 
+import { KingdomCellInterface } from "../interfaces";
 import { classNames } from "@/utils";
 
 const formatGrid = (index: number): string | undefined => {
@@ -21,11 +22,6 @@ const formatGrid = (index: number): string | undefined => {
     return "rounded-br-3xl";
   }
 };
-
-export interface KingdomCellInterface {
-  icon: string;
-  size: number;
-}
 
 interface KingdomCellProps {
   cell?: KingdomCellInterface;
