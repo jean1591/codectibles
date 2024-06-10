@@ -1,9 +1,8 @@
-import { classNames } from "@/utils";
-import { ReactNode } from "react";
-
-const GRID_SIZE = 7;
+import { KingdomCell, KingdomCellInterface } from "./kingdomCell";
 
 const formatGrid = (index: number): string | undefined => {
+  const GRID_SIZE = 7;
+
   if (index === 0) {
     return "rounded-tl-3xl";
   }
@@ -21,12 +20,7 @@ const formatGrid = (index: number): string | undefined => {
   }
 };
 
-interface KingdomType {
-  icon: string;
-  size: number;
-}
-
-const kingdom: (KingdomType | undefined)[] = [
+const kingdom: (KingdomCellInterface | undefined)[] = [
   undefined,
   undefined,
   undefined,
@@ -42,8 +36,8 @@ const kingdom: (KingdomType | undefined)[] = [
   undefined,
   undefined,
   { icon: "🌾", size: 1 },
-  undefined,
-  undefined,
+  { icon: "🌾", size: 2 },
+  { icon: "🌾", size: 3 },
   undefined,
   undefined,
   undefined,
@@ -83,41 +77,9 @@ export const Kingdom = () => {
     <div className="flex items-center justify-center">
       <div className="grid grid-cols-7">
         {kingdom.map((cell, index) => (
-          <KingdomCell className={formatGrid(index)}>
-            {cell ? (
-              <div>
-                <p className={classNames(
-                    cell.size === 1 ? "text-xl" : "",
-                    cell.size === 2 ? "text-3xl" : "",
-                    cell.size === 3 ? "text-6xl" : "",
-                    )}>{cell.icon}</p>
-                <p className="text-normal absolute bottom-1 right-1 text-slate-500">
-                  {cell.size}
-                </p>
-              </div>
-            ) : undefined}
-          </KingdomCell>
+          <KingdomCell key={index} cell={cell} className={formatGrid(index)} />
         ))}
       </div>
-    </div>
-  );
-};
-
-const KingdomCell = ({
-  children,
-  className,
-}: {
-  children?: ReactNode;
-  className?: string;
-}) => {
-  return (
-    <div
-      className={classNames(
-        className ? className : "",
-        "relative flex h-12 w-12 sm:h-24 sm:w-24 items-center justify-center border-[1px] border-br border-dashed border-slate-300 bg-slate-700"
-      )}
-    >
-      {children}
     </div>
   );
 };
