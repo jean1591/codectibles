@@ -1,3 +1,4 @@
+import { ContinueButton } from "./components/continueButton";
 import { Kingdom } from "./components/kingdom";
 
 export default function Home() {
@@ -5,6 +6,10 @@ export default function Home() {
     <div>
       <div className="mt-20">
         <Kingdom />
+      </div>
+
+      <div className="mt-12">
+        <ContinueButton />
       </div>
     </div>
   );

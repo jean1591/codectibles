@@ -7,19 +7,19 @@ const formatGrid = (index: number): string | undefined => {
   const GRID_SIZE = 7;
 
   if (index === 0) {
-    return "rounded-tl-3xl";
+    return "rounded-tl-xl";
   }
 
   if (index === GRID_SIZE - 1) {
-    return "rounded-tr-3xl";
+    return "rounded-tr-xl";
   }
 
   if (index === GRID_SIZE ** 2 - GRID_SIZE) {
-    return "rounded-bl-3xl";
+    return "rounded-bl-xl";
   }
 
   if (index === GRID_SIZE ** 2 - 1) {
-    return "rounded-br-3xl";
+    return "rounded-br-xl";
   }
 };
 
