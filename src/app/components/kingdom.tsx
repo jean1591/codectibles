@@ -1,25 +1,5 @@
 import { KingdomCell, KingdomCellInterface } from "./kingdomCell";
 
-const formatGrid = (index: number): string | undefined => {
-  const GRID_SIZE = 7;
-
-  if (index === 0) {
-    return "rounded-tl-3xl";
-  }
-
-  if (index === GRID_SIZE - 1) {
-    return "rounded-tr-3xl";
-  }
-
-  if (index === GRID_SIZE ** 2 - GRID_SIZE) {
-    return "rounded-bl-3xl";
-  }
-
-  if (index === GRID_SIZE ** 2 - 1) {
-    return "rounded-br-3xl";
-  }
-};
-
 const kingdom: (KingdomCellInterface | undefined)[] = [
   undefined,
   undefined,
@@ -77,7 +57,7 @@ export const Kingdom = () => {
     <div className="flex items-center justify-center">
       <div className="grid grid-cols-7">
         {kingdom.map((cell, index) => (
-          <KingdomCell key={index} cell={cell} className={formatGrid(index)} />
+          <KingdomCell key={index} cell={cell} index={index} />
         ))}
       </div>
     </div>

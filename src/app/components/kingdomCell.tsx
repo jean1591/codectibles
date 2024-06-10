@@ -1,21 +1,45 @@
+"use client";
+
 import { classNames } from "@/utils";
+
+const formatGrid = (index: number): string | undefined => {
+  const GRID_SIZE = 7;
+
+  if (index === 0) {
+    return "rounded-tl-3xl";
+  }
+
+  if (index === GRID_SIZE - 1) {
+    return "rounded-tr-3xl";
+  }
+
+  if (index === GRID_SIZE ** 2 - GRID_SIZE) {
+    return "rounded-bl-3xl";
+  }
+
+  if (index === GRID_SIZE ** 2 - 1) {
+    return "rounded-br-3xl";
+  }
+};
 
 export interface KingdomCellInterface {
   icon: string;
   size: number;
 }
 
-export const KingdomCell = ({
-  cell,
-  className,
-}: {
+interface KingdomCellProps {
   cell?: KingdomCellInterface;
-  className?: string;
-}) => {
+  index: number;
+}
+
+export const KingdomCell = ({ cell, index }: KingdomCellProps) => {
+  const borderStyle = formatGrid(index);
+
   return (
     <div
+      onClick={() => console.log("Clicked", index)}
       className={classNames(
-        className ? className : "",
+        borderStyle ? borderStyle : "",
         "relative flex h-12 w-12 sm:h-24 sm:w-24 items-center justify-center border-[1px] border-br border-dashed border-slate-300 bg-slate-700"
       )}
     >
@@ -34,7 +58,9 @@ export const KingdomCell = ({
             {cell.size}
           </p>
         </div>
-      ) : undefined}
+      ) : (
+        <div></div>
+      )}
     </div>
   );
 };
