@@ -1,31 +1,31 @@
 import { Kingdom } from "@/app/interfaces";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
-import { emptyKingdom } from "./emptyKingdom";
+import { preFilledKingdom } from "./preFilledlKingdom";
 
 export interface KingdomState {
+  coins: number;
   kingdom: Kingdom;
-  selectedCell: number | null;
 }
 
 const initialState: KingdomState = {
-  kingdom: emptyKingdom,
-  selectedCell: null,
+  coins: 10,
+  kingdom: preFilledKingdom,
 };
 
 export const kingdomSlice = createSlice({
   name: "kingdom",
   initialState,
   reducers: {
+    setCoins: (state, action: PayloadAction<number>) => {
+      state.coins = action.payload
+    },
     setKingdom: (state, action: PayloadAction<Kingdom>) => {
       state.kingdom = action.payload;
-    },
-    setSelectedCell: (state, action: PayloadAction<number | null>) => {
-      state.selectedCell = action.payload;
     },
   },
 });
 
-export const { setKingdom, setSelectedCell } = kingdomSlice.actions;
+export const { setCoins, setKingdom } = kingdomSlice.actions;
 
 export default kingdomSlice.reducer;

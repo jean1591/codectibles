@@ -3,4 +3,4 @@ export interface KingdomCellInterface {
   size: number;
 }
 
-export type Kingdom = (KingdomCellInterface | undefined)[];
+export type Kingdom = (KingdomCellInterface | null)[];
