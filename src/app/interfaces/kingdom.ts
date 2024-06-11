@@ -1,3 +1,6 @@
+export type Asset = "🌾" | "🌳" | "🏰";
+
+export type AssetPrice = { icon: Asset; price: number };
 export interface KingdomCellInterface {
   icon: string;
   size: number;

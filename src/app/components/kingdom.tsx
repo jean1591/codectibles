@@ -1,8 +1,11 @@
 "use client";
 
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../lib/store/store";
+import { assetPrices, getPriceByAsset } from "@/utils/assetPrices";
 import { setCoins, setKingdom } from "../lib/store/features/kingdom/slice";
+import { useDispatch, useSelector } from "react-redux";
+
+import { AssetPrice } from "../interfaces";
+import { RootState } from "../lib/store/store";
 import { classNames } from "@/utils";
 import { useState } from "react";
 
@@ -13,35 +16,45 @@ export const Kingdom = () => {
   const [isPopoverVisible, setIsPopoverVisibe] = useState(false);
   const [selectedCell, setSelectedCell] = useState<number | null>(null);
 
+  const handleCellOnClick = (index: number) => {
+    if (selectedCell === index) {
+      setIsPopoverVisibe(false);
+      setSelectedCell(null);
+    } else {
+      setIsPopoverVisibe(true);
+      setSelectedCell(index);
+    }
+  };
+
+  const handlePriceOnClick = ({ icon, price }: AssetPrice, index: number) => {
+    const updatedKingdom = [...kingdom];
+
+    if (updatedKingdom[index] === null && coins >= price) {
+      updatedKingdom[index] = { icon, size: 1 };
+      dispatch(setCoins(coins - price));
+    } else if (updatedKingdom[index] !== null) {
+      updatedKingdom[index] = null;
+      dispatch(setCoins(coins + price));
+    }
+
+    dispatch(setKingdom(updatedKingdom));
+  };
+
+  const handleAssetOnRemove = (index: number) => {
+    const updatedKingdom = [...kingdom];
+    updatedKingdom[index] = null;
+
+    dispatch(setCoins(coins + getPriceByAsset(kingdom[selectedCell!]?.icon)));
+    dispatch(setKingdom(updatedKingdom));
+  };
+
   return (
     <div className="flex items-center justify-center">
       <div className="relative grid grid-cols-7">
         {kingdom.map((cell, index) => (
           <div
             key={index}
-            onClick={() => {
-              // Displaying popover
-              if (selectedCell === index) {
-                setIsPopoverVisibe(false);
-                setSelectedCell(null);
-              } else {
-                setIsPopoverVisibe(true);
-                setSelectedCell(index);
-              }
-
-              // Updating kingdom
-              const updatedKingdom = [...kingdom];
-
-              if (updatedKingdom[index] === null && coins >= 5) {
-                updatedKingdom[index] = { icon: "🏰", size: 1 };
-                dispatch(setCoins(coins - 5));
-              } else if (updatedKingdom[index] !== null) {
-                updatedKingdom[index] = null;
-                dispatch(setCoins(coins + 5));
-              }
-
-              dispatch(setKingdom(updatedKingdom));
-            }}
+            onClick={() => handleCellOnClick(index)}
             className={classNames(
               selectedCell === index ? "bg-slate-800" : "bg-slate-700",
               "relative h-24 w-24 flex items-center justify-center border-[1px] border-slate-300 hover:bg-slate-800"
@@ -67,8 +80,10 @@ export const Kingdom = () => {
               <div></div>
             )}
 
-            {/* Popover */}
-            {selectedCell === index && isPopoverVisible ? (
+            {/* Select Popover */}
+            {selectedCell === index &&
+            isPopoverVisible &&
+            kingdom[selectedCell] === null ? (
               <div
                 className={classNames(
                   isPopoverVisible ? "visible" : "hidden",
@@ -81,12 +96,63 @@ export const Kingdom = () => {
                     key={icon}
                     className="py-2 flex items-center justify-between"
                   >
-                    <p className="h-12 w-12 text-3xl bg-gradient-to-r from-slate-500 to-slate-300 rounded-md flex items-center justify-center">
+                    <p
+                      className={classNames(
+                        coins >= price
+                          ? "bg-gradient-to-r from-slate-300 to-slate-500"
+                          : "bg-slate-700",
+                        "h-12 w-12 text-3xl rounded-md flex items-center justify-center"
+                      )}
+                    >
                       {icon}
                     </p>
-                    <button className="h-12 text-2xl text-right text-slate-800 bg-gradient-to-r from-slate-300 to-slate-500 px-4 py-2 rounded-md">{`${price} 💎`}</button>
+                    <button
+                      onClick={() => handlePriceOnClick({ icon, price }, index)}
+                      disabled={price >= coins}
+                      className={classNames(
+                        coins >= price
+                          ? "bg-gradient-to-r from-slate-300 to-slate-500 text-slate-800"
+                          : "bg-slate-700 text-slate-500",
+                        "h-12 text-2xl text-right px-4 py-2 rounded-md"
+                      )}
+                    >{`${price} 💎`}</button>
                   </div>
                 ))}
+              </div>
+            ) : (
+              <div></div>
+            )}
+
+            {selectedCell === index &&
+            isPopoverVisible &&
+            kingdom[selectedCell] !== null ? (
+              <div
+                className={classNames(
+                  isPopoverVisible ? "visible" : "hidden",
+                  selectedCell < 7 ? "top-20" : "bottom-20",
+                  "z-50 absolute -left-1/2 bg-slate-800 p-4 rounded-lg w-48 border border-slate-300"
+                )}
+              >
+                <div className="py-2">
+                  <p className="text-xl text-slate-400 rounded-md flex items-center justify-center">
+                    {`Delete ${kingdom[selectedCell]?.icon},`}
+                  </p>
+                  <p className="text-xl text-slate-400 rounded-md flex items-center justify-center">
+                    {`get ${getPriceByAsset(
+                      kingdom[selectedCell]?.icon
+                    )} 💎 back`}
+                  </p>
+                  <div className="mt-4 flex items-center justify-center">
+                    <button
+                      onClick={() => handleAssetOnRemove(index)}
+                      className={classNames(
+                        "h-12 text-2xl text-right px-4 py-2 rounded-md bg-gradient-to-r from-slate-300 to-slate-500 text-slate-800"
+                      )}
+                    >
+                      {"Remove"}
+                    </button>
+                  </div>
+                </div>
               </div>
             ) : (
               <div></div>
@@ -97,9 +163,3 @@ export const Kingdom = () => {
     </div>
   );
 };
-
-const assetPrices = [
-  { icon: "🌾", price: 2 },
-  { icon: "🌳", price: 4 },
-  { icon: "🏰", price: 8 },
-];
