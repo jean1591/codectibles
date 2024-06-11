@@ -1,7 +1,13 @@
+"use client";
+
+import { useDispatch, useSelector } from "react-redux";
+
 import { KingdomCell } from "./kingdomCell";
 import { KingdomCellInterface } from "../interfaces";
+import { RootState } from "../lib/store/store";
+import { setKingdom } from "../lib/store/features/kingdom/slice";
 
-const kingdom: (KingdomCellInterface | undefined)[] = [
+const kingdomFromDB: (KingdomCellInterface | undefined)[] = [
   undefined,
   undefined,
   undefined,
@@ -54,6 +60,12 @@ const kingdom: (KingdomCellInterface | undefined)[] = [
 ];
 
 export const Kingdom = () => {
+  // Get kingdom from DB and dispatch to reducer
+  const dispatch = useDispatch();
+  dispatch(setKingdom(kingdomFromDB));
+
+  const { kingdom } = useSelector((state: RootState) => state.kingdom);
+
   return (
     <div className="flex items-center justify-center">
       <div className="grid grid-cols-7">

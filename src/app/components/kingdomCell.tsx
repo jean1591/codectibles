@@ -1,7 +1,13 @@
-"use client";
+import { Kingdom, KingdomCellInterface } from "../interfaces";
+import {
+  setKingdom,
+  setSelectedCell,
+} from "../lib/store/features/kingdom/slice";
+import { useDispatch, useSelector } from "react-redux";
 
-import { KingdomCellInterface } from "../interfaces";
+import { RootState } from "../lib/store/store";
 import { classNames } from "@/utils";
+import { useEffect } from "react";
 
 const formatGrid = (index: number): string | undefined => {
   const GRID_SIZE = 7;
@@ -29,14 +35,37 @@ interface KingdomCellProps {
 }
 
 export const KingdomCell = ({ cell, index }: KingdomCellProps) => {
+  const dispatch = useDispatch();
+  const { kingdom, selectedCell } = useSelector(
+    (state: RootState) => state.kingdom
+  );
+
   const borderStyle = formatGrid(index);
+
+  const handleCellOnClick = () => {
+    console.log("🚀 handleCellOnClick:", { selectedCell });
+
+    dispatch(setSelectedCell(selectedCell ? null : index));
+  };
+
+  useEffect(() => {
+    console.log("🚀 useEffect:", { selectedCell });
+
+    if (selectedCell && kingdom[selectedCell] === undefined) {
+      const updatedKingdom: Kingdom = [...kingdom];
+      updatedKingdom[selectedCell] = { icon: "🌾", size: 1 };
+
+      dispatch(setKingdom(updatedKingdom));
+    }
+  }, [selectedCell]);
 
   return (
     <div
-      onClick={() => console.log("Clicked", index)}
+      onClick={handleCellOnClick}
       className={classNames(
         borderStyle ? borderStyle : "",
-        "relative flex h-12 w-12 sm:h-24 sm:w-24 items-center justify-center border-[1px] border-br border-dashed border-slate-300 bg-slate-700"
+        index === selectedCell ? "bg-black" : "bg-slate-700",
+        "relative flex h-12 w-12 sm:h-24 sm:w-24 items-center justify-center border-[1px] border-br border-dashed border-slate-300 "
       )}
     >
       {cell ? (
