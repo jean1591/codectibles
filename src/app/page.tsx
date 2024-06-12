@@ -1,5 +1,6 @@
-import { Prizes } from "./components/prizes";
 import { Kingdom } from "./components/kingdom";
+import { PrizeButton } from "./components/prizeButton";
+import { PrizeModal } from "./components/prizeModal";
 
 export default function Home() {
   return (
@@ -9,10 +10,12 @@ export default function Home() {
           <Kingdom />
         </div>
 
-        <div className="col-span-1 border border-slate-300 rounded-2xl order-1 sm:order-2">
-          <Prizes />
+        <div className="col-span-1 order-1 sm:order-2">
+          <PrizeButton />
         </div>
       </div>
+
+      <PrizeModal />
     </div>
   );
 }

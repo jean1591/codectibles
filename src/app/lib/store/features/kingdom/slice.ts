@@ -6,13 +6,11 @@ import { preFilledKingdom } from "./preFilledlKingdom";
 export interface KingdomState {
   coins: number;
   kingdom: Kingdom;
-  prizes: Prize[];
 }
 
 const initialState: KingdomState = {
   coins: 10,
   kingdom: preFilledKingdom,
-  prizes: []
 };
 
 export const kingdomSlice = createSlice({
