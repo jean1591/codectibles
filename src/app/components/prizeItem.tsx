@@ -3,14 +3,9 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../lib/store/store";
 import { setCoins } from "../lib/store/features/kingdom/slice";
+import { Prize } from "../interfaces";
 
-export const ClaimPrizeItem = ({
-  title,
-  prize,
-}: {
-  title: string;
-  prize: number;
-}) => {
+export const PrizeItem = ({ title, prize }: Prize) => {
   const dispatch = useDispatch();
   const { coins } = useSelector((state: RootState) => state.kingdom);
 
@@ -19,7 +14,7 @@ export const ClaimPrizeItem = ({
       <p className="text-left text-slate-300 text-lg">{title}</p>
 
       <button
-        className="flex items-center justify-center bg-red-400/75 hover:bg-red-300/75 text-slate-300 text-lg text-right px-4 py-2 rounded-full uppercase"
+        className="flex items-center justify-center bg-red-300/75 hover:bg-red-400/75 text-slate-300 text-lg text-right px-4 py-2 rounded-full uppercase"
         onClick={() => {
           dispatch(setCoins(coins + prize));
         }}

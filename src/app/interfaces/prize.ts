@@ -1,0 +1,1 @@
+export interface Prize { title: string; prize: number }

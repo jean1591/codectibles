@@ -1,4 +1,4 @@
-import { ClaimPrizeItem } from "./components/claimPrizeItem";
+import { Prizes } from "./components/prizes";
 import { Kingdom } from "./components/kingdom";
 
 export default function Home() {
@@ -10,8 +10,7 @@ export default function Home() {
         </div>
 
         <div className="col-span-1 border border-slate-300 rounded-2xl order-1 sm:order-2">
-          <ClaimPrizeItem title="12 PR milestone 📍" prize={10} />
-          <ClaimPrizeItem title="Documentation guru 📝" prize={50} />
+          <Prizes />
         </div>
       </div>
     </div>

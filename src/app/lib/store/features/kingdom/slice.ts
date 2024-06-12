@@ -1,4 +1,4 @@
-import { Kingdom } from "@/app/interfaces";
+import { Kingdom, Prize } from "@/app/interfaces";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import { preFilledKingdom } from "./preFilledlKingdom";
@@ -6,11 +6,13 @@ import { preFilledKingdom } from "./preFilledlKingdom";
 export interface KingdomState {
   coins: number;
   kingdom: Kingdom;
+  prizes: Prize[];
 }
 
 const initialState: KingdomState = {
   coins: 10,
   kingdom: preFilledKingdom,
+  prizes: []
 };
 
 export const kingdomSlice = createSlice({
