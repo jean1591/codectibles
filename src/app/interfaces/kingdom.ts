@@ -1,9 +1,5 @@
 export type Asset = "🌾" | "🌳" | "🏰";
 
-export type AssetPrice = { icon: Asset; price: number };
-export interface KingdomCellInterface {
-  icon: string;
-  size: number;
-}
+export type AssetDetails = { icon: Asset; level: number; price: number };
 
-export type Kingdom = (KingdomCellInterface | null)[];
+export type Kingdom = (AssetDetails | null)[];

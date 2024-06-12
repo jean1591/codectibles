@@ -1,10 +1,10 @@
 "use client";
 
-import { assetPrices, getPriceByAsset } from "@/utils/assetPrices";
+import { assetPricesLevel1, getPriceByAsset } from "@/utils/assetPrices";
 import { setCoins, setKingdom } from "../lib/store/features/kingdom/slice";
 import { useDispatch, useSelector } from "react-redux";
 
-import { AssetPrice } from "../interfaces";
+import { AssetDetails } from "../interfaces";
 import { RootState } from "../lib/store/store";
 import { classNames } from "@/utils";
 import { useState } from "react";
@@ -26,11 +26,11 @@ export const Kingdom = () => {
     }
   };
 
-  const handlePriceOnClick = ({ icon, price }: AssetPrice, index: number) => {
+  const handlePriceOnClick = ({ icon, price }: AssetDetails, index: number) => {
     const updatedKingdom = [...kingdom];
 
     if (updatedKingdom[index] === null && coins >= price) {
-      updatedKingdom[index] = { icon, size: 1 };
+      updatedKingdom[index] = { icon, level: 1, price };
       dispatch(setCoins(coins - price));
     } else if (updatedKingdom[index] !== null) {
       updatedKingdom[index] = null;
@@ -51,7 +51,7 @@ export const Kingdom = () => {
   return (
     <div className="flex items-center justify-center">
       <div className="relative grid grid-cols-7">
-        {kingdom.map((cell, index) => (
+        {kingdom.map((asset, index) => (
           <div
             key={index}
             onClick={() => handleCellOnClick(index)}
@@ -61,19 +61,19 @@ export const Kingdom = () => {
             )}
           >
             {/* Asset */}
-            {cell ? (
+            {asset ? (
               <div>
                 <p
                   className={classNames(
-                    cell.size === 1 ? "text-base sm:text-xl" : "",
-                    cell.size === 2 ? "text-base sm:text-4xl" : "",
-                    cell.size === 3 ? "text-base sm:text-6xl" : ""
+                    asset.level === 1 ? "text-base sm:text-xl" : "",
+                    asset.level === 2 ? "text-base sm:text-4xl" : "",
+                    asset.level === 3 ? "text-base sm:text-6xl" : ""
                   )}
                 >
-                  {cell.icon}
+                  {asset.icon}
                 </p>
                 <p className="text-normal absolute bottom-1 right-1 text-slate-500">
-                  {cell.size}
+                  {asset.level}
                 </p>
               </div>
             ) : (
@@ -91,31 +91,31 @@ export const Kingdom = () => {
                   "z-50 absolute -left-1/2 bg-slate-800 p-4 rounded-lg w-48 border border-slate-300"
                 )}
               >
-                {assetPrices.map(({ icon, price }) => (
+                {assetPricesLevel1.map((asset) => (
                   <div
-                    key={icon}
+                    key={asset.icon}
                     className="py-2 flex items-center justify-between"
                   >
                     <p
                       className={classNames(
-                        coins >= price
+                        coins >= asset.price
                           ? "bg-gradient-to-r from-slate-300 to-slate-500"
                           : "bg-slate-700",
                         "h-12 w-12 text-3xl rounded-md flex items-center justify-center"
                       )}
                     >
-                      {icon}
+                      {asset.icon}
                     </p>
                     <button
-                      onClick={() => handlePriceOnClick({ icon, price }, index)}
-                      disabled={price >= coins}
+                      onClick={() => handlePriceOnClick(asset, index)}
+                      disabled={asset.price > coins}
                       className={classNames(
-                        coins >= price
+                        coins >= asset.price
                           ? "bg-gradient-to-r from-slate-300 to-slate-500 text-slate-800"
                           : "bg-slate-700 text-slate-500",
                         "h-12 text-2xl text-right px-4 py-2 rounded-md"
                       )}
-                    >{`${price} 💎`}</button>
+                    >{`${asset.price} 💎`}</button>
                   </div>
                 ))}
               </div>
@@ -133,7 +133,7 @@ export const Kingdom = () => {
                   "z-50 absolute -left-1/2 bg-slate-800 p-4 rounded-lg w-48 border border-slate-300"
                 )}
               >
-                <div className="py-2">
+                <div className="mt-4">
                   <p className="text-xl text-slate-400 rounded-md flex items-center justify-center">
                     {`Delete ${kingdom[selectedCell]?.icon},`}
                   </p>
