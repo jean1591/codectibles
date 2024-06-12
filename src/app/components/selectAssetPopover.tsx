@@ -5,6 +5,7 @@ import { assetPricesLevel1 } from "@/utils/assetPrices";
 import { AssetDetails } from "../interfaces";
 import { RootState } from "../lib/store/store";
 import { classNames } from "@/utils";
+import { Popover } from "./ui/popover";
 
 export const SelectAssetPopover = ({
   index,
@@ -37,12 +38,9 @@ export const SelectAssetPopover = ({
       {selectedCell === index &&
         isPopoverVisible &&
         kingdom[selectedCell] === null && (
-          <div
-            className={classNames(
-              isPopoverVisible ? "visible" : "hidden",
-              selectedCell < 7 ? "top-20" : "bottom-20",
-              "z-50 absolute -left-1/2 bg-slate-800 p-4 rounded-lg w-48 border border-slate-300"
-            )}
+          <Popover
+            isPopoverVisible={isPopoverVisible}
+            selectedCell={selectedCell}
           >
             {assetPricesLevel1.map((asset) => (
               <div
@@ -71,7 +69,7 @@ export const SelectAssetPopover = ({
                 >{`${asset.price} 💎`}</button>
               </div>
             ))}
-          </div>
+          </Popover>
         )}
     </div>
   );

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { RootState } from "../lib/store/store";
 import { classNames } from "@/utils";
+import { Popover } from "./ui/popover";
 
 export const RemoveAssetPopover = ({
   index,
@@ -30,12 +31,9 @@ export const RemoveAssetPopover = ({
       {selectedCell === index &&
         isPopoverVisible &&
         kingdom[selectedCell] !== null && (
-          <div
-            className={classNames(
-              isPopoverVisible ? "visible" : "hidden",
-              selectedCell < 7 ? "top-20" : "bottom-20",
-              "z-50 absolute -left-1/2 bg-slate-800 p-4 rounded-lg w-48 border border-slate-300"
-            )}
+          <Popover
+            isPopoverVisible={isPopoverVisible}
+            selectedCell={selectedCell}
           >
             <div>
               <p className="text-xl text-slate-400 rounded-md flex items-center justify-center">
@@ -55,7 +53,7 @@ export const RemoveAssetPopover = ({
                 </button>
               </div>
             </div>
-          </div>
+          </Popover>
         )}
     </div>
   );
