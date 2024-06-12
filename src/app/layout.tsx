@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import { Navbar } from "./components/navbar";
 import { StoreProvider } from "./lib/store/storeProvider";
 import { classNames } from "@/utils";
+import { Banner } from "./components/banner";
 
 const inter = Inter({ subsets: ["latin"] });
 export default function RootLayout({
@@ -17,6 +18,7 @@ export default function RootLayout({
         <body
           className={classNames(inter.className, "bg-slate-800 text-slate-100")}
         >
+          <Banner/>
           <Navbar />
           <div className="my-16 px-4 sm:px-0 mx-auto max-w-6xl min-h-screen">
             {children}
