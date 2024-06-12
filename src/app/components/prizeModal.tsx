@@ -53,14 +53,14 @@ export const PrizeModal = () => {
                       aria-hidden="true"
                     />
                   </div>
-                  <div className="mt-3 text-center sm:mt-5">
+                  <div className="mt-4 text-center sm:mt-8">
                     <DialogTitle
                       as="h3"
                       className="text-lg font-semibold leading-6 text-slate-300"
                     >
                       Collect your prizes !
                     </DialogTitle>
-                    <div className="mt-2">
+                    <div className="mt-4">
                       <p className="text-base">
                         Merge, approve or comment PR to earn prizes !
                       </p>
