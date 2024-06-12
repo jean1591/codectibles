@@ -1,2 +1,2 @@
 export * from "./kingdom";
-export * from "./prize";
+export * from "./rewards";

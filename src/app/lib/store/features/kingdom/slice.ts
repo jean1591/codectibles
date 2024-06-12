@@ -1,4 +1,4 @@
-import { Kingdom, Prize } from "@/app/interfaces";
+import { Kingdom, Reward } from "@/app/interfaces";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import { preFilledKingdom } from "./preFilledlKingdom";

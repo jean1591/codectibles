@@ -11,18 +11,18 @@ import {
 import { PiGift } from "react-icons/pi";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../lib/store/store";
-import { setIsPrizesModalOpen } from "../lib/store/features/prize/slice";
-import { Prizes } from "./prizes";
+import { setIsRewardsModalOpen } from "../lib/store/features/rewards/slice";
+import { Rewards } from "./rewards";
 
-export const PrizeModal = () => {
+export const RewardsModal = () => {
   const dispatch = useDispatch();
-  const { isPrizesModalOpen } = useSelector((state: RootState) => state.prize);
+  const { isRewardsModalOpen } = useSelector((state: RootState) => state.rewards);
 
   return (
-    <Transition show={isPrizesModalOpen}>
+    <Transition show={isRewardsModalOpen}>
       <Dialog
         className="relative z-50"
-        onClose={() => dispatch(setIsPrizesModalOpen(false))}
+        onClose={() => dispatch(setIsRewardsModalOpen(false))}
       >
         <TransitionChild
           enter="ease-out duration-300"
@@ -69,13 +69,13 @@ export const PrizeModal = () => {
                 </div>
                 <div className="mt-8 sm:mt-16">
                   <div className="my-16">
-                    <Prizes />
+                    <Rewards />
                   </div>
 
                   <button
                     type="button"
                     className="inline-flex w-full justify-center rounded-md bg-red-400 px-3 py-2 text-base font-medium text-slate-100 shadow-sm hover:bg-red-400"
-                    onClick={() => dispatch(setIsPrizesModalOpen(false))}
+                    onClick={() => dispatch(setIsRewardsModalOpen(false))}
                   >
                     Return to kingdom 👑
                   </button>

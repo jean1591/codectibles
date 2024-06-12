@@ -1,7 +1,7 @@
 import { ActivityFeed } from "./components/activityFeed";
 import { Kingdom } from "./components/kingdom";
-import { PrizeButton } from "./components/prizeButton";
-import { PrizeModal } from "./components/prizeModal";
+import { RewardButton } from "./components/getRewardsButton";
+import { RewardsModal } from "./components/rewardsModal";
 
 export default function Home() {
   return (
@@ -12,7 +12,7 @@ export default function Home() {
         </div>
 
         <div className="col-span-1 order-1 sm:order-2">
-          <PrizeButton />
+          <RewardButton />
           <div className="mt-20 hidden sm:block">
             <ActivityFeed />
           </div>
@@ -23,7 +23,7 @@ export default function Home() {
         <ActivityFeed />
       </div>
 
-      <PrizeModal />
+      <RewardsModal />
     </div>
   );
 }
