@@ -1,8 +1,8 @@
 import { createClient } from "@/utils/supabase/server";
-import { ActivityFeed } from "./components/activityFeed";
-import { Kingdom } from "./components/kingdom";
-import { RewardsModal } from "./components/rewardsModal";
 import { redirect } from "next/navigation";
+import { Kingdom } from "../components/kingdom";
+import { ActivityFeed } from "../components/activityFeed";
+import { RewardsModal } from "../components/rewardsModal";
 
 export default async function Home() {
   const supabase = createClient();
