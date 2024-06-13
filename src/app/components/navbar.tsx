@@ -41,7 +41,7 @@ export const Navbar = () => {
         <RewardButton />
         <button onClick={onSignOut}>
           <Link href="/login">
-            <PiSignOut className="h-6 w-6" />
+            <PiSignOut className="h-5 w-5 sm:h-6 sm:w-6" />
           </Link>
         </button>
       </div>

@@ -60,11 +60,11 @@ export const RewardsModal = () => {
                       as="h3"
                       className="text-lg font-semibold leading-6 text-slate-300"
                     >
-                      Collect your prizes !
+                      Collect your rewards !
                     </DialogTitle>
                     <div className="mt-4">
                       <p className="text-base">
-                        Merge, approve or comment PR to earn prizes !
+                        Merge, approve or comment PR to earn rewards !
                       </p>
                     </div>
                   </div>
