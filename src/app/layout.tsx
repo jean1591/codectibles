@@ -20,7 +20,7 @@ export default function RootLayout({
         >
           <Banner />
           <Navbar />
-          <div className="my-16 px-4 sm:px-0 mx-auto max-w-3xl min-h-screen">
+          <div className="my-16 px-4 sm:px-0 mx-auto max-w-3xl min-h-screen flex justify-center">
             {children}
           </div>
         </body>

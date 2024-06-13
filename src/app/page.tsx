@@ -5,9 +5,7 @@ import { RewardsModal } from "./components/rewardsModal";
 export default function Home() {
   return (
     <div>
-      <div className="mt-16">
-        <Kingdom />
-      </div>
+      <Kingdom />
 
       <div className="mt-16">
         <ActivityFeed />
