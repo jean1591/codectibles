@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { setUsername } from "../lib/store/features/user/slice";
+import { PiSignOut } from "react-icons/pi";
+import Link from "next/link";
 
 export const Navbar = () => {
   const dispatch = useDispatch();
@@ -27,12 +29,21 @@ export const Navbar = () => {
     })();
   }, []);
 
+  const onSignOut = async () => {
+    await supabase.auth.signOut();
+  };
+
   return (
     <div className="px-4 md:px-0 py-4 mx-auto max-w-3xl flex items-center justify-between border-b border-slate-300 text-base sm:text-xl font-medium">
       <div>Code Kingdom 👑</div>
       <div className="flex items-center justify-end gap-x-4 sm:gap-x-8 text-sm sm:text-xl">
         <div>{coins} 💎</div>
         <RewardButton />
+        <button onClick={onSignOut}>
+          <Link href="/login">
+            <PiSignOut className="h-6 w-6" />
+          </Link>
+        </button>
       </div>
     </div>
   );
