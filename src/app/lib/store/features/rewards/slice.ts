@@ -1,11 +1,6 @@
-import { Reward } from "@/app/interfaces";
 import type { PayloadAction } from "@reduxjs/toolkit";
+import { Reward } from "@/app/interfaces";
 import { createSlice } from "@reduxjs/toolkit";
-
-const initialRewards: Reward[] = [
-  { title: "12 PR milestone 📍", reward: 10 },
-  { title: "Documentation guru 📝", reward: 50 },
-]
 
 export interface RewardsState {
   isRewardsModalOpen: boolean;
@@ -14,7 +9,7 @@ export interface RewardsState {
 
 const initialState: RewardsState = {
   isRewardsModalOpen: false,
-  rewards: initialRewards,
+  rewards: [],
 };
 
 export const rewardsSlice = createSlice({
@@ -22,14 +17,20 @@ export const rewardsSlice = createSlice({
   initialState,
   reducers: {
     claimReward: (state, action: PayloadAction<string>) => {
-      state.rewards = state.rewards.filter(({title}) => title !== action.payload)
+      state.rewards = state.rewards.filter(
+        ({ title }) => title !== action.payload
+      );
     },
     setIsRewardsModalOpen: (state, action: PayloadAction<boolean>) => {
-      state.isRewardsModalOpen = action.payload
+      state.isRewardsModalOpen = action.payload;
+    },
+    setRewards: (state, action: PayloadAction<Reward[]>) => {
+      state.rewards = action.payload;
     },
   },
 });
 
-export const { claimReward, setIsRewardsModalOpen } = rewardsSlice.actions;
+export const { claimReward, setIsRewardsModalOpen, setRewards } =
+  rewardsSlice.actions;
 
 export default rewardsSlice.reducer;

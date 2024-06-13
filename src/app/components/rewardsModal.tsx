@@ -16,7 +16,9 @@ import { Rewards } from "./rewards";
 
 export const RewardsModal = () => {
   const dispatch = useDispatch();
-  const { isRewardsModalOpen } = useSelector((state: RootState) => state.rewards);
+  const { isRewardsModalOpen } = useSelector(
+    (state: RootState) => state.rewards
+  );
 
   return (
     <Transition show={isRewardsModalOpen}>
