@@ -15,6 +15,7 @@ export const RewardItem = ({ title, reward }: Reward) => {
     dispatch(setCoins(coins + reward));
     dispatch(claimReward(title))
 
+    // rewardType: 'merge' | 'milestone'
     
   }
 

@@ -1,13 +1,14 @@
 "use client";
 
+import { useDispatch, useSelector } from "react-redux";
+
+import Link from "next/link";
+import { PiSignOut } from "react-icons/pi";
 import { RewardButton } from "./getRewardsButton";
 import { RootState } from "../lib/store/store";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { setUsername } from "../lib/store/features/user/slice";
-import { PiSignOut } from "react-icons/pi";
-import Link from "next/link";
+import { useEffect } from "react";
 
 export const Navbar = () => {
   const dispatch = useDispatch();
