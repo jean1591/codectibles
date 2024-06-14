@@ -1,4 +1,6 @@
 export interface Reward {
-  title: string;
+  details: number[];
   reward: number;
+  title: string;
+  type: "merge";
 }

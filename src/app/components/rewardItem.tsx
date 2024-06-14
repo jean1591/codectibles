@@ -1,23 +1,22 @@
 "use client";
 
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../lib/store/store";
-import { setCoins } from "../lib/store/features/kingdom/slice";
+
 import { Reward } from "../interfaces";
+import { RootState } from "../lib/store/store";
 import { claimReward } from "../lib/store/features/rewards/slice";
+import { setCoins } from "../lib/store/features/kingdom/slice";
 
 // TODO: use setCoins(rewards) or setCoins(-rewards)
-export const RewardItem = ({ title, reward }: Reward) => {
+export const RewardItem = ({ reward }: { reward: Reward }) => {
+  const { reward: rewardValue, title } = reward;
   const dispatch = useDispatch();
   const { coins } = useSelector((state: RootState) => state.kingdom);
 
   const onClaimReward = () => {
-    dispatch(setCoins(coins + reward));
-    dispatch(claimReward(title))
-
-    // rewardType: 'merge' | 'milestone'
-    
-  }
+    dispatch(setCoins(coins + rewardValue));
+    dispatch(claimReward(title));
+  };
 
   return (
     <div className="my-8 px-4 flex items-center justify-between">

@@ -5,7 +5,6 @@ import { RewardItem } from "./rewardItem";
 import { RootState } from "../lib/store/store";
 import { setRewards } from "../lib/store/features/rewards/slice";
 import { useEffect } from "react";
-import { rewardsMapper } from "@/utils/rewards/mapper";
 
 export const Rewards = () => {
   const dispatch = useDispatch();
@@ -13,8 +12,7 @@ export const Rewards = () => {
   useEffect(() => {
     fetch("/api/rewards")
       .then((res) => res.json())
-      .then((data) => {
-        const rewards = rewardsMapper(data);
+      .then((rewards) => {
         dispatch(setRewards(rewards));
       });
   }, []);
@@ -24,8 +22,8 @@ export const Rewards = () => {
   return (
     <div>
       {rewards.length ? (
-        rewards.map(({ reward, title }) => (
-          <RewardItem key={title} title={title} reward={reward} />
+        rewards.map((reward) => (
+          <RewardItem key={reward.title} reward={reward} />
         ))
       ) : (
         <NoRewardsItem />
