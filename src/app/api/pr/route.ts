@@ -3,7 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { createClient } from "@/utils/supabase/server";
 
-export async function GET(request: NextRequest) {
+// TODO: create enum for table name user | pr
+export async function GET(request: NextRequest): Promise<NextResponse> {
   /* Fetch data from DB */
   const supabase = createClient();
   const {
@@ -63,6 +64,55 @@ export async function GET(request: NextRequest) {
 
   if (error) {
     console.error(error.message, { error });
+  }
+
+  return NextResponse.json({ success: true });
+}
+
+export async function PUT(request: NextRequest): Promise<NextResponse> {
+  const { details, reward, type } = await request.json();
+
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("User is not connected");
+  }
+
+  // TODO: create enum for reward type merge
+  if (type === "merge") {
+    const { error: updatePrError } = await supabase
+      .from("pr")
+      .update({ claimed: true })
+      .in("pr_id", details);
+
+    if (updatePrError) {
+      console.error(updatePrError.message, { error: updatePrError });
+    }
+
+    const { data: users } = await supabase
+      .from("user")
+      .select("coins")
+      .eq("auth_user_id", user.id);
+
+    if (!users || users.length === 0) {
+      throw new Error(`No users found for id ${user.id}`);
+    }
+
+    const { coins } = users[0];
+
+    const { error: updateUserError } = await supabase
+      .from("user")
+      .update({ coins: coins + reward })
+      .eq("auth_user_id", user.id);
+
+    if (updateUserError) {
+      console.error(updateUserError.message, {
+        error: JSON.stringify(updateUserError, null, 2),
+      });
+    }
   }
 
   return NextResponse.json({ success: true });

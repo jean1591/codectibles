@@ -9,13 +9,21 @@ import { setCoins } from "../lib/store/features/kingdom/slice";
 
 // TODO: use setCoins(rewards) or setCoins(-rewards)
 export const RewardItem = ({ reward }: { reward: Reward }) => {
-  const { reward: rewardValue, title } = reward;
+  const { details, reward: rewardValue, title, type } = reward;
   const dispatch = useDispatch();
   const { coins } = useSelector((state: RootState) => state.kingdom);
 
-  const onClaimReward = () => {
+  const onClaimReward = async () => {
+    // Update state
     dispatch(setCoins(coins + rewardValue));
     dispatch(claimReward(title));
+
+    // Update DB
+    fetch("/api/pr", {
+      method: "PUT",
+      body: JSON.stringify({ details, reward: rewardValue, type }),
+      headers: { "Content-Type": "application/json" },
+    }).then((res) => res.json());
   };
 
   return (
