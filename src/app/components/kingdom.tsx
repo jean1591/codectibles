@@ -1,19 +1,23 @@
 "use client";
 
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
-import { RootState } from "../lib/store/store";
-import { classNames } from "@/utils";
-import { useState } from "react";
-import { SelectAssetPopover } from "./selectAssetPopover";
-import { RemoveAssetPopover } from "./removeAssetPopover";
 import { Asset } from "./asset";
+import { RemoveAssetPopover } from "./removeAssetPopover";
+import { RootState } from "../lib/store/store";
+import { SelectAssetPopover } from "./selectAssetPopover";
+import { classNames } from "@/utils";
+import { useSelector } from "react-redux";
 
 export const Kingdom = () => {
   const { kingdom } = useSelector((state: RootState) => state.kingdom);
 
   const [isPopoverVisible, setIsPopoverVisibe] = useState(false);
   const [selectedCell, setSelectedCell] = useState<number | null>(null);
+
+  useEffect(() => {
+    fetch("/api/pr").then((res) => res.json());
+  }, []);
 
   const handleCellOnClick = (index: number) => {
     if (selectedCell === index) {
