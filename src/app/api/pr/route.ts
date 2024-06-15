@@ -24,17 +24,12 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     throw new Error(`No users found for id ${user.id}`);
   }
 
-  const { fetched_at, token, user_name } = users[0];
+  const { fetched_at: fetchedAt, token, user_name: userName } = users[0];
 
   /* Fetch data from Github */
-  const formatedCurrentDate = new Date().toISOString().slice(0, 10);
-  const formatedFetchedAt = new Date(fetched_at).toISOString().slice(0, 10);
+  const githubPr = await getLatestGithubMergedPr(fetchedAt, token, userName);
 
-  const url = `https://api.github.com/search/issues?q=type:pr+author:${user_name}+updated:${formatedFetchedAt}..${formatedCurrentDate}`;
-
-  const githubPr = await getLatestGithubMergedPr(url, token);
-
-  /* Exclude PR already in saved DB */
+  /* Exclude PR already saved in DB */
   const { data: dbPr } = await supabase
     .from("pr")
     .select("pr_id")
@@ -43,11 +38,12 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       "pr_id",
       githubPr.map((pr) => pr.id)
     );
+  console.log("🚀 ~ GET ~ dbPr:", dbPr);
   const dbPrIds = dbPr?.map((pr: { pr_id: number }) => pr.pr_id);
 
   let prToSave = [...githubPr];
 
-  if (dbPrIds !== undefined) {
+  if (dbPrIds && dbPrIds.length > 0) {
     prToSave = githubPr.filter((pr) => !dbPrIds.includes(pr.id));
   }
 
@@ -62,8 +58,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     }))
   );
 
+  // TODO: create enum for error message
   if (error) {
-    console.error(error.message, { error });
+    console.error("Error when inserting data: PR", { error });
   }
 
   return NextResponse.json({ success: true });
@@ -89,7 +86,9 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
       .in("pr_id", details);
 
     if (updatePrError) {
-      console.error(updatePrError.message, { error: updatePrError });
+      console.error("Error when updating data: PR", {
+        error: updatePrError,
+      });
     }
 
     const { data: users } = await supabase
@@ -109,7 +108,7 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
       .eq("auth_user_id", user.id);
 
     if (updateUserError) {
-      console.error(updateUserError.message, {
+      console.error("Error when updating data: USER", {
         error: JSON.stringify(updateUserError, null, 2),
       });
     }
@@ -119,9 +118,15 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
 }
 
 const getLatestGithubMergedPr = async (
-  url: string,
-  token: string
+  fetchedAt: Date,
+  token: string,
+  userName: string
 ): Promise<Issue[]> => {
+  const formatedCurrentDate = new Date().toISOString().slice(0, 10);
+  const formatedFetchedAt = new Date(fetchedAt).toISOString().slice(0, 10);
+
+  const url = `https://api.github.com/search/issues?q=type:pr+author:${userName}+updated:${formatedFetchedAt}..${formatedCurrentDate}`;
+
   const githubIssuesResponse = await fetch(url, {
     method: "GET",
     headers: {
