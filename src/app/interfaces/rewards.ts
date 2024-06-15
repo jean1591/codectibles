@@ -2,5 +2,9 @@ export interface Reward {
   details: number[];
   reward: number;
   title: string;
-  type: "merge";
+  type: RewardType;
+}
+
+export enum RewardType {
+  MERGE = "merge",
 }

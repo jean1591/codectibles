@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Reward, RewardType } from "@/app/interfaces";
 
-import { Reward } from "@/app/interfaces";
+import { DbTable } from "../interfaces/database";
 import { createClient } from "@/utils/supabase/server";
 
 export async function GET(
@@ -16,8 +17,8 @@ export async function GET(
   }
 
   const { data: unclaimedPr } = await supabase
-    .from("pr")
-    .select("*")
+    .from(DbTable.PR)
+    .select("pr_id")
     .eq("user_id", user.id)
     .eq("claimed", false);
 
@@ -25,12 +26,16 @@ export async function GET(
     return NextResponse.json([]);
   }
 
-  const formatUnclaimedPrToRewards: Reward = {
-    details: unclaimedPr.map((pr) => pr.pr_id),
-    reward: unclaimedPr.length * 2,
-    type: "merge",
-    title: `${unclaimedPr.length * 2} PR merged ✅`,
-  };
+  const formatUnclaimedPrToRewards = generateUnclaimedPrReward(unclaimedPr);
 
   return NextResponse.json([formatUnclaimedPrToRewards]);
 }
+
+const generateUnclaimedPrReward = (
+  unclaimedPr: { pr_id: number }[]
+): Reward => ({
+  details: unclaimedPr.map((pr) => pr.pr_id),
+  reward: unclaimedPr.length * 2,
+  type: RewardType.MERGE,
+  title: `${unclaimedPr.length * 2} PR merged ✅`,
+});

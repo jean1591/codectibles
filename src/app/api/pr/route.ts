@@ -1,9 +1,10 @@
+import { DbError, DbTable } from "../interfaces/database";
 import { GithubIssue, Issue } from "../interfaces/github";
 import { NextRequest, NextResponse } from "next/server";
 
+import { RewardType } from "@/app/interfaces";
 import { createClient } from "@/utils/supabase/server";
 
-// TODO: create enum for table name user | pr
 export async function GET(request: NextRequest): Promise<NextResponse> {
   /* Fetch data from DB */
   const supabase = createClient();
@@ -16,7 +17,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   }
 
   const { data: users } = await supabase
-    .from("user")
+    .from(DbTable.USER)
     .select("fetched_at, token, user_name")
     .eq("auth_user_id", user.id);
 
@@ -31,14 +32,13 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
   /* Exclude PR already saved in DB */
   const { data: dbPr } = await supabase
-    .from("pr")
+    .from(DbTable.PR)
     .select("pr_id")
     .eq("user_id", user.id)
     .in(
       "pr_id",
       githubPr.map((pr) => pr.id)
     );
-  console.log("🚀 ~ GET ~ dbPr:", dbPr);
   const dbPrIds = dbPr?.map((pr: { pr_id: number }) => pr.pr_id);
 
   let prToSave = [...githubPr];
@@ -48,7 +48,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   }
 
   /* Insert new PR */
-  const { error } = await supabase.from("pr").insert(
+  const { error } = await supabase.from(DbTable.PR).insert(
     prToSave.map((pr) => ({
       claimed: false,
       merged_at: pr.pull_request.merged_at,
@@ -58,9 +58,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     }))
   );
 
-  // TODO: create enum for error message
   if (error) {
-    console.error("Error when inserting data: PR", { error });
+    console.error(`${DbError.INSERT}: PR"`, { error });
   }
 
   return NextResponse.json({ success: true });
@@ -78,21 +77,20 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
     throw new Error("User is not connected");
   }
 
-  // TODO: create enum for reward type merge
-  if (type === "merge") {
+  if (type === RewardType.MERGE) {
     const { error: updatePrError } = await supabase
-      .from("pr")
+      .from(DbTable.PR)
       .update({ claimed: true })
       .in("pr_id", details);
 
     if (updatePrError) {
-      console.error("Error when updating data: PR", {
+      console.error(`${DbError.UPDATE}: PR"`, {
         error: updatePrError,
       });
     }
 
     const { data: users } = await supabase
-      .from("user")
+      .from(DbTable.USER)
       .select("coins")
       .eq("auth_user_id", user.id);
 
@@ -103,12 +101,12 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
     const { coins } = users[0];
 
     const { error: updateUserError } = await supabase
-      .from("user")
+      .from(DbTable.USER)
       .update({ coins: coins + reward })
       .eq("auth_user_id", user.id);
 
     if (updateUserError) {
-      console.error("Error when updating data: USER", {
+      console.error(`${DbError.UPDATE}: USER"`, {
         error: JSON.stringify(updateUserError, null, 2),
       });
     }
