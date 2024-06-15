@@ -81,6 +81,7 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
     const { error: updatePrError } = await supabase
       .from(DbTable.PR)
       .update({ claimed: true })
+      .eq("user_id", user.id)
       .in("pr_id", details);
 
     if (updatePrError) {
