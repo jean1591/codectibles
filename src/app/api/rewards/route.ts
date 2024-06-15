@@ -1,14 +1,41 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Reward, RewardType } from "@/app/interfaces";
 
-export async function GET(request: NextRequest) {
-  // Get data from Github
-  // Get data from DB
+import { DbTable } from "../interfaces/database";
+import { createClient } from "@/utils/supabase/server";
 
-  // How many PR merged on Github ?
-  // Has milestone been reached ?
+export async function GET(
+  request: NextRequest
+): Promise<NextResponse<Reward[]>> {
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  return NextResponse.json({
-    prMilestone: 8,
-    prMerged: 2,
-  });
+  if (!user) {
+    throw new Error("User is not connected");
+  }
+
+  const { data: unclaimedPr } = await supabase
+    .from(DbTable.PR)
+    .select("pr_id")
+    .eq("user_id", user.id)
+    .eq("claimed", false);
+
+  if (!unclaimedPr || unclaimedPr.length === 0) {
+    return NextResponse.json([]);
+  }
+
+  const formatUnclaimedPrToRewards = generateUnclaimedPrReward(unclaimedPr);
+
+  return NextResponse.json([formatUnclaimedPrToRewards]);
 }
+
+const generateUnclaimedPrReward = (
+  unclaimedPr: { pr_id: number }[]
+): Reward => ({
+  details: unclaimedPr.map((pr) => pr.pr_id),
+  reward: unclaimedPr.length * 2,
+  type: RewardType.MERGE,
+  title: `${unclaimedPr.length * 2} PR merged ✅`,
+});

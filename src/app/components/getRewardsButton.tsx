@@ -8,10 +8,10 @@ export const RewardButton = () => {
 
   return (
     <button
-      className="bg-red-400 hover:bg-red-400/75 px-2 py-1 sm:px-4 rounded-full uppercase"
+      className="bg-red-400 hover:bg-red-400/75 px-4 py-1 sm:px-4 rounded-full uppercase"
       onClick={() => dispatch(setIsRewardsModalOpen(true))}
     >
-      🎁 Get rewards 🎁
+      🎁
     </button>
   );
 };

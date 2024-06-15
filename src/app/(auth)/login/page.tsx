@@ -1,11 +1,11 @@
 "use client";
 
-import { createClient } from "@/utils/supabase/client";
 import { PiGithubLogo } from "react-icons/pi";
+import { createClient } from "@/utils/supabase/client";
 
 async function signInWithGithub() {
   const supabase = createClient();
-  
+
   await supabase.auth.signInWithOAuth({
     provider: "github",
     options: {

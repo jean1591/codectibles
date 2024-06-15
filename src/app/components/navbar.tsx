@@ -1,13 +1,14 @@
 "use client";
 
+import { useDispatch, useSelector } from "react-redux";
+
+import Link from "next/link";
+import { PiSignOut } from "react-icons/pi";
 import { RewardButton } from "./getRewardsButton";
 import { RootState } from "../lib/store/store";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { setUsername } from "../lib/store/features/user/slice";
-import { PiSignOut } from "react-icons/pi";
-import Link from "next/link";
+import { useEffect } from "react";
 
 export const Navbar = () => {
   const dispatch = useDispatch();
@@ -41,7 +42,7 @@ export const Navbar = () => {
         <RewardButton />
         <button onClick={onSignOut}>
           <Link href="/login">
-            <PiSignOut className="h-6 w-6" />
+            <PiSignOut className="h-5 w-5 sm:h-6 sm:w-6" />
           </Link>
         </button>
       </div>
