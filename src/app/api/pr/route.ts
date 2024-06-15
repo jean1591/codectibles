@@ -77,10 +77,12 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
     throw new Error("User is not connected");
   }
 
+  const claimedAt = new Date();
+
   if (type === RewardType.MERGE) {
     const { error: updatePrError } = await supabase
       .from(DbTable.PR)
-      .update({ claimed: true })
+      .update({ claimed: true, claimed_at: claimedAt })
       .eq("user_id", user.id)
       .in("pr_id", details);
 
