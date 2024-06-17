@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -19,7 +20,21 @@ export default function TokenPage() {
 
   return (
     <div className="w-full sm:w-2/3">
-      <div className="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-slate-300 text-xs sm:text-sm sm:leading-6">
+      <h2 className="text-center text-2xl font-bold leading-9 tracking-tight">
+        Save new Github Token to access{" "}
+        <span className="text-red-300/75">Code Kingdom 👑</span>
+      </h2>
+      <div className="mt-12">
+        <Image
+          className="rounded-md w-auto"
+          priority={true}
+          src="/token-scope.png"
+          width={500}
+          height={500}
+          alt="Github token scope"
+        />
+      </div>
+      <div className="mt-8 rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-slate-300 text-xs sm:text-sm sm:leading-6">
         <label htmlFor="token" className="font-medium">
           Github Token
         </label>
