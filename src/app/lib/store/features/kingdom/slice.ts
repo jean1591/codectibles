@@ -4,12 +4,12 @@ import { createSlice } from "@reduxjs/toolkit";
 import { preFilledKingdom } from "./preFilledlKingdom";
 
 export interface KingdomState {
-  coins: number;
+  coins: number | null;
   kingdom: Kingdom;
 }
 
 const initialState: KingdomState = {
-  coins: 10,
+  coins: null,
   kingdom: preFilledKingdom,
 };
 

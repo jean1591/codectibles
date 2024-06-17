@@ -8,9 +8,12 @@ import { RootState } from "../lib/store/store";
 import { SelectAssetPopover } from "./selectAssetPopover";
 import { classNames } from "@/utils";
 import { redirect } from "next/navigation";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setCoins } from "../lib/store/features/kingdom/slice";
+import { setUsername } from "../lib/store/features/user/slice";
 
 export const Kingdom = () => {
+  const dispatch = useDispatch();
   const { kingdom } = useSelector((state: RootState) => state.kingdom);
 
   const [isPopoverVisible, setIsPopoverVisibe] = useState(false);
@@ -20,6 +23,10 @@ export const Kingdom = () => {
   useEffect(() => {
     fetch("/api/pr")
       .then((res) => res.json())
+      .then(({ coins, userName }) => {
+        dispatch(setCoins(coins));
+        dispatch(setUsername(userName));
+      })
       .catch(() => setShouldRedirect(true));
   }, []);
 

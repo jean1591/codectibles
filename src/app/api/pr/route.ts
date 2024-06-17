@@ -20,14 +20,14 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
   const { data: users } = await supabase
     .from(DbTable.USER)
-    .select("fetched_at, token, user_name")
+    .select("coins, fetched_at, token, user_name")
     .eq("auth_user_id", user.id);
 
   if (!users || users.length === 0) {
     throw new Error(`No users found for id ${user.id}`);
   }
 
-  const { fetched_at: fetchedAt, token: hashedToken, user_name: userName } = users[0];
+  const { coins, fetched_at: fetchedAt, token: hashedToken, user_name: userName } = users[0];
 
   const token = decrypt(hashedToken)
 
@@ -78,7 +78,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     });
   }
 
-  return NextResponse.json({ success: true });
+  return NextResponse.json({ coins, userName });
 }
 
 export async function PUT(request: NextRequest): Promise<NextResponse> {
