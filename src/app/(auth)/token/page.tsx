@@ -22,12 +22,12 @@ export default function TokenPage() {
     <div className="w-full sm:w-2/3">
       <h2 className="text-center text-2xl font-bold leading-9 tracking-tight">
         Save new Github Token to access{" "}
-        <span className="text-red-300/75">Code Kingdom 👑</span>
+        <span className="text-red-300/75">Code Zoo 👑</span>
       </h2>
 
       <p className="mt-8 text-center text-lg font-medium leading-5 tracking-tight">
-        Your token will be{" "}
-        <span className="text-red-300/75">encrypted</span>{" "} before being saved in DB
+        Your token will be <span className="text-red-300/75">encrypted</span>{" "}
+        before being saved in DB
       </p>
 
       <div className="mt-8">

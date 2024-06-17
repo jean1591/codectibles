@@ -19,7 +19,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
   const { data: users } = await supabase
     .from(DbTable.USER)
-    .select("coins, fetched_at, kingdom, token, user_name")
+    .select("coins, fetched_at, token, user_name, zoo")
     .eq("auth_user_id", user.id);
 
   if (!users || users.length === 0) {
@@ -29,9 +29,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   const {
     coins,
     fetched_at: fetchedAt,
-    kingdom,
     token: hashedToken,
     user_name: userName,
+    zoo,
   } = users[0];
 
   const token = decrypt(hashedToken);
@@ -83,7 +83,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     });
   }
 
-  return NextResponse.json({ coins, kingdom: JSON.parse(kingdom), userName });
+  return NextResponse.json({ coins, zoo: JSON.parse(zoo), userName });
 }
 
 export async function PUT(request: NextRequest): Promise<NextResponse> {

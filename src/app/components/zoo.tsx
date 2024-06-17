@@ -1,6 +1,6 @@
 "use client";
 
-import { setCoins, setKingdom } from "../lib/store/features/kingdom/slice";
+import { setCoins, setZoo } from "../lib/store/features/zoo/slice";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
@@ -12,9 +12,9 @@ import { classNames } from "@/utils";
 import { redirect } from "next/navigation";
 import { setUsername } from "../lib/store/features/user/slice";
 
-export const Kingdom = () => {
+export const Zoo = () => {
   const dispatch = useDispatch();
-  const { kingdom } = useSelector((state: RootState) => state.kingdom);
+  const { zoo } = useSelector((state: RootState) => state.zoo);
 
   const [isPopoverVisible, setIsPopoverVisibe] = useState(false);
   const [selectedCell, setSelectedCell] = useState<number | null>(null);
@@ -23,10 +23,10 @@ export const Kingdom = () => {
   useEffect(() => {
     fetch("/api/pr")
       .then((res) => res.json())
-      .then(({ coins, kingdom, userName }) => {
+      .then(({ coins, userName, zoo }) => {
         dispatch(setCoins(coins));
-        dispatch(setKingdom(kingdom));
         dispatch(setUsername(userName));
+        dispatch(setZoo(zoo));
       })
       .catch(() => setShouldRedirect(true));
   }, []);
@@ -50,7 +50,7 @@ export const Kingdom = () => {
   return (
     <div className="flex items-center justify-center">
       <div className="relative grid grid-cols-7">
-        {kingdom.map((asset, index) => (
+        {zoo.map((asset, index) => (
           <div
             key={index}
             onClick={() => handleCellOnClick(index)}

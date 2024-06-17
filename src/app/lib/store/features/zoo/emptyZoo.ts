@@ -1,6 +1,6 @@
-import { KingdomCellInterface } from "@/app/interfaces";
+import { AssetDetails } from "@/app/interfaces";
 
-export const emptyKingdom: (KingdomCellInterface | null)[] = [
+export const emptyZoo: (AssetDetails | null)[] = [
   null,
   null,
   null,

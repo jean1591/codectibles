@@ -1,15 +1,10 @@
 import { AssetDetails } from "@/app/interfaces";
 
 export const assetPrices: AssetDetails[] = [
-  { icon: "🌾", level: 1, price: 2 },
-  { icon: "🌾", level: 2, price: 4 },
-  { icon: "🌾", level: 3, price: 8 },
-  { icon: "🌳", level: 1, price: 4 },
-  { icon: "🌳", level: 2, price: 8 },
-  { icon: "🌳", level: 3, price: 16 },
-  { icon: "🏰", level: 1, price: 8 },
-  { icon: "🏰", level: 2, price: 16 },
-  { icon: "🏰", level: 3, price: 32 },
+  { icon: "🐵", level: 1, price: 100 },
+  { icon: "🐨", level: 1, price: 250 },
+  { icon: "🐼", level: 1, price: 500 },
+  { icon: "🦁", level: 1, price: 1000 },
 ];
 
 export const assetPricesLevel1 = assetPrices.filter(({ level }) => level === 1);

@@ -1,4 +1,4 @@
-import { setCoins, setKingdom } from "../lib/store/features/kingdom/slice";
+import { setCoins, setZoo } from "../lib/store/features/zoo/slice";
 import { useDispatch, useSelector } from "react-redux";
 
 import { Popover } from "./ui/popover";
@@ -16,31 +16,31 @@ export const RemoveAssetPopover = ({
   selectedCell: number | null;
 }) => {
   const dispatch = useDispatch();
-  const { kingdom, coins } = useSelector((state: RootState) => state.kingdom);
+  const { zoo, coins } = useSelector((state: RootState) => state.zoo);
 
   const handleAssetOnRemove = (index: number) => {
-    const updatedKingdom = [...kingdom];
-    updatedKingdom[index] = null;
+    const updatedZoo = [...zoo];
+    updatedZoo[index] = null;
 
-    dispatch(setCoins(coins + getPriceByAsset(kingdom[selectedCell!]?.icon)));
-    dispatch(setKingdom(updatedKingdom));
+    dispatch(setCoins(coins + getPriceByAsset(zoo[selectedCell!]?.icon)));
+    dispatch(setZoo(updatedZoo));
   };
 
   return (
     <div>
       {selectedCell === index &&
         isPopoverVisible &&
-        kingdom[selectedCell] !== null && (
+        zoo[selectedCell] !== null && (
           <Popover
             isPopoverVisible={isPopoverVisible}
             selectedCell={selectedCell}
           >
             <div>
               <p className="text-xl text-slate-400 rounded-md flex items-center justify-center">
-                {`Delete ${kingdom[selectedCell]?.icon},`}
+                {`Delete ${zoo[selectedCell]?.icon},`}
               </p>
               <p className="text-xl text-slate-400 rounded-md flex items-center justify-center">
-                {`get ${getPriceByAsset(kingdom[selectedCell]?.icon)} 💎 back`}
+                {`get ${getPriceByAsset(zoo[selectedCell]?.icon)} 💎 back`}
               </p>
               <div className="mt-4 flex items-center justify-center">
                 <button
