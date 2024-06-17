@@ -1,4 +1,4 @@
-export type Asset = "🌾" | "🌳" | "🏰";
+export type Asset = "🦁" | "🐨" | "🐵" | "🐼";
 
 export type AssetDetails = { icon: Asset; level: number; price: number };
 
