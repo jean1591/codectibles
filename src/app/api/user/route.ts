@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/server";
 
 export async function PUT(request: NextRequest): Promise<NextResponse> {
-  const { coins, kingdom } = await request.json();
+  const { coins, zoo } = await request.json();
 
   const supabase = createClient();
   const {
@@ -17,7 +17,7 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
 
   const { error: updateUserError } = await supabase
     .from(DbTable.USER)
-    .update({ coins, kingdom: JSON.stringify(kingdom) })
+    .update({ coins, zoo: JSON.stringify(zoo) })
     .eq("auth_user_id", user.id);
 
   if (updateUserError) {

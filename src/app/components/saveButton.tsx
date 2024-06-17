@@ -4,12 +4,12 @@ import { RootState } from "../lib/store/store";
 import { useSelector } from "react-redux";
 
 export const SaveButton = () => {
-  const { coins, kingdom } = useSelector((state: RootState) => state.kingdom);
+  const { coins, zoo } = useSelector((state: RootState) => state.zoo);
 
   const onSave = async () => {
     fetch("/api/user", {
       method: "PUT",
-      body: JSON.stringify({ coins, kingdom }),
+      body: JSON.stringify({ coins, zoo }),
       headers: { "Content-Type": "application/json" },
     }).then((res) => res.json());
   };
@@ -20,7 +20,7 @@ export const SaveButton = () => {
         className="py-4 bg-blue-500 hover:bg-blue-600 rounded-xl w-full transition ease-in-out duration-500"
         onClick={onSave}
       >
-        <p className="text-xl">Save kingdom</p>
+        <p className="text-xl">Save zoo</p>
       </button>
     </div>
   );

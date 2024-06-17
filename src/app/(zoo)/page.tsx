@@ -1,6 +1,6 @@
-import { Kingdom } from "../components/kingdom";
 import { RewardsModal } from "../components/rewardsModal";
 import { SaveButton } from "../components/saveButton";
+import { Zoo } from "../components/zoo";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
@@ -15,7 +15,7 @@ export default async function Home() {
 
   return (
     <div>
-      <Kingdom />
+      <Zoo />
 
       <div className="mt-8">
         <SaveButton />

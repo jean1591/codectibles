@@ -7,12 +7,12 @@ import {
   Transition,
   TransitionChild,
 } from "@headlessui/react";
+import { useDispatch, useSelector } from "react-redux";
 
 import { PiGift } from "react-icons/pi";
-import { useDispatch, useSelector } from "react-redux";
+import { Rewards } from "./rewards";
 import { RootState } from "../lib/store/store";
 import { setIsRewardsModalOpen } from "../lib/store/features/rewards/slice";
-import { Rewards } from "./rewards";
 
 export const RewardsModal = () => {
   const dispatch = useDispatch();
@@ -79,7 +79,7 @@ export const RewardsModal = () => {
                     className="inline-flex w-full justify-center rounded-md bg-red-400 px-3 py-2 text-base font-medium text-slate-100 shadow-sm hover:bg-red-400"
                     onClick={() => dispatch(setIsRewardsModalOpen(false))}
                   >
-                    Return to kingdom 👑
+                    Return to zoo 👑
                   </button>
                 </div>
               </DialogPanel>

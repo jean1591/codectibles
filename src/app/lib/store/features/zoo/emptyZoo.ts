@@ -1,6 +1,6 @@
 import { AssetDetails } from "@/app/interfaces";
 
-export const emptyKingdom: (AssetDetails | null)[] = [
+export const emptyZoo: (AssetDetails | null)[] = [
   null,
   null,
   null,

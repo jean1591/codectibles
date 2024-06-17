@@ -1,5 +1,4 @@
 import { AssetDetails } from "../interfaces";
-import { classNames } from "@/utils";
 
 export const Asset = ({ asset }: { asset: AssetDetails | null }) => {
   return (

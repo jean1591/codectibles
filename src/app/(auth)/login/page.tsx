@@ -20,7 +20,7 @@ export default function LoginPage() {
       <div className="flex min-h-full flex-1 items-center justify-center py-12">
         <div className="w-full max-w-sm space-y-10">
           <h2 className="text-center text-2xl font-bold leading-9 tracking-tight">
-            Sign in to <span className="text-red-300/75">Code Kingdom 👑</span>
+            Sign in to <span className="text-red-300/75">Code Zoo 👑</span>
           </h2>
 
           <button

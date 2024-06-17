@@ -1,11 +1,11 @@
-import { setCoins, setKingdom } from "../lib/store/features/kingdom/slice";
+import { setCoins, setZoo } from "../lib/store/features/zoo/slice";
 import { useDispatch, useSelector } from "react-redux";
-import { assetPricesLevel1 } from "@/utils/assetPrices";
 
 import { AssetDetails } from "../interfaces";
-import { RootState } from "../lib/store/store";
-import { classNames } from "@/utils";
 import { Popover } from "./ui/popover";
+import { RootState } from "../lib/store/store";
+import { assetPricesLevel1 } from "@/utils/assetPrices";
+import { classNames } from "@/utils";
 
 export const SelectAssetPopover = ({
   index,
@@ -17,27 +17,27 @@ export const SelectAssetPopover = ({
   selectedCell: number | null;
 }) => {
   const dispatch = useDispatch();
-  const { kingdom, coins } = useSelector((state: RootState) => state.kingdom);
+  const { zoo, coins } = useSelector((state: RootState) => state.zoo);
 
   const handlePriceOnClick = ({ icon, price }: AssetDetails, index: number) => {
-    const updatedKingdom = [...kingdom];
+    const updatedZoo = [...zoo];
 
-    if (updatedKingdom[index] === null && coins >= price) {
-      updatedKingdom[index] = { icon, level: 1, price };
+    if (updatedZoo[index] === null && coins >= price) {
+      updatedZoo[index] = { icon, level: 1, price };
       dispatch(setCoins(coins - price));
-    } else if (updatedKingdom[index] !== null) {
-      updatedKingdom[index] = null;
+    } else if (updatedZoo[index] !== null) {
+      updatedZoo[index] = null;
       dispatch(setCoins(coins + price));
     }
 
-    dispatch(setKingdom(updatedKingdom));
+    dispatch(setZoo(updatedZoo));
   };
 
   return (
     <div>
       {selectedCell === index &&
         isPopoverVisible &&
-        kingdom[selectedCell] === null && (
+        zoo[selectedCell] === null && (
           <Popover
             isPopoverVisible={isPopoverVisible}
             selectedCell={selectedCell}

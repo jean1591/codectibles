@@ -5,13 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { Reward } from "../interfaces";
 import { RootState } from "../lib/store/store";
 import { claimReward } from "../lib/store/features/rewards/slice";
-import { setCoins } from "../lib/store/features/kingdom/slice";
+import { setCoins } from "../lib/store/features/zoo/slice";
 
-// TODO: use setCoins(rewards) or setCoins(-rewards)
 export const RewardItem = ({ reward }: { reward: Reward }) => {
   const { details, reward: rewardValue, title, type } = reward;
   const dispatch = useDispatch();
-  const { coins } = useSelector((state: RootState) => state.kingdom);
+  const { coins } = useSelector((state: RootState) => state.zoo);
 
   const onClaimReward = async () => {
     // Update state
