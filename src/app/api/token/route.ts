@@ -2,6 +2,8 @@ import { DbError, DbTable } from "../interfaces/database";
 import { NextRequest, NextResponse } from "next/server";
 
 import { createClient } from "@/utils/supabase/server";
+import { encrypt } from "@/utils/hash";
+
 
 export async function PUT(request: NextRequest): Promise<NextResponse> {
   const { token } = await request.json();
@@ -15,9 +17,11 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
     throw new Error("User is not connected");
   }
 
+  const hashedToken = encrypt(token)
+
   const { error } = await supabase
     .from(DbTable.USER)
-    .update({ token })
+    .update({ token: hashedToken })
     .eq("auth_user_id", user.id);
 
   if (error) {

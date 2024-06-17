@@ -4,6 +4,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { RewardType } from "@/app/interfaces";
 import { createClient } from "@/utils/supabase/server";
+import { decrypt } from "@/utils/hash";
+
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   /* Fetch data from DB */
@@ -25,7 +27,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     throw new Error(`No users found for id ${user.id}`);
   }
 
-  const { fetched_at: fetchedAt, token, user_name: userName } = users[0];
+  const { fetched_at: fetchedAt, token: hashedToken, user_name: userName } = users[0];
+
+  const token = decrypt(hashedToken)
 
   /* Fetch data from Github */
   const githubPr = await getLatestGithubMergedPr(fetchedAt, token, userName);
