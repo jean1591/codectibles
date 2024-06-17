@@ -24,7 +24,13 @@ export default function TokenPage() {
         Save new Github Token to access{" "}
         <span className="text-red-300/75">Code Kingdom 👑</span>
       </h2>
-      <div className="mt-12">
+
+      <p className="mt-8 text-center text-lg font-medium leading-5 tracking-tight">
+        Your token will be{" "}
+        <span className="text-red-300/75">encrypted</span>{" "} before being saved in DB
+      </p>
+
+      <div className="mt-8">
         <Image
           className="rounded-md w-auto"
           priority={true}
@@ -34,6 +40,7 @@ export default function TokenPage() {
           alt="Github token scope"
         />
       </div>
+
       <div className="mt-8 rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-slate-300 text-xs sm:text-sm sm:leading-6">
         <label htmlFor="token" className="font-medium">
           Github Token
