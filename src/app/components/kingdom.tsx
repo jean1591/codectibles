@@ -1,5 +1,7 @@
 "use client";
 
+import { setCoins, setKingdom } from "../lib/store/features/kingdom/slice";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
 import { Asset } from "./asset";
@@ -8,8 +10,6 @@ import { RootState } from "../lib/store/store";
 import { SelectAssetPopover } from "./selectAssetPopover";
 import { classNames } from "@/utils";
 import { redirect } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
-import { setCoins } from "../lib/store/features/kingdom/slice";
 import { setUsername } from "../lib/store/features/user/slice";
 
 export const Kingdom = () => {
@@ -23,8 +23,9 @@ export const Kingdom = () => {
   useEffect(() => {
     fetch("/api/pr")
       .then((res) => res.json())
-      .then(({ coins, userName }) => {
+      .then(({ coins, kingdom, userName }) => {
         dispatch(setCoins(coins));
+        dispatch(setKingdom(kingdom));
         dispatch(setUsername(userName));
       })
       .catch(() => setShouldRedirect(true));

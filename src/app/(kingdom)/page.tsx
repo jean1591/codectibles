@@ -1,6 +1,6 @@
-import { ActivityFeed } from "../components/activityFeed";
 import { Kingdom } from "../components/kingdom";
 import { RewardsModal } from "../components/rewardsModal";
+import { SaveButton } from "../components/saveButton";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
@@ -17,8 +17,8 @@ export default async function Home() {
     <div>
       <Kingdom />
 
-      <div className="mt-16">
-        <ActivityFeed />
+      <div className="mt-8">
+        <SaveButton />
       </div>
 
       <RewardsModal />

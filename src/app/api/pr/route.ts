@@ -6,7 +6,6 @@ import { RewardType } from "@/app/interfaces";
 import { createClient } from "@/utils/supabase/server";
 import { decrypt } from "@/utils/hash";
 
-
 export async function GET(request: NextRequest): Promise<NextResponse> {
   /* Fetch data from DB */
   const supabase = createClient();
@@ -20,16 +19,22 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
   const { data: users } = await supabase
     .from(DbTable.USER)
-    .select("coins, fetched_at, token, user_name")
+    .select("coins, fetched_at, kingdom, token, user_name")
     .eq("auth_user_id", user.id);
 
   if (!users || users.length === 0) {
     throw new Error(`No users found for id ${user.id}`);
   }
 
-  const { coins, fetched_at: fetchedAt, token: hashedToken, user_name: userName } = users[0];
+  const {
+    coins,
+    fetched_at: fetchedAt,
+    kingdom,
+    token: hashedToken,
+    user_name: userName,
+  } = users[0];
 
-  const token = decrypt(hashedToken)
+  const token = decrypt(hashedToken);
 
   /* Fetch data from Github */
   const githubPr = await getLatestGithubMergedPr(fetchedAt, token, userName);
@@ -78,7 +83,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     });
   }
 
-  return NextResponse.json({ coins, userName });
+  return NextResponse.json({ coins, kingdom: JSON.parse(kingdom), userName });
 }
 
 export async function PUT(request: NextRequest): Promise<NextResponse> {

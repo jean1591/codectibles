@@ -1,10 +1,10 @@
-import { getPriceByAsset } from "@/utils/assetPrices";
 import { setCoins, setKingdom } from "../lib/store/features/kingdom/slice";
 import { useDispatch, useSelector } from "react-redux";
 
+import { Popover } from "./ui/popover";
 import { RootState } from "../lib/store/store";
 import { classNames } from "@/utils";
-import { Popover } from "./ui/popover";
+import { getPriceByAsset } from "@/utils/assetPrices";
 
 export const RemoveAssetPopover = ({
   index,
