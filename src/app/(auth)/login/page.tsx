@@ -16,7 +16,7 @@ async function signInWithGithub() {
 
 export default function LoginPage() {
   return (
-    <>
+    <div>
       <div className="flex min-h-full flex-1 items-center justify-center py-12">
         <div className="w-full max-w-sm space-y-10">
           <h2 className="text-center text-2xl font-bold leading-9 tracking-tight">
@@ -32,6 +32,6 @@ export default function LoginPage() {
           </button>
         </div>
       </div>
-    </>
+    </div>
   );
 }

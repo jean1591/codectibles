@@ -62,6 +62,18 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     console.error(`${DbError.INSERT}: PR"`, { error });
   }
 
+  /* Update user fetched_at */
+  const { error: updateUserError } = await supabase
+    .from(DbTable.USER)
+    .update({ fetched_at: new Date() })
+    .eq("auth_user_id", user.id);
+
+  if (updateUserError) {
+    console.error(`${DbError.UPDATE}: USER"`, {
+      error: JSON.stringify(updateUserError, null, 2),
+    });
+  }
+
   return NextResponse.json({ success: true });
 }
 
