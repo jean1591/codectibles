@@ -7,6 +7,7 @@ import { RemoveAssetPopover } from "./removeAssetPopover";
 import { RootState } from "../lib/store/store";
 import { SelectAssetPopover } from "./selectAssetPopover";
 import { classNames } from "@/utils";
+import { redirect } from "next/navigation";
 import { useSelector } from "react-redux";
 
 export const Kingdom = () => {
@@ -14,10 +15,19 @@ export const Kingdom = () => {
 
   const [isPopoverVisible, setIsPopoverVisibe] = useState(false);
   const [selectedCell, setSelectedCell] = useState<number | null>(null);
+  const [shouldRedirect, setShouldRedirect] = useState(false);
 
   useEffect(() => {
-    fetch("/api/pr").then((res) => res.json());
+    fetch("/api/pr")
+      .then((res) => res.json())
+      .catch(() => setShouldRedirect(true));
   }, []);
+
+  useEffect(() => {
+    if (shouldRedirect) {
+      redirect("/token");
+    }
+  }, [shouldRedirect]);
 
   const handleCellOnClick = (index: number) => {
     if (selectedCell === index) {
