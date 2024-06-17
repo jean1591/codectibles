@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
 import { Asset } from "./asset";
-import { RemoveAssetPopover } from "./removeAssetPopover";
 import { RootState } from "../lib/store/store";
 import { SelectAssetPopover } from "./selectAssetPopover";
+import { UpgradeOrRemovePopover } from "./upgradeOrRemovePopover";
 import { classNames } from "@/utils";
 import { redirect } from "next/navigation";
 import { setUsername } from "../lib/store/features/user/slice";
@@ -65,7 +65,7 @@ export const Zoo = () => {
               isPopoverVisible={isPopoverVisible}
               selectedCell={selectedCell}
             />
-            <RemoveAssetPopover
+            <UpgradeOrRemovePopover
               index={index}
               isPopoverVisible={isPopoverVisible}
               selectedCell={selectedCell}

@@ -9,7 +9,10 @@ export const assetPrices: AssetDetails[] = [
 
 export const assetPricesLevel1 = assetPrices.filter(({ level }) => level === 1);
 
-export const getPriceByAsset = (assetIcon?: string): number => {
+export const getPriceByAssetAndLevel = (
+  assetIcon?: string,
+  assetLevel: number = 1
+): number => {
   const foundAsset = assetPrices.find(
     ({ icon, level }) => assetIcon === icon && level === 1
   );
@@ -18,5 +21,5 @@ export const getPriceByAsset = (assetIcon?: string): number => {
     throw new Error(`Asset not found: ${assetIcon}`);
   }
 
-  return foundAsset.price;
+  return foundAsset.price * assetLevel;
 };
