@@ -35,7 +35,7 @@ const generateUnclaimedPrReward = (
   unclaimedPr: { pr_id: number }[]
 ): Reward => ({
   details: unclaimedPr.map((pr) => pr.pr_id),
-  reward: unclaimedPr.length * 2,
+  reward: unclaimedPr.length * 50,
   type: RewardType.MERGE,
   title: `${unclaimedPr.length} PR merged ✅`,
 });
