@@ -66,10 +66,24 @@ export const UpgradeOrRemovePopover = ({
                     selectedAsset.level > 2
                       ? "border-slate-950 text-slate-950"
                       : "hover:bg-slate-700 border-slate-300 text-slate-300",
-                    "h-12 text-2xl text-right px-4 py-2 rounded-md border"
+                    "text-xl px-2 py-1 rounded-md border grid grid-cols-2 text-center"
                   )}
                 >
-                  <PiArrowCircleUp className="h-6 w-6" />
+                  <div className="px-1">
+                    <p className="text-sm">
+                      {`${
+                        selectedAsset.level === 3
+                          ? selectedAsset.level
+                          : selectedAsset.level + 1
+                      } ${selectedAsset.icon}`}
+                    </p>
+                  </div>
+                  <div className="px-1 row-span-2 flex items-center justify-center h-full">
+                    <PiArrowCircleUp className="h-6 w-6" />
+                  </div>
+                  <div className="px-1">
+                    <p className="text-sm text-nowrap">{`${selectedAsset.price} 💎`}</p>
+                  </div>
                 </button>
                 <button
                   onClick={() => handleAssetOnRemove(index)}
