@@ -47,16 +47,18 @@ export const SelectAssetPopover = ({
                 key={asset.icon}
                 className="py-2 flex items-center justify-between"
               >
-                <p
+                <button
+                  onClick={() => handlePriceOnClick(asset, index)}
+                  disabled={asset.price > coins}
                   className={classNames(
                     coins >= asset.price
-                      ? "bg-gradient-to-r from-slate-300 to-slate-500"
-                      : "bg-slate-700",
-                    "h-12 w-12 text-3xl rounded-md flex items-center justify-center"
+                      ? "bg-gradient-to-r from-slate-300 to-slate-500 text-slate-800"
+                      : "bg-slate-700 text-slate-500",
+                    "h-12 text-2xl text-right px-4 py-2 rounded-md"
                   )}
                 >
                   {asset.icon}
-                </p>
+                </button>
                 <button
                   onClick={() => handlePriceOnClick(asset, index)}
                   disabled={asset.price > coins}
