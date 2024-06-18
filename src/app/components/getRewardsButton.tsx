@@ -8,7 +8,7 @@ export const RewardButton = () => {
 
   return (
     <button
-      className="bg-red-400 hover:bg-red-400/75 px-4 py-1 sm:px-4 rounded-full uppercase transition ease-in-out duration-500"
+      className="bg-gradient-to-b from-red-500 to-red-400 hover:from-red-400 hover:to-red-300 px-4 py-1 rounded-full"
       onClick={() => dispatch(setIsRewardsModalOpen(true))}
     >
       🎁

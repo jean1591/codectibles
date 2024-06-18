@@ -76,7 +76,7 @@ export const RewardsModal = () => {
 
                   <button
                     type="button"
-                    className="inline-flex w-full justify-center rounded-md bg-red-400 px-3 py-2 text-base font-medium text-slate-100 shadow-sm hover:bg-red-400"
+                    className="bg-gradient-to-b from-red-500 to-red-400 hover:from-red-400 hover:to-red-300 inline-flex w-full justify-center rounded-md px-3 py-2 text-base font-medium text-slate-100 shadow-sm"
                     onClick={() => dispatch(setIsRewardsModalOpen(false))}
                   >
                     Return to zoo 👑

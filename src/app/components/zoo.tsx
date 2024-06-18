@@ -56,7 +56,7 @@ export const Zoo = () => {
             onClick={() => handleCellOnClick(index)}
             className={classNames(
               selectedCell === index ? "bg-slate-800" : "bg-slate-700",
-              "relative h-14 w-14 sm:h-24 sm:w-24 flex items-center justify-center border-[1px] border-slate-300 hover:bg-slate-800"
+              "relative h-14 w-14 sm:h-24 sm:w-24 flex items-center justify-center border-[1px] border-slate-300 hover:bg-slate-800 transition ease-in-out duration-500"
             )}
           >
             <Asset asset={asset} />

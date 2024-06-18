@@ -30,7 +30,7 @@ export const RewardItem = ({ reward }: { reward: Reward }) => {
       <p className="text-left text-base">{title}</p>
 
       <button
-        className="flex items-center justify-center bg-red-400 hover:bg-red-400/75 text-base text-right px-6 py-2 rounded-full uppercase font-semibold"
+        className="bg-gradient-to-b from-red-500 to-red-400 hover:from-red-400 hover:to-red-300 animate-[wiggle_2s_ease-in-out_infinite] flex items-center justify-center text-base text-right px-6 py-2 rounded-full uppercase font-semibold"
         onClick={onClaimReward}
       >
         Claim 🎁
