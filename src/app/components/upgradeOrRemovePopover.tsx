@@ -60,10 +60,10 @@ export const UpgradeOrRemovePopover = ({
             <div>
               <div className="flex items-center justify-center gap-x-4">
                 <button
-                  disabled={selectedAsset.level > 2}
+                  disabled={selectedAsset.level > 2 || selectedAsset.price > coins}
                   onClick={() => handleAssetUpgrade(index)}
                   className={classNames(
-                    selectedAsset.level > 2
+                    selectedAsset.level > 2 || selectedAsset.price > coins
                       ? "border-slate-950 text-slate-950"
                       : "hover:bg-slate-700 border-slate-300 text-slate-300",
                     "text-xl px-2 py-1 rounded-md border grid grid-cols-2 text-center"

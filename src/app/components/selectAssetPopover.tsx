@@ -43,33 +43,20 @@ export const SelectAssetPopover = ({
             selectedCell={selectedCell}
           >
             {assetPricesLevel1.map((asset) => (
-              <div
+              <button
                 key={asset.icon}
-                className="py-2 flex items-center justify-between"
+                onClick={() => handlePriceOnClick(asset, index)}
+                disabled={asset.price > coins}
+                className={classNames(
+                  coins >= asset.price
+                    ? "bg-gradient-to-r from-slate-300 to-slate-500 text-slate-800"
+                    : "bg-slate-700 text-slate-500",
+                  "my-2 py-1 px-2 w-full flex items-center justify-between font-medium text-2xl rounded-md"
+                )}
               >
-                <button
-                  onClick={() => handlePriceOnClick(asset, index)}
-                  disabled={asset.price > coins}
-                  className={classNames(
-                    coins >= asset.price
-                      ? "bg-gradient-to-r from-slate-300 to-slate-500 text-slate-800"
-                      : "bg-slate-700 text-slate-500",
-                    "h-12 text-2xl text-right px-4 py-2 rounded-md"
-                  )}
-                >
-                  {asset.icon}
-                </button>
-                <button
-                  onClick={() => handlePriceOnClick(asset, index)}
-                  disabled={asset.price > coins}
-                  className={classNames(
-                    coins >= asset.price
-                      ? "bg-gradient-to-r from-slate-300 to-slate-500 text-slate-800"
-                      : "bg-slate-700 text-slate-500",
-                    "h-12 text-2xl text-right px-4 py-2 rounded-md"
-                  )}
-                >{`${asset.price} 💎`}</button>
-              </div>
+                <p className="text-left text-3xl">{asset.icon}</p>
+                <p className="text-right">{`${asset.price} 💎`}</p>
+              </button>
             ))}
           </Popover>
         )}
