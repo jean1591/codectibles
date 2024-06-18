@@ -21,12 +21,14 @@ export const UpgradeOrRemovePopover = ({
   const dispatch = useDispatch();
   const { zoo, coins } = useSelector((state: RootState) => state.zoo);
 
+  const selectedAsset = zoo[index] as AssetDetails;
+
   const handleAssetUpgrade = (index: number) => {
     const updatedZoo = [...zoo];
     updatedZoo[index] = {
-      ...updatedZoo[index],
-      level: updatedZoo[index]?.level! + 1,
-    } as AssetDetails;
+      ...selectedAsset,
+      level: selectedAsset.level! + 1,
+    };
 
     dispatch(
       setCoins(coins - getPriceByAssetAndLevel(zoo[selectedCell!]?.icon))
@@ -58,12 +60,16 @@ export const UpgradeOrRemovePopover = ({
             <div>
               <div className="flex items-center justify-center gap-x-4">
                 <button
+                  disabled={selectedAsset.level > 2}
                   onClick={() => handleAssetUpgrade(index)}
                   className={classNames(
-                    "h-12 text-2xl text-right px-4 py-2 rounded-md border border-slate-300 hover:bg-slate-700"
+                    selectedAsset.level > 2
+                      ? "border-slate-950 text-slate-950"
+                      : "hover:bg-slate-700 border-slate-300 text-slate-300",
+                    "h-12 text-2xl text-right px-4 py-2 rounded-md border"
                   )}
                 >
-                  <PiArrowCircleUp className="h-6 w-6 text-slate-300" />
+                  <PiArrowCircleUp className="h-6 w-6" />
                 </button>
                 <button
                   onClick={() => handleAssetOnRemove(index)}
