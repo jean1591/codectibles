@@ -1,7 +1,7 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { Zoo } from "@/app/interfaces";
 import { createSlice } from "@reduxjs/toolkit";
-import { emptyZoo } from "./emptyZoo";
+import { emptyZoo } from "@/app/api/constants/emptyZoo";
 
 export interface ZooState {
   coins: number;
