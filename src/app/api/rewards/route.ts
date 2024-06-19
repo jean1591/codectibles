@@ -1,19 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Reward, RewardDetails, RewardType } from "@/app/interfaces";
+import { CurrentRewardsAndNextRewards, Reward, RewardDetails, RewardType } from "@/app/interfaces";
 
 import { DbTable } from "../interfaces/database";
 import { createClient } from "@/utils/supabase/server";
 
 // TODO: load user in state to not have to fetch it every time
 
-type RewardAndNext = {
-  rewards: Reward[];
-  nextRewards: Reward[];
-};
-
 export async function GET(
   request: NextRequest
-): Promise<NextResponse<RewardAndNext>> {
+): Promise<NextResponse<CurrentRewardsAndNextRewards>> {
   const supabase = createClient();
   const {
     data: { user },
@@ -26,6 +21,7 @@ export async function GET(
   const rewards: Reward[] = [];
   const nextRewards: Reward[] = [];
 
+  /* Unclaimed PR */
   const { data: unclaimedPr } = await supabase
     .from(DbTable.PR)
     .select("pr_id")
@@ -36,6 +32,7 @@ export async function GET(
     rewards.push(generateUnclaimedPrReward(unclaimedPr));
   }
 
+  /* PR milestone */
   const { count: prCount } = await supabase
     .from(DbTable.PR)
     .select("*", { count: "exact", head: true })
@@ -77,7 +74,8 @@ const generatePrMilestoneReward = (
   prCount: number, details: RewardDetails
 ): Reward => ({
   details,
-  reward: prCount * 5,
+  // @ts-expect-error details are defined
+  reward: Math.min((details.upperBound - details.lowerBound) * 5, 20),
   type: RewardType.MILESTONE,
   title: `${prCount} PR milestone 📍`,
 });

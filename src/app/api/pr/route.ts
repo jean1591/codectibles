@@ -145,7 +145,7 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
 
   if (updateUserError) {
     console.error(`${DbError.UPDATE}: USER"`, {
-      error: JSON.stringify(updateUserError, null, 2),
+      error: updateUserError,
     });
   }
 

@@ -8,6 +8,7 @@ import { NoRewardsItem } from "./noRewardsItems";
 import { RewardItem } from "./rewardItem";
 import { RootState } from "../lib/store/store";
 import { useEffect } from "react";
+import { CurrentRewardsAndNextRewards, Reward } from "../interfaces";
 
 export const Rewards = () => {
   const dispatch = useDispatch();
@@ -15,10 +16,15 @@ export const Rewards = () => {
   useEffect(() => {
     fetch("/api/rewards")
       .then((res) => res.json())
-      .then(({ nextRewards, rewards }) => {
-        dispatch(setRewards(rewards));
-        dispatch(setNextRewards(nextRewards));
-      });
+      .then(
+        ({
+          nextRewards,
+          rewards,
+        }: CurrentRewardsAndNextRewards) => {
+          dispatch(setRewards(rewards));
+          dispatch(setNextRewards(nextRewards));
+        }
+      );
   }, []);
 
   const { rewards } = useSelector((state: RootState) => state.rewards);

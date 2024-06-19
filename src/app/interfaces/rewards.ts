@@ -9,6 +9,12 @@ export interface Reward {
   type: RewardType;
 }
 
+
+export type CurrentRewardsAndNextRewards = {
+  rewards: Reward[];
+  nextRewards: Reward[];
+};
+
 export enum RewardType {
   MERGE = "merge",
   MILESTONE = "milestone",
