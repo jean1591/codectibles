@@ -1,9 +1,9 @@
 {
-  "name": "bento-generator",
+  "name": "code-kingdom",
   "version": "1.0.0",
   "author": {
     "name": "jean robertou",
-    "url": "https://bento-generator.jeanrobertou.com"
+    "url": "https://code-kingdom.jeanrobertou.com"
   },
   "private": false,
   "scripts": {
