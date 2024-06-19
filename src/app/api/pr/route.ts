@@ -117,7 +117,7 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
   if (type === RewardType.MILESTONE) {
     const { error: updateUserError } = await supabase
       .from(DbTable.USER)
-      .update({ nextPrMilestone: details.upperBound })
+      .update({ next_pr_milestone: details.upperBound })
       .eq("auth_user_id", user.id);
 
     if (updateUserError) {

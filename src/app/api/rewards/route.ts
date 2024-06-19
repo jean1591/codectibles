@@ -44,14 +44,14 @@ export async function GET(
 
     const { data: users } = await supabase
       .from(DbTable.USER)
-      .select("nextPrMilestone")
+      .select("next_pr_milestone")
       .eq("auth_user_id", user.id);
 
     if (!users || users.length === 0) {
       throw new Error(`No users found for id ${user.id}`);
     }
 
-    const { nextPrMilestone } = users[0];
+    const { next_pr_milestone: nextPrMilestone } = users[0];
 
     if (prCount >= nextPrMilestone) {
       rewards.push(generatePrMilestoneReward(prCount, nextPrMergeMilestone.details));

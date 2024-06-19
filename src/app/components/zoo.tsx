@@ -10,7 +10,7 @@ import { SelectAssetPopover } from "./selectAssetPopover";
 import { UpgradeOrRemovePopover } from "./upgradeOrRemovePopover";
 import { classNames } from "@/utils";
 import { redirect } from "next/navigation";
-import { setUsername } from "../lib/store/features/user/slice";
+import { setUser, setUsername } from "../lib/store/features/user/slice";
 
 export const Zoo = () => {
   const dispatch = useDispatch();
@@ -29,6 +29,12 @@ export const Zoo = () => {
         dispatch(setZoo(zoo));
       })
       .catch(() => setShouldRedirect(true));
+
+    fetch("/api/user")
+      .then((res) => res.json())
+      .then((user) => {
+        dispatch(setUser(user));
+      });
   }, []);
 
   useEffect(() => {
