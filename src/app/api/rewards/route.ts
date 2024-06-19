@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Reward, RewardType } from "@/app/interfaces";
+import { Reward, RewardDetails, RewardType } from "@/app/interfaces";
 
 import { DbTable } from "../interfaces/database";
 import { createClient } from "@/utils/supabase/server";
+
+// TODO: load user in state to not have to fetch it every time
 
 type RewardAndNext = {
   rewards: Reward[];
@@ -43,9 +45,19 @@ export async function GET(
     const nextPrMergeMilestone = generateNextPrMilestone(prCount);
     nextRewards.push(nextPrMergeMilestone);
 
-    // @ts-expect-error lowerBound is present in nextPrMergeMilestone.details
-    if (`${prCount} PR` === nextPrMergeMilestone.details.lowerBound) {
-      rewards.push(generatePrMilestoneReward(prCount));
+    const { data: users } = await supabase
+      .from(DbTable.USER)
+      .select("nextPrMilestone")
+      .eq("auth_user_id", user.id);
+
+    if (!users || users.length === 0) {
+      throw new Error(`No users found for id ${user.id}`);
+    }
+
+    const { nextPrMilestone } = users[0];
+
+    if (prCount >= nextPrMilestone) {
+      rewards.push(generatePrMilestoneReward(prCount, nextPrMergeMilestone.details));
     }
   }
 
@@ -62,12 +74,12 @@ const generateUnclaimedPrReward = (
 });
 
 const generatePrMilestoneReward = (
-  prCount: number
+  prCount: number, details: RewardDetails
 ): Reward => ({
-  details: [],
+  details,
   reward: prCount * 5,
   type: RewardType.MILESTONE,
-  title: `${prCount} PR milestone reached ✅`,
+  title: `${prCount} PR milestone 📍`,
 });
 
 const generateNextPrMilestone = (prCount: number): Reward => {
@@ -77,7 +89,7 @@ const generateNextPrMilestone = (prCount: number): Reward => {
   return {
     type: RewardType.MILESTONE,
     title: `Merge ${upperBound - prCount} PR to reach next milestone`,
-    details: { lowerBound: `${lowerBound} PR`, upperBound: `${upperBound} PR`, progress: `${progress}%` },
+    details: { lowerBound, upperBound, progress },
     reward: 0,
   };
 };

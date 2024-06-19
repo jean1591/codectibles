@@ -12,7 +12,7 @@ export const NoRewardsItem = () => {
 
   return (
     <div>
-      <p className="block text-base text-center">
+      <p className="text-base text-center">
         All rewards have been <span className="text-red-400">claimed</span> 🦁
       </p>
 
@@ -40,12 +40,12 @@ const NextPRMergeMilestone = ({
         <div className="overflow-hidden rounded-full bg-gray-200">
           <div
             className="h-2 rounded-full bg-red-400"
-            style={{ width: `${progress}` }}
+            style={{ width: `${progress}%` }}
           />
         </div>
         <div className="mt-2 grid grid-cols-2 text-sm font-medium">
-          <div className="text-red-400">{lowerBound}</div>
-          <div className="text-right">{upperBound}</div>
+          <div className="text-red-400">{`${lowerBound} PR`}</div>
+          <div className="text-right">{`${upperBound} PR`}</div>
         </div>
       </div>
     </div>

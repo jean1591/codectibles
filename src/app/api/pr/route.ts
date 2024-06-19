@@ -112,28 +112,41 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
         error: updatePrError,
       });
     }
+  }
 
-    const { data: users } = await supabase
-      .from(DbTable.USER)
-      .select("coins")
-      .eq("auth_user_id", user.id);
-
-    if (!users || users.length === 0) {
-      throw new Error(`No users found for id ${user.id}`);
-    }
-
-    const { coins } = users[0];
-
+  if (type === RewardType.MILESTONE) {
     const { error: updateUserError } = await supabase
       .from(DbTable.USER)
-      .update({ coins: coins + reward })
+      .update({ nextPrMilestone: details.upperBound })
       .eq("auth_user_id", user.id);
 
     if (updateUserError) {
       console.error(`${DbError.UPDATE}: USER"`, {
-        error: JSON.stringify(updateUserError, null, 2),
+        error: updateUserError,
       });
     }
+  }
+
+  const { data: users } = await supabase
+    .from(DbTable.USER)
+    .select("coins")
+    .eq("auth_user_id", user.id);
+
+  if (!users || users.length === 0) {
+    throw new Error(`No users found for id ${user.id}`);
+  }
+
+  const { coins } = users[0];
+
+  const { error: updateUserError } = await supabase
+    .from(DbTable.USER)
+    .update({ coins: coins + reward })
+    .eq("auth_user_id", user.id);
+
+  if (updateUserError) {
+    console.error(`${DbError.UPDATE}: USER"`, {
+      error: JSON.stringify(updateUserError, null, 2),
+    });
   }
 
   return NextResponse.json({ success: true });

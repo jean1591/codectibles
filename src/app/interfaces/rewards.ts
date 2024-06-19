@@ -1,7 +1,9 @@
+export type RewardDetails =
+  | number[]
+  | { lowerBound: number; progress: number; upperBound: number };
+
 export interface Reward {
-  details:
-    | number[]
-    | { lowerBound: string; progress: string; upperBound: string };
+  details: RewardDetails;
   reward: number;
   title: string;
   type: RewardType;
