@@ -1,10 +1,14 @@
+import {
+  setNextRewards,
+  setRewards,
+} from "../lib/store/features/rewards/slice";
 import { useDispatch, useSelector } from "react-redux";
 
 import { NoRewardsItem } from "./noRewardsItems";
 import { RewardItem } from "./rewardItem";
 import { RootState } from "../lib/store/store";
-import { setRewards } from "../lib/store/features/rewards/slice";
 import { useEffect } from "react";
+import { CurrentRewardsAndNextRewards, Reward } from "../interfaces";
 
 export const Rewards = () => {
   const dispatch = useDispatch();
@@ -12,9 +16,15 @@ export const Rewards = () => {
   useEffect(() => {
     fetch("/api/rewards")
       .then((res) => res.json())
-      .then((rewards) => {
-        dispatch(setRewards(rewards));
-      });
+      .then(
+        ({
+          nextRewards,
+          rewards,
+        }: CurrentRewardsAndNextRewards) => {
+          dispatch(setRewards(rewards));
+          dispatch(setNextRewards(nextRewards));
+        }
+      );
   }, []);
 
   const { rewards } = useSelector((state: RootState) => state.rewards);
