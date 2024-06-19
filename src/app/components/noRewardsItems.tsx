@@ -36,11 +36,11 @@ const NextPRMergeMilestone = ({
   return (
     <div>
       <p className="text-base">{nextPrMergeMilestone.title}</p>
-      <div className="mt-4" aria-hidden="true">
+      <div className="mt-4">
         <div className="overflow-hidden rounded-full bg-gray-200">
           <div
             className="h-2 rounded-full bg-red-400"
-            style={{ width: `${progress}%` }}
+            style={{ width: `${progress}` }}
           />
         </div>
         <div className="mt-2 grid grid-cols-2 text-sm font-medium">

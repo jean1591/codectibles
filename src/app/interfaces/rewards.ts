@@ -1,7 +1,7 @@
 export interface Reward {
   details:
     | number[]
-    | { lowerBound: string; progress: number; upperBound: string };
+    | { lowerBound: string; progress: string; upperBound: string };
   reward: number;
   title: string;
   type: RewardType;

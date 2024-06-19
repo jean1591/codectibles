@@ -40,7 +40,7 @@ export async function GET(
     .eq("user_id", user.id);
 
   if (prCount) {
-    const nextPrMergeMilestone = generateNextPrMergeMilestone(prCount);
+    const nextPrMergeMilestone = generateNextPrMilestone(prCount);
     nextRewards.push(nextPrMergeMilestone);
   }
 
@@ -56,11 +56,32 @@ const generateUnclaimedPrReward = (
   title: `${unclaimedPr.length} PR merged ✅`,
 });
 
-const generateNextPrMergeMilestone = (prCount: number): Reward => {
+const generateNextPrMilestone = (prCount: number): Reward => {
+  const { lowerBound, upperBound } = getPrMilestoneBounds(prCount)
+  const progress = Math.ceil((prCount - lowerBound) / (upperBound - lowerBound) * 100)
+
   return {
     type: RewardType.MILESTONE,
-    title: `Next milestone in 1 PR`,
-    details: { lowerBound: "4 PR", upperBound: "8 PR", progress: 75 },
+    title: `Merge ${upperBound - prCount} PR to reach next milestone`,
+    details: { lowerBound: `${lowerBound} PR`, upperBound: `${upperBound} PR`, progress: `${progress}%` },
     reward: 0,
   };
 };
+
+const getPrMilestoneBounds = (prCount: number): { upperBound: number, lowerBound: number } => {
+  if (prCount === 0) {
+    return { upperBound: 1, lowerBound: 0 };
+  }
+
+  let currentPowerOfTwo = 1;
+
+  while (2 ** currentPowerOfTwo < prCount) {
+    currentPowerOfTwo += 1;
+  }
+
+  if (prCount === 2 ** currentPowerOfTwo) {
+    return { upperBound: 2 ** (currentPowerOfTwo + 1), lowerBound: 2 ** currentPowerOfTwo };
+  }
+
+  return { upperBound: 2 ** currentPowerOfTwo, lowerBound: 2 ** (currentPowerOfTwo - 1) };
+}
