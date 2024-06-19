@@ -42,6 +42,11 @@ export async function GET(
   if (prCount) {
     const nextPrMergeMilestone = generateNextPrMilestone(prCount);
     nextRewards.push(nextPrMergeMilestone);
+
+    // @ts-expect-error lowerBound is present in nextPrMergeMilestone.details
+    if (`${prCount} PR` === nextPrMergeMilestone.details.lowerBound) {
+      rewards.push(generatePrMilestoneReward(prCount));
+    }
   }
 
   return NextResponse.json({ rewards, nextRewards });
@@ -54,6 +59,15 @@ const generateUnclaimedPrReward = (
   reward: unclaimedPr.length * 50,
   type: RewardType.MERGE,
   title: `${unclaimedPr.length} PR merged ✅`,
+});
+
+const generatePrMilestoneReward = (
+  prCount: number
+): Reward => ({
+  details: [],
+  reward: prCount * 5,
+  type: RewardType.MILESTONE,
+  title: `${prCount} PR milestone reached ✅`,
 });
 
 const generateNextPrMilestone = (prCount: number): Reward => {
@@ -80,7 +94,7 @@ const getPrMilestoneBounds = (prCount: number): { upperBound: number, lowerBound
   }
 
   if (prCount === 2 ** currentPowerOfTwo) {
-    return { upperBound: 2 ** (currentPowerOfTwo + 1), lowerBound: 2 ** currentPowerOfTwo };
+    return { upperBound: 2 ** (currentPowerOfTwo + 1), lowerBound: prCount };
   }
 
   return { upperBound: 2 ** currentPowerOfTwo, lowerBound: 2 ** (currentPowerOfTwo - 1) };
