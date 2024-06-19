@@ -4,11 +4,13 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export interface RewardsState {
   isRewardsModalOpen: boolean;
+  nextRewards: Reward[];
   rewards: Reward[];
 }
 
 const initialState: RewardsState = {
   isRewardsModalOpen: false,
+  nextRewards: [],
   rewards: [],
 };
 
@@ -24,13 +26,20 @@ export const rewardsSlice = createSlice({
     setIsRewardsModalOpen: (state, action: PayloadAction<boolean>) => {
       state.isRewardsModalOpen = action.payload;
     },
+    setNextRewards: (state, action: PayloadAction<Reward[]>) => {
+      state.nextRewards = action.payload;
+    },
     setRewards: (state, action: PayloadAction<Reward[]>) => {
       state.rewards = action.payload;
     },
   },
 });
 
-export const { claimReward, setIsRewardsModalOpen, setRewards } =
-  rewardsSlice.actions;
+export const {
+  claimReward,
+  setIsRewardsModalOpen,
+  setNextRewards,
+  setRewards,
+} = rewardsSlice.actions;
 
 export default rewardsSlice.reducer;

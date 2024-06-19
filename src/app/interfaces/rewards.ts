@@ -1,5 +1,7 @@
 export interface Reward {
-  details: number[];
+  details:
+    | number[]
+    | { lowerBound: string; progress: number; upperBound: string };
   reward: number;
   title: string;
   type: RewardType;
@@ -7,4 +9,5 @@ export interface Reward {
 
 export enum RewardType {
   MERGE = "merge",
+  MILESTONE = "milestone",
 }

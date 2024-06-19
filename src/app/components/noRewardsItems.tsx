@@ -1,4 +1,15 @@
+import { Reward, RewardType } from "../interfaces";
+
+import { RootState } from "../lib/store/store";
+import { useSelector } from "react-redux";
+
 export const NoRewardsItem = () => {
+  const { nextRewards } = useSelector((state: RootState) => state.rewards);
+
+  const nextPrMergeMilestone = nextRewards.find(
+    (nextReward) => nextReward.type === RewardType.MILESTONE
+  );
+
   return (
     <div>
       <p className="block text-base text-center">
@@ -6,20 +17,35 @@ export const NoRewardsItem = () => {
       </p>
 
       <div className="mt-8">
-        <p className="text-base">
-          Next milestone in <span className="text-red-400">1</span> PR
-        </p>
-        <div className="mt-4" aria-hidden="true">
-          <div className="overflow-hidden rounded-full bg-gray-200">
-            <div
-              className="h-2 rounded-full bg-red-400"
-              style={{ width: "75%" }}
-            />
-          </div>
-          <div className="mt-2 hidden grid-cols-2 text-sm font-medium sm:grid">
-            <div className="text-red-400">4 PR</div>
-            <div className="text-right">8 PR</div>
-          </div>
+        {nextPrMergeMilestone && (
+          <NextPRMergeMilestone nextPrMergeMilestone={nextPrMergeMilestone} />
+        )}
+      </div>
+    </div>
+  );
+};
+
+const NextPRMergeMilestone = ({
+  nextPrMergeMilestone,
+}: {
+  nextPrMergeMilestone: Reward;
+}) => {
+  // @ts-expect-error Properties exist in details
+  const { lowerBound, progress, upperBound } = nextPrMergeMilestone.details;
+
+  return (
+    <div>
+      <p className="text-base">{nextPrMergeMilestone.title}</p>
+      <div className="mt-4" aria-hidden="true">
+        <div className="overflow-hidden rounded-full bg-gray-200">
+          <div
+            className="h-2 rounded-full bg-red-400"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+        <div className="mt-2 grid grid-cols-2 text-sm font-medium">
+          <div className="text-red-400">{lowerBound}</div>
+          <div className="text-right">{upperBound}</div>
         </div>
       </div>
     </div>
