@@ -9,7 +9,7 @@ export default function TokenPage() {
   const [token, setToken] = useState<string | null>(null);
 
   const onSaveToken = async () => {
-    fetch("/api/token", {
+    fetch("/api/auth/token", {
       method: "PUT",
       body: JSON.stringify({ token }),
       headers: { "Content-Type": "application/json" },
