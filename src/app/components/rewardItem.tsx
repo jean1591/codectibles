@@ -2,19 +2,19 @@
 
 import { useDispatch, useSelector } from "react-redux";
 
-import { Reward } from "../interfaces";
+import { Reward, User } from "../interfaces";
 import { RootState } from "../lib/store/store";
 import { claimReward } from "../lib/store/features/rewards/slice";
-import { setCoins } from "../lib/store/features/zoo/slice";
+import { setUser } from "../lib/store/features/user/slice";
 
 export const RewardItem = ({ reward }: { reward: Reward }) => {
   const { details, reward: rewardValue, title, type } = reward;
   const dispatch = useDispatch();
-  const { coins } = useSelector((state: RootState) => state.zoo);
+  const { user } = useSelector((state: RootState) => state.user);
 
   const onClaimReward = async () => {
     // Update state
-    dispatch(setCoins(coins + rewardValue));
+    dispatch(setUser({...user, coins: user!.coins + rewardValue} as User));
     dispatch(claimReward(title));
 
     // Update DB

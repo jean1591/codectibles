@@ -1,13 +1,13 @@
-import { setCoins, setZoo } from "../lib/store/features/zoo/slice";
 import { useDispatch, useSelector } from "react-redux";
 
-import { AssetDetails } from "../interfaces";
+import { AssetDetails, User } from "../interfaces";
 import { PiArrowCircleUp } from "react-icons/pi";
 import { PiTrash } from "react-icons/pi";
 import { Popover } from "./ui/popover";
 import { RootState } from "../lib/store/store";
 import { classNames } from "@/utils";
 import { getPriceByAssetAndLevel } from "@/utils/assetPrices";
+import { setUser } from "../lib/store/features/user/slice";
 
 export const UpgradeOrRemovePopover = ({
   index,
@@ -19,40 +19,38 @@ export const UpgradeOrRemovePopover = ({
   selectedCell: number | null;
 }) => {
   const dispatch = useDispatch();
-  const { zoo, coins } = useSelector((state: RootState) => state.zoo);
+  const { user } = useSelector((state: RootState) => state.user);
 
-  const selectedAsset = zoo[index] as AssetDetails;
+  const selectedAsset = user!.zoo[index] as AssetDetails;
 
   const handleAssetUpgrade = (index: number) => {
-    const updatedZoo = [...zoo];
+    const updatedZoo = [...user!.zoo];
     updatedZoo[index] = {
       ...selectedAsset,
       level: selectedAsset.level! + 1,
     };
 
     dispatch(
-      setCoins(coins - getPriceByAssetAndLevel(zoo[selectedCell!]?.icon))
+      dispatch(setUser({ ...user, coins: user!.coins - getPriceByAssetAndLevel(user!.zoo[selectedCell!]?.icon), zoo: updatedZoo } as User))
     );
-    dispatch(setZoo(updatedZoo));
   };
 
   const handleAssetOnRemove = (index: number) => {
-    const updatedZoo = [...zoo];
+    const updatedZoo = [...user!.zoo];
     updatedZoo[index] = null;
 
-    const asset = zoo[selectedCell!] as AssetDetails;
+    const asset = user!.zoo[selectedCell!] as AssetDetails;
 
     dispatch(
-      setCoins(coins + getPriceByAssetAndLevel(asset.icon, asset.level))
+      dispatch(setUser({ ...user, coins: user!.coins + getPriceByAssetAndLevel(asset.icon, asset.level), zoo: updatedZoo } as User))
     );
-    dispatch(setZoo(updatedZoo));
   };
 
   return (
     <div>
       {selectedCell === index &&
         isPopoverVisible &&
-        zoo[selectedCell] !== null && (
+        user!.zoo[selectedCell] !== null && (
           <Popover
             isPopoverVisible={isPopoverVisible}
             selectedCell={selectedCell}
@@ -60,10 +58,10 @@ export const UpgradeOrRemovePopover = ({
             <div>
               <div className="flex items-center justify-center gap-x-4">
                 <button
-                  disabled={selectedAsset.level > 2 || selectedAsset.price > coins}
+                  disabled={selectedAsset.level > 2 || selectedAsset.price > user!.coins}
                   onClick={() => handleAssetUpgrade(index)}
                   className={classNames(
-                    selectedAsset.level > 2 || selectedAsset.price > coins
+                    selectedAsset.level > 2 || selectedAsset.price > user!.coins
                       ? "border-slate-950 text-slate-950"
                       : "hover:bg-slate-700 border-slate-300 text-slate-300",
                     "text-xl px-2 py-1 rounded-md border grid grid-cols-2 text-center"
