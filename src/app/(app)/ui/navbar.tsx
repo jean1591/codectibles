@@ -1,20 +1,18 @@
 "use client";
 
-import { useDispatch, useSelector } from "react-redux";
-
 import Link from "next/link";
-import { setCurrentPage } from "@/app/lib/store/features/navigation/slice";
+
 import { classNames } from "@/utils";
-import { RootState } from "@/app/lib/store/store";
+import { usePathname } from "next/navigation";
 
 export const Navbar = () => {
-  const dispatch = useDispatch();
-  const {currentPage} = useSelector((state: RootState) => state.navigation)
+  const pathname = usePathname()
+  const page = pathname.split('/').at(-1)
 
   const navigationItems = [
-    { title: "Profile", href: "/profile" },
-    { title: "Success", href: "/success" },
-    { title: "Pets", href: "/pets" },
+    { title: "profile", href: "/profile" },
+    { title: "success", href: "/success" },
+    { title: "pets", href: "/pets" },
   ];
 
   return (
@@ -22,11 +20,10 @@ export const Navbar = () => {
       {navigationItems.map(({ title, href }) => (
         <Link
           key={title}
-          onClick={() => dispatch(setCurrentPage(title))}
           href={href}
           className={classNames(
-            currentPage === title ? "bg-slate-800" : "bg-none",
-            "hover:bg-slate-800 px-4 py-2 rounded-lg text-slate-300 text-lg font-medium uppercase")}
+            page === title ? "bg-slate-800" : "bg-none",
+            "hover:bg-slate-800 px-4 py-2 rounded-lg text-slate-300 text-base font-medium uppercase")}
         >
           {title}
         </Link>
