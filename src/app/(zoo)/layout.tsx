@@ -1,5 +1,5 @@
-import { Banner } from "@/app/components/banner";
-import { Navbar } from "@/app/components/navbar";
+import { Banner } from "../(app)/ui/banner";
+
 
 export default function Layout({
   children,
@@ -9,7 +9,6 @@ export default function Layout({
   return (
     <div>
       <Banner />
-      <Navbar />
       <div className="my-16 px-4 sm:px-0 mx-auto max-w-3xl min-h-screen flex justify-center">
         {children}
       </div>
