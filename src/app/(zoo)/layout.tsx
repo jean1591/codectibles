@@ -1,4 +1,4 @@
-import { Banner } from "../components/banner";
+import { Banner } from "../(app)/ui/banner";
 
 
 export default function Layout({
