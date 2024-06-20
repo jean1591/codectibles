@@ -2,7 +2,6 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { type CookieOptions, createServerClient } from "@supabase/ssr";
 import { DbError, DbTable } from "@/app/api/interfaces/database";
-import { emptyZoo } from "@/app/api/constants/emptyZoo";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
@@ -50,7 +49,6 @@ export async function GET(request: Request) {
         auth_user_id: authUser.id,
         coins: 0,
         user_name: authUser.user_metadata.user_name,
-        zoo: JSON.stringify(emptyZoo),
       });
 
       if (error) {

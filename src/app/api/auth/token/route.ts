@@ -1,10 +1,12 @@
-import { DbError, DbTable } from "../interfaces/database";
+import { DbError, DbTable } from "../../interfaces/database";
 import { NextRequest, NextResponse } from "next/server";
 
 import { createClient } from "@/utils/supabase/server";
+import { encrypt } from "@/utils/hash";
+
 
 export async function PUT(request: NextRequest): Promise<NextResponse> {
-  const { coins, zoo } = await request.json();
+  const { token } = await request.json();
 
   const supabase = createClient();
   const {
@@ -15,14 +17,16 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
     throw new Error("User is not connected");
   }
 
-  const { error: updateUserError } = await supabase
+  const hashedToken = encrypt(token)
+
+  const { error } = await supabase
     .from(DbTable.USER)
-    .update({ coins, zoo: JSON.stringify(zoo) })
+    .update({ token: hashedToken })
     .eq("auth_user_id", user.id);
 
-  if (updateUserError) {
+  if (error) {
     console.error(`${DbError.UPDATE}: USER"`, {
-      error: JSON.stringify(updateUserError, null, 2),
+      error: JSON.stringify(error, null, 2),
     });
   }
 
