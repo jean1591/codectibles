@@ -5,6 +5,7 @@ import { StoreProvider } from "./lib/store/storeProvider";
 import { classNames } from "@/utils";
 
 const inter = Inter({ subsets: ["latin"] });
+
 export default function RootLayout({
   children,
 }: Readonly<{
