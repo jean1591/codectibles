@@ -3,11 +3,11 @@ import { Zoo } from "./zoo";
 export interface User {
     authUserId: string;
     coins: number;
-    fetchedAt: Date;
+    fetchedAt: string;
     userId: string;
     nextPrMilestone: number;
     token: string;
-    userName: string;
+    username: string;
     xp: number;
     zoo: Zoo;
 }

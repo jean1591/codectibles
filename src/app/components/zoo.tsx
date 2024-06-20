@@ -1,6 +1,5 @@
 "use client";
 
-import { setCoins, setZoo } from "../lib/store/features/zoo/slice";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
@@ -10,31 +9,31 @@ import { SelectAssetPopover } from "./selectAssetPopover";
 import { UpgradeOrRemovePopover } from "./upgradeOrRemovePopover";
 import { classNames } from "@/utils";
 import { redirect } from "next/navigation";
-import { setUser, setUsername } from "../lib/store/features/user/slice";
+import { setUser } from "../lib/store/features/user/slice";
+import { User } from "../interfaces";
 
 export const Zoo = () => {
   const dispatch = useDispatch();
-  const { zoo } = useSelector((state: RootState) => state.zoo);
+  const { zoo } = useSelector((state: RootState) => state.user);
 
   const [isPopoverVisible, setIsPopoverVisibe] = useState(false);
   const [selectedCell, setSelectedCell] = useState<number | null>(null);
   const [shouldRedirect, setShouldRedirect] = useState(false);
 
   useEffect(() => {
-    fetch("/api/pr")
-      .then((res) => res.json())
-      .then(({ coins, userName, zoo }) => {
-        dispatch(setCoins(coins));
-        dispatch(setUsername(userName));
-        dispatch(setZoo(zoo));
-      })
-      .catch(() => setShouldRedirect(true));
-
     fetch("/api/user")
       .then((res) => res.json())
-      .then((user) => {
-        dispatch(setUser(user));
-      });
+      .then(({ user }: { user: User }) => {
+        fetch(
+          `/api/pr?fetchedAt=${encodeURIComponent(user.fetchedAt)}&userId=${
+            user.authUserId
+          }&token=${user.token}&username=${user.username}`
+        );
+        dispatch(setUser({ ...user, fetchedAt: new Date().toISOString() }));
+      })
+      .catch((error) => {
+        console.error(error)
+        setShouldRedirect(true)});
   }, []);
 
   useEffect(() => {

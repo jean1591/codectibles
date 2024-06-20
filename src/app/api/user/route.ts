@@ -32,9 +32,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     userId: id,
     nextPrMilestone: next_pr_milestone,
     token,
-    userName: user_name,
+    username: user_name,
     xp,
-    zoo
+    zoo: JSON.parse(zoo)
   }
 
   return NextResponse.json({ user: formattedUser });

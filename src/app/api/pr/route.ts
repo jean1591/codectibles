@@ -7,43 +7,27 @@ import { createClient } from "@/utils/supabase/server";
 import { decrypt } from "@/utils/hash";
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
-  /* Fetch data from DB */
-  const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const searchParams = request.nextUrl.searchParams
+  const fetchedAt = searchParams.get('fetchedAt')
+  const hashedToken = searchParams.get('token')
+  const userId = searchParams.get('userId')
+  const username = searchParams.get('username')
 
-  if (!user) {
-    throw new Error("User is not connected");
+  if (!fetchedAt || !hashedToken || !userId || !username) {
+    throw new Error(`fetchedAt, hashedToken, userId and userName must be defined`);
   }
-
-  const { data: users } = await supabase
-    .from(DbTable.USER)
-    .select("coins, fetched_at, token, user_name, zoo")
-    .eq("auth_user_id", user.id);
-
-  if (!users || users.length === 0) {
-    throw new Error(`No users found for id ${user.id}`);
-  }
-
-  const {
-    coins,
-    fetched_at: fetchedAt,
-    token: hashedToken,
-    user_name: userName,
-    zoo,
-  } = users[0];
 
   const token = decrypt(hashedToken);
 
   /* Fetch data from Github */
-  const githubPr = await getLatestGithubMergedPr(fetchedAt, token, userName);
+  const githubPr = await getLatestGithubMergedPr(new Date(fetchedAt), token, username);
 
   /* Exclude PR already saved in DB */
+  const supabase = createClient();
   const { data: dbPr } = await supabase
     .from(DbTable.PR)
     .select("pr_id")
-    .eq("user_id", user.id)
+    .eq("user_id", userId)
     .in(
       "pr_id",
       githubPr.map((pr) => pr.id)
@@ -63,7 +47,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       merged_at: pr.pull_request.merged_at,
       pr_id: pr.id,
       pr_number: pr.number,
-      user_id: user.id,
+      user_id: userId,
     }))
   );
 
@@ -75,7 +59,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   const { error: updateUserError } = await supabase
     .from(DbTable.USER)
     .update({ fetched_at: new Date() })
-    .eq("auth_user_id", user.id);
+    .eq("auth_user_id", userId);
 
   if (updateUserError) {
     console.error(`${DbError.UPDATE}: USER"`, {
@@ -83,7 +67,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     });
   }
 
-  return NextResponse.json({ coins, zoo: JSON.parse(zoo), userName });
+  return NextResponse.json({ success: true });
 }
 
 export async function PUT(request: NextRequest): Promise<NextResponse> {
@@ -155,12 +139,12 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
 const getLatestGithubMergedPr = async (
   fetchedAt: Date,
   token: string,
-  userName: string
+  username: string
 ): Promise<Issue[]> => {
   const formatedCurrentDate = new Date().toISOString().slice(0, 10);
-  const formatedFetchedAt = new Date(fetchedAt).toISOString().slice(0, 10);
+  const formatedFetchedAt = fetchedAt.toISOString().slice(0, 10);
 
-  const url = `https://api.github.com/search/issues?q=type:pr+author:${userName}+updated:${formatedFetchedAt}..${formatedCurrentDate}`;
+  const url = `https://api.github.com/search/issues?q=type:pr+author:${username}+updated:${formatedFetchedAt}..${formatedCurrentDate}`;
 
   const githubIssuesResponse = await fetch(url, {
     method: "GET",
