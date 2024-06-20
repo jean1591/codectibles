@@ -9,7 +9,6 @@ const initialState: UserSlice = {
   username: null,
 };
 
-// TODO: merge with zoo
 export const userSlice = createSlice({
   name: "userSlice",
   initialState,
