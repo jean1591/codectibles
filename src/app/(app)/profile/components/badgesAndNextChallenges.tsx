@@ -54,9 +54,9 @@ const nextChallenges = [
 export const BadgesAndNextChallenges = () => {
   return (
     <div className="bg-slate-200 rounded-lg p-4 lg:p-8 shadow-lg">
-      {/* COMPLETED */}
+      {/* BADGES */}
       <div>
-        <p className="text-2xl font-medium">Completed</p>
+        <p className="text-2xl font-medium">Badges</p>
 
         <div className="mt-8 grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-4 xl:grid-cols-5 grid-flow-row items-center justify-center gap-4">
           {badges.map(({ badge }) => (
@@ -73,9 +73,9 @@ export const BadgesAndNextChallenges = () => {
         </div>
       </div>
 
-      {/* NEXT CHALLENGES */}
+      {/* NEXT BADGES */}
       <div className="mt-12">
-        <p className="text-2xl font-medium">Next challenges</p>
+        <p className="text-2xl font-medium">Next badges</p>
 
         <div className="mt-8">
           {nextChallenges.map(({ description, price, title }) => (
