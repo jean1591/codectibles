@@ -25,7 +25,7 @@ export const user: UserDb = {
             }
         },
         comments: {
-            user: 403,
+            user: 510,
             nextmilestone: 500,
             previousmilestone: 200,
             reward: {

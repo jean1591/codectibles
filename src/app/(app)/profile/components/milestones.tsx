@@ -30,7 +30,7 @@ export const Milestones = () => {
       />
       <div className="mt-8">
         <ProgressBarWithTitle
-          title={`${comments.user} PR merged`}
+          title={`${comments.user} comments made`}
           reward={`+ ${comments.reward.value} ${comments.reward.type.toUpperCase()}`}
           lowerBound={comments.previousmilestone.toString()}
           upperBound={comments.nextmilestone.toString()}
@@ -39,7 +39,7 @@ export const Milestones = () => {
       </div>
       <div className="mt-8">
         <ProgressBarWithTitle
-          title={`${approves.user} PR merged`}
+          title={`${approves.user} PR approved`}
           reward={`+ ${approves.reward.value} ${approves.reward.type.toUpperCase()}`}
           lowerBound={approves.previousmilestone.toString()}
           upperBound={approves.nextmilestone.toString()}

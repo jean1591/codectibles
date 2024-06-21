@@ -14,11 +14,33 @@ export const ProgressBarWithTitle = ({
   upperBound: string;
   progress: number;
 }) => {
+  // progress >= 100 ✅
+  // display claim on reward ✅
+  // At claim, update DB with new previous/next milestone
+  // Fetch updated user
+  // reload component with updated data (miletone, level, xp, coins, ...)
+
+  const handleClaimMilestone = () => {
+    console.log(`Claiming ${reward}`);
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between">
         <p className="text-xl font-medium text-left">{title}</p>
-        <p className="text-base text-right">{reward}</p>
+        {progress >= 100 ? (
+          <button
+            onClick={handleClaimMilestone}
+            className={classNames(
+              gradientBg,
+              "text-slate-100 py-1 px-4 rounded-md text-base text-right animate-bounce"
+            )}
+          >
+            {reward}
+          </button>
+        ) : (
+          <p className="text-base text-right">{reward}</p>
+        )}
       </div>
 
       <div className="mt-4">
