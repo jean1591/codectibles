@@ -53,7 +53,7 @@ const nextChallenges = [
 
 export const BadgesAndNextChallenges = () => {
   return (
-    <div className="bg-slate-200 rounded-lg p-4 lg:p-8">
+    <div className="bg-slate-200 rounded-lg p-4 lg:p-8 shadow-lg">
       {/* COMPLETED */}
       <div>
         <p className="text-2xl font-medium">Completed</p>
@@ -64,7 +64,7 @@ export const BadgesAndNextChallenges = () => {
               key={badge}
               className={classNames(
                 gradientBg,
-                "flex items-center justify-center h-20 w-20 border-2 border-slate-500 rounded-lg"
+                "flex items-center justify-center h-20 w-20 border-2 border-slate-500 rounded-lg shadow-md"
               )}
             >
               <p className="text-4xl">{badge}</p>
@@ -81,7 +81,7 @@ export const BadgesAndNextChallenges = () => {
           {nextChallenges.map(({ description, price, title }) => (
             <div
               key={title}
-              className={classNames(gradientBg, "rounded-lg p-[2px] mt-2")}
+              className={classNames(gradientBg, "rounded-lg p-[2px] mt-2 shadow-md")}
             >
               <div className="flex items-center justify-between p-4 bg-slate-200 rounded-lg">
                 <div>
