@@ -54,7 +54,7 @@ const nextChallenges = [
 
 export default async function Profile() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
       <LevelAndXp />
       <BadgesAndNextChallenges />
     </div>
@@ -63,7 +63,7 @@ export default async function Profile() {
 
 const LevelAndXp = () => {
   return (
-    <div className="bg-slate-400/25 rounded-lg p-4 md:p-8">
+    <div className="bg-slate-400/25 rounded-lg p-4 lg:p-8">
       <div className="flex items-center justify-between">
         <p className="text-2xl font-medium text-left">Level 76</p>
         <p className="text-xl text-right">3653 XP</p>
@@ -76,9 +76,11 @@ const LevelAndXp = () => {
             style={{ width: "37.5%" }}
           />
         </div>
-        <div className="mt-4 grid-cols-2 text-base font-medium grid">
-          <div className="text-left">3500 XP</div>
-          <div className="text-right">5000 XP</div>
+        <div className="mt-4 flex items-center justify-between text-base font-medium">
+          <p className={classNames(
+            gradientBg,
+            "inline-block text-left text-transparent bg-clip-text")}>3500 XP</p>
+          <p className="text-right">5000 XP</p>
         </div>
       </div>
     </div>
@@ -87,12 +89,12 @@ const LevelAndXp = () => {
 
 const BadgesAndNextChallenges = () => {
   return (
-    <div className="bg-slate-400/25 rounded-lg p-4 md:p-8">
+    <div className="bg-slate-400/25 rounded-lg p-4 lg:p-8">
       {/* COMPLETED */}
       <div>
         <p className="text-2xl font-medium">Completed</p>
 
-        <div className="mt-8 grid grid-cols-4 md:grid-cols-5 grid-flow-row items-center justify-center gap-4">
+        <div className="mt-8 grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-4 xl:grid-cols-5 grid-flow-row items-center justify-center gap-4">
           {badges.map(({ badge }) => (
             <div
               key={badge}

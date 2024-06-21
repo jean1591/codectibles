@@ -11,11 +11,11 @@ export default function Layout({
       <Banner />
 
       <div className="my-4 grid grid-cols-7 gap-x-12">
-        <div className="hidden sm:block sm:col-span-1">
+        <div className="hidden lg:block lg:col-span-1">
           <Navbar />
         </div>
 
-        <div className="col-span-7 sm:col-span-6">{children}</div>
+        <div className="col-span-7 lg:col-span-6">{children}</div>
       </div>
     </div>
   );
