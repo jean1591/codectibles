@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { User, UserDb } from "../interfaces/user";
 import { createClient } from "@/utils/supabase/server";
-import { DbTable } from "../interfaces/database";
+import { DbError, DbTable } from "../interfaces/database";
 
 export async function GET(request: NextRequest): Promise<NextResponse<User>> {
     const supabase = createClient();
+
     const {
         data: { user: authUser },
     } = await supabase.auth.getUser();
@@ -15,7 +16,7 @@ export async function GET(request: NextRequest): Promise<NextResponse<User>> {
 
     const { data: users } = await supabase
         .from(DbTable.USER)
-        .select("badges, level, stats, token, username")
+        .select("authUserId, badges, level, stats, token, username")
         .eq("authUserId", authUser.id);
 
     if (!users || users.length === 0) {
@@ -40,4 +41,23 @@ export async function GET(request: NextRequest): Promise<NextResponse<User>> {
     }
 
     return NextResponse.json(user);
+}
+
+export async function PUT(request: NextRequest): Promise<NextResponse> {
+    const supabase = createClient();
+
+    const { user }: { user: User } = await request.json();
+
+    const { error: updateUserError } = await supabase
+        .from(DbTable.USER)
+        .update(user)
+        .eq("authUserId", user.authUserId);
+
+    if (updateUserError) {
+        console.error(`${DbError.UPDATE}: USER"`, {
+            error: JSON.stringify(updateUserError, null, 2),
+        });
+    }
+
+    return NextResponse.json({ success: true });
 }

@@ -6,6 +6,7 @@ export type User = Omit<UserDb, 'badges'> & {
 }
 
 export interface UserDb {
+    authUserId: string,
     badges: BadgeWithUnlockedAt[];
     id: string;
     level: number;
@@ -43,9 +44,17 @@ export interface Stats {
 }
 
 export interface Stat {
+    id: StatType;
     nextmilestone: number;
     previousmilestone: number;
     reward: number;
     rewardType: RewardType;
     user: number;
+}
+
+export enum StatType {
+    APPROVES = 'approves',
+    COMMENTS = 'comments',
+    PR = 'pr',
+    XP = 'xp',
 }

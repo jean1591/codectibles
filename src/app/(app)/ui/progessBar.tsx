@@ -1,33 +1,63 @@
 import { classNames } from "@/utils";
 import { gradientBg } from "./constants";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/app/lib/store/store";
+import { Stat, User, UserDb } from "@/app/api/interfaces/user";
+import { computeProgress } from "@/utils/computeProgress";
+import { setUser } from "@/app/lib/store/features/user/slice";
 
-export const ProgressBarWithTitle = ({
-  title,
-  reward,
-  lowerBound,
-  upperBound,
-  progress,
-}: {
-  reward: string;
-  title: string;
-  lowerBound: string;
-  upperBound: string;
-  progress: number;
-}) => {
-  // progress >= 100 ✅
-  // display claim on reward ✅
-  // At claim, update DB with new previous/next milestone
-  // Fetch updated user
-  // reload component with updated data (miletone, level, xp, coins, ...)
+export const ProgressBarWithTitle = ({ stat }: { stat: Stat }) => {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state: RootState) => state.user);
+
+  if (!user) {
+    return <></>;
+  }
 
   const handleClaimMilestone = () => {
-    console.log(`Claiming ${reward}`);
+    const updatedXp: Stat = {
+      ...user.stats.xp,
+      user: user.stats.xp.user + stat.reward,
+    };
+
+    const updatedStat: Stat = {
+      ...stat,
+      nextmilestone: stat.nextmilestone * 2,
+      previousmilestone: stat.nextmilestone,
+      reward: 100,
+    };
+
+    const updatedUser = {
+      authUserId: user.authUserId,
+      stats: { ...user.stats, xp: updatedXp, [stat.id]: updatedStat },
+    } as UserDb;
+
+    (async function updateUser() {
+      await fetch("/api/user", {
+        method: "PUT",
+        body: JSON.stringify({ user: updatedUser }),
+        headers: { "Content-Type": "application/json" },
+      });
+    })();
+
+    const stateUser: User = {
+      ...user,
+      stats: { ...user.stats, xp: updatedXp, [stat.id]: updatedStat },
+    };
+
+    dispatch(setUser(stateUser));
   };
+
+  const progress = computeProgress(
+    stat.user,
+    stat.previousmilestone,
+    stat.nextmilestone
+  );
 
   return (
     <div>
       <div className="flex items-center justify-between">
-        <p className="text-xl font-medium text-left">{title}</p>
+        <p className="text-xl font-medium text-left">{`${stat.user} PR merged`}</p>
         {progress >= 100 ? (
           <button
             onClick={handleClaimMilestone}
@@ -36,17 +66,17 @@ export const ProgressBarWithTitle = ({
               "text-slate-100 py-1 px-4 rounded-md text-base text-right animate-bounce"
             )}
           >
-            {reward}
+            {`+ ${stat.reward} ${stat.rewardType}`}
           </button>
         ) : (
-          <p className="text-base text-right">{reward}</p>
+          <p className="text-base text-right">{`+ ${stat.reward} ${stat.rewardType}`}</p>
         )}
       </div>
 
       <div className="mt-4">
         <ProgressBar
-          lowerBound={lowerBound}
-          upperBound={upperBound}
+          lowerBound={stat.previousmilestone.toString()}
+          upperBound={stat.nextmilestone.toString()}
           progress={progress}
         />
       </div>
