@@ -8,7 +8,7 @@ export const BadgePopover = ({
   badge: BadgeWithUnlockedAt;
   isPopoverVisible: boolean;
 }) => {
-  const { description, reward, title, unlockedAt } = badge;
+  const { description, reward, rewardType, title, unlockedAt } = badge;
 
   return (
     <div>
@@ -18,7 +18,7 @@ export const BadgePopover = ({
             <p className="text-lg font-medium capitalize">{title}</p>
             <p className="mt-2 text-xs capitalize">{description}</p>
             <p className="mt-4 text-sm">
-              {`Got ${reward.value} ${reward.type.toUpperCase()} on ${unlockedAt.slice(
+              {`Got ${reward} ${rewardType.toUpperCase()} on ${unlockedAt.slice(
                 0,
                 10
               )}`}

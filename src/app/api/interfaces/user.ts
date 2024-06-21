@@ -18,7 +18,8 @@ export interface Badge {
     description: string;
     icon: string;
     id: string;
-    reward: Reward;
+    reward: number;
+    rewardType: RewardType;
     title: string;
 }
 
@@ -44,6 +45,7 @@ export interface Stats {
 export interface Stat {
     nextmilestone: number;
     previousmilestone: number;
-    reward: Reward;
+    reward: number;
+    rewardType: RewardType;
     user: number;
 }

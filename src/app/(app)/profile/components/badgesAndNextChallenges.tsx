@@ -66,7 +66,7 @@ export const BadgesAndNextChallenges = () => {
         <p className="text-2xl font-medium">Next badges</p>
 
         <div className="mt-8">
-          {locked.map(({ description, reward, title }) => (
+          {locked.map(({ description, reward, rewardType, title }) => (
             <div
               key={title}
               className={classNames(
@@ -82,7 +82,7 @@ export const BadgesAndNextChallenges = () => {
                   </p>
                 </div>
                 <div>
-                  <p className="text-lg text-nowrap">{`+ ${reward.value} ${reward.type.toUpperCase()}`}</p>
+                  <p className="text-lg text-nowrap">{`+ ${reward} ${rewardType.toUpperCase()}`}</p>
                 </div>
               </div>
             </div>
