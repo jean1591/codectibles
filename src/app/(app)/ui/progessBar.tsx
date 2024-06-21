@@ -32,7 +32,7 @@ export const ProgressBarWithTitle = ({
   );
 };
 
-const ProgressBar = ({
+export const ProgressBar = ({
   lowerBound,
   upperBound,
   progress,
