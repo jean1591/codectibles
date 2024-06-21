@@ -54,9 +54,14 @@ const nextChallenges = [
 
 export default async function Profile() {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      <LevelAndXp />
-      <BadgesAndNextChallenges />
+    <div className="lg:flex items-start justify-center gap-4 space-y-4 lg:space-y-0">
+      <div className="lg:flex-col flex-1 space-y-4">
+        <LevelAndXp />
+      </div>
+
+      <div className="flex-1">
+        <BadgesAndNextChallenges />
+      </div>
     </div>
   );
 }
@@ -77,9 +82,14 @@ const LevelAndXp = () => {
           />
         </div>
         <div className="mt-4 flex items-center justify-between text-base font-medium">
-          <p className={classNames(
-            gradientBg,
-            "inline-block text-left text-transparent bg-clip-text")}>3500 XP</p>
+          <p
+            className={classNames(
+              gradientBg,
+              "inline-block text-left text-transparent bg-clip-text"
+            )}
+          >
+            3500 XP
+          </p>
           <p className="text-right">5000 XP</p>
         </div>
       </div>
