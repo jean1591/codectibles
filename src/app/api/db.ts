@@ -1,5 +1,6 @@
 import { Badge, RewardType, UserDb } from "./interfaces/user"
 
+// TODO: delete this file
 export const user: UserDb = {
     id: "azerty",
     username: "josebove",
