@@ -1,23 +1,27 @@
-import { Badge } from "@/app/api/interfaces/profile";
+import { BadgeWithUnlockedAt } from "@/app/api/interfaces/user";
 import { Popover } from "../../ui";
 
 export const BadgePopover = ({
   badge,
   isPopoverVisible,
 }: {
-  badge: Badge;
+  badge: BadgeWithUnlockedAt;
   isPopoverVisible: boolean;
 }) => {
-  const { claimedAt, description, reward, rewardType, title } = badge;
+  const { description, reward, title, unlockedAt } = badge;
+
   return (
     <div>
       {isPopoverVisible && (
         <Popover isPopoverVisible={isPopoverVisible}>
           <div className="text-left">
             <p className="text-lg font-medium capitalize">{title}</p>
-            <p className="mt-2 text-sm capitalize">{description}</p>
+            <p className="mt-2 text-xs capitalize">{description}</p>
             <p className="mt-4 text-sm">
-              {`Got ${reward} ${rewardType} on ${claimedAt.toISOString().slice(0, 10)}`}
+              {`Got ${reward.value} ${reward.type.toUpperCase()} on ${unlockedAt.slice(
+                0,
+                10
+              )}`}
             </p>
           </div>
         </Popover>
