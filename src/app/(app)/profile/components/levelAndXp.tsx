@@ -1,7 +1,6 @@
 import { classNames } from "@/utils";
 import { gradientBg } from "../../ui";
 
-
 export const LevelAndXp = () => {
     return (
       <div className="bg-slate-200 rounded-lg p-4 lg:p-8 shadow-lg">

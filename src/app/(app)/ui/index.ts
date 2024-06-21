@@ -1,4 +1,5 @@
 export * from './banner'
 export * from './constants'
 export * from './navbar'
+export * from './popover'
 export * from './progessBar'

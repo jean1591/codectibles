@@ -9,7 +9,7 @@ export default function Layout({
     <div className="px-4 mx-auto max-w-7xl">
       <Banner />
 
-      <div className="my-4 grid grid-cols-7 gap-x-4">
+      <div className="my-4 grid grid-cols-7 gap-x-12">
         <div className="hidden lg:block lg:col-span-1">
           <Navbar />
         </div>
