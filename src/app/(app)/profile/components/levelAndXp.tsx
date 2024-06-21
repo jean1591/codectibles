@@ -4,14 +4,14 @@ import { gradientBg } from "../../ui";
 
 export const LevelAndXp = () => {
     return (
-      <div className="bg-slate-400/25 rounded-lg p-4 lg:p-8">
+      <div className="bg-slate-200 rounded-lg p-4 lg:p-8">
         <div className="flex items-center justify-between">
           <p className="text-2xl font-medium text-left">Level 76</p>
           <p className="text-xl text-right">3653 XP</p>
         </div>
   
         <div className="mt-8">
-          <div className="overflow-hidden rounded-full bg-slate-200">
+          <div className="overflow-hidden rounded-full bg-slate-300">
             <div
               className={classNames(gradientBg, "h-2 rounded-full")}
               style={{ width: "37.5%" }}
