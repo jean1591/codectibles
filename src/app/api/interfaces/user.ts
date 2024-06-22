@@ -31,7 +31,7 @@ export type BadgeWithUnlockedAt = { unlockedAt: string } & Badge
 export type BadgeWithUnlockedBoolean = { unlocked: boolean } & Badge
 
 export enum RewardType {
-    XP = "xp",
+    XP = "XP",
     COINS = "coins"
 }
 

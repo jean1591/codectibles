@@ -19,8 +19,6 @@ export default function Profile() {
       const userResponse = await fetch("/api/user");
       const user = (await userResponse.json()) as User;
 
-      console.log('🚀 ~ user:', user);
-
       dispatch(setUser(user));
     })();
   }, []);

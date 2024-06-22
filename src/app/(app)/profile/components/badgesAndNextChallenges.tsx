@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/lib/store/store";
 import {
   BadgeWithUnlockedBoolean,
+  RewardType,
+  Stat,
   User,
   UserDb,
 } from "@/app/api/interfaces/user";
@@ -99,8 +101,29 @@ const BadgeToClaim = ({ badge }: { badge: BadgeWithUnlockedBoolean }) => {
   const handleClaimBadge = () => {
     const updatedUser = {
       authUserId: user.authUserId,
-      badges: [...user.badges.unlocked, {...badge, unlockedAt: new Date()}],
+      badges: [...user.badges.unlocked, { ...badge, unlockedAt: new Date() }],
     } as UserDb;
+
+    const stateUser: User = {
+      ...user,
+      badges: {
+        unlocked: [
+          ...user.badges.unlocked,
+          { ...badge, unlockedAt: new Date().toISOString() },
+        ],
+        locked: user.badges.locked.filter(({ id }) => id !== badge.id),
+      },
+    };
+
+    if (badge.rewardType === RewardType.XP) {
+      const updatedXp: Stat = {
+        ...user.stats.xp,
+        user: user.stats.xp.user + badge.reward,
+      };
+      updatedUser.stats = { ...user.stats, xp: updatedXp };
+
+      stateUser.stats = { ...user.stats, xp: updatedXp };
+    }
 
     (async function updateUser() {
       await fetch("/api/user", {
@@ -109,14 +132,6 @@ const BadgeToClaim = ({ badge }: { badge: BadgeWithUnlockedBoolean }) => {
         headers: { "Content-Type": "application/json" },
       });
     })();
-
-    const stateUser: User = {
-      ...user,
-      badges: {
-        unlocked: [...user.badges.unlocked, {...badge, unlockedAt: new Date().toISOString()}],
-        locked: user.badges.locked.filter(({id}) => id !== badge.id)
-      }
-    };
 
     dispatch(setUser(stateUser));
   };
@@ -127,7 +142,10 @@ const BadgeToClaim = ({ badge }: { badge: BadgeWithUnlockedBoolean }) => {
     <div
       className={classNames(gradientBg, "rounded-lg p-[2px] mt-2 shadow-md")}
     >
-      <button onClick={handleClaimBadge} className="flex items-center justify-between p-4 rounded-lg bg-none text-slate-100 w-full">
+      <button
+        onClick={handleClaimBadge}
+        className="flex items-center justify-between p-4 rounded-lg bg-none text-slate-100 w-full"
+      >
         <div className="text-left">
           <p className="text-lg font-medium capitalize">{title}</p>
           <p className="text-xs capitalize">{description}</p>
