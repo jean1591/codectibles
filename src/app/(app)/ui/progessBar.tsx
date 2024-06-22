@@ -2,7 +2,7 @@ import { classNames } from "@/utils";
 import { gradientBg } from "./constants";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/lib/store/store";
-import { Stat, User, UserDb } from "@/app/api/interfaces/user";
+import { Stat, StatType, User, UserDb } from "@/app/api/interfaces/user";
 import { computeProgress } from "@/utils/computeProgress";
 import { setUser } from "@/app/lib/store/features/user/slice";
 
@@ -57,7 +57,7 @@ export const ProgressBarWithTitle = ({ stat }: { stat: Stat }) => {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <p className="text-xl font-medium text-left">{`${stat.user} PR merged`}</p>
+        <p className="text-xl font-medium text-left">{`${stat.user} ${statTypeToTitle(stat.id)}`}</p>
         {progress >= 100 ? (
           <button
             onClick={handleClaimMilestone}
@@ -82,6 +82,17 @@ export const ProgressBarWithTitle = ({ stat }: { stat: Stat }) => {
       </div>
     </div>
   );
+};
+
+const statTypeToTitle = (statType: StatType): string => {
+  const mapper: Record<StatType, string> = {
+    [StatType.APPROVES]: "PR approved",
+    [StatType.COMMENTS]: "comments made",
+    [StatType.PR]: "PR merged",
+    [StatType.XP]: "",
+  };
+
+  return mapper[statType];
 };
 
 export const ProgressBar = ({
