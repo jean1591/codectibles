@@ -1,7 +1,9 @@
 import { classNames } from "@/utils";
 import { ProgressBar, gradientBg } from "../../ui";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/lib/store/store";
+import { Stat, User, UserDb } from "@/app/api/interfaces/user";
+import { setUser } from "@/app/lib/store/features/user/slice";
 
 export const LevelAndXp = () => {
   const { user } = useSelector((state: RootState) => state.user);
@@ -33,7 +35,7 @@ export const LevelAndXp = () => {
         >
           {`Level ${level}`}
         </p>
-        <p className="text-xl text-right">{`${xp.user} XP`}</p>
+        {progress >= 100 ? <NextLevelButton /> : <Xp value={xp.user} />}
       </div>
 
       <div className="mt-4">
@@ -45,4 +47,67 @@ export const LevelAndXp = () => {
       </div>
     </div>
   );
+};
+
+const NextLevelButton = () => {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state: RootState) => state.user);
+
+  if (!user) {
+    return <></>;
+  }
+
+  const handleClaimLevel = () => {
+    const {
+      level,
+      stats: { xp: xpStat },
+    } = user;
+
+    const updatedLevel = level + 1
+
+    const updatedXp: Stat = {
+      ...xpStat,
+      nextmilestone: updatedLevel ** 3 * 10,
+      previousmilestone: xpStat.nextmilestone,
+    };
+
+    const updatedUser = {
+      authUserId: user.authUserId,
+      level: updatedLevel,
+      stats: { ...user.stats, xp: updatedXp },
+    } as UserDb;
+
+
+    (async function updateUser() {
+      await fetch("/api/user", {
+        method: "PUT",
+        body: JSON.stringify({ user: updatedUser }),
+        headers: { "Content-Type": "application/json" },
+      });
+    })();
+
+    const stateUser: User = {
+      ...user,
+      level: updatedLevel,
+      stats: { ...user.stats, xp: updatedXp },
+    };
+
+    dispatch(setUser(stateUser));
+  };
+
+  return (
+    <button
+      onClick={handleClaimLevel}
+      className={classNames(
+        gradientBg,
+        "text-slate-100 py-1 px-4 rounded-md text-base uppercase text-right animate-bounce"
+      )}
+    >
+      Level up !
+    </button>
+  );
+};
+
+const Xp = ({ value }: { value: number }) => {
+  return <p className="text-xl text-right">{`${value} XP`}</p>;
 };

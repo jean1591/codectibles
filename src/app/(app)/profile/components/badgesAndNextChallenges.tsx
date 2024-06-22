@@ -2,8 +2,16 @@ import { classNames } from "@/utils";
 import { gradientBg } from "../../ui";
 import { useState } from "react";
 import { BadgePopover } from "./badgePopover";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/lib/store/store";
+import {
+  Badge as BadgeType,
+  RewardType,
+  Stat,
+  User,
+  UserDb,
+} from "@/app/api/interfaces/user";
+import { setUser } from "@/app/lib/store/features/user/slice";
 
 export const BadgesAndNextChallenges = () => {
   const { user } = useSelector((state: RootState) => state.user);
@@ -66,27 +74,107 @@ export const BadgesAndNextChallenges = () => {
         <p className="text-2xl font-medium">Next badges</p>
 
         <div className="mt-8">
-          {locked.map(({ description, reward, rewardType, title }) => (
-            <div
-              key={title}
-              className={classNames(
-                gradientBg,
-                "rounded-lg p-[2px] mt-2 shadow-md"
+          {locked.map((badge) => (
+            <div key={badge.id}>
+              {badge.unlocked ? (
+                <BadgeToClaim badge={badge} />
+              ) : (
+                <Badge badge={badge} />
               )}
-            >
-              <div className="flex items-center justify-between p-4 bg-slate-200 rounded-lg">
-                <div>
-                  <p className="text-lg font-medium capitalize">{title}</p>
-                  <p className="text-xs text-slate-600 capitalize">
-                    {description}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-lg text-nowrap">{`+ ${reward} ${rewardType.toUpperCase()}`}</p>
-                </div>
-              </div>
             </div>
           ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const BadgeToClaim = ({ badge }: { badge: BadgeType }) => {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state: RootState) => state.user);
+
+  // TODO: display skeleton
+  if (!user) {
+    return <></>;
+  }
+
+  const handleClaimBadge = () => {
+    const updatedUser = {
+      authUserId: user.authUserId,
+      badges: [
+        ...user.badges.unlocked,
+        { ...badge, unlockedAt: new Date(), unlocked: true },
+      ],
+    } as UserDb;
+
+    const stateUser: User = {
+      ...user,
+      badges: {
+        unlocked: [
+          ...user.badges.unlocked,
+          { ...badge, unlockedAt: new Date().toISOString(), unlocked: true },
+        ],
+        locked: user.badges.locked.filter(({ id }) => id !== badge.id),
+      },
+    };
+
+    if (badge.rewardType === RewardType.XP) {
+      const updatedXp: Stat = {
+        ...user.stats.xp,
+        user: user.stats.xp.user + badge.reward,
+      };
+      
+      updatedUser.stats = { ...user.stats, xp: updatedXp };
+      stateUser.stats = { ...user.stats, xp: updatedXp };
+    }
+
+    (async function updateUser() {
+      await fetch("/api/user", {
+        method: "PUT",
+        body: JSON.stringify({ user: updatedUser }),
+        headers: { "Content-Type": "application/json" },
+      });
+    })();
+
+    dispatch(setUser(stateUser));
+  };
+
+  const { description, reward, rewardType, title } = badge;
+
+  return (
+    <div
+      className={classNames(gradientBg, "rounded-lg p-[2px] mt-2 shadow-md")}
+    >
+      <button
+        onClick={handleClaimBadge}
+        className="flex items-center justify-between p-4 rounded-lg bg-none text-slate-100 w-full"
+      >
+        <div className="text-left">
+          <p className="text-lg font-medium capitalize">{title}</p>
+          <p className="text-xs capitalize">{description}</p>
+        </div>
+        <div>
+          <p className="text-lg text-nowrap">{`+ ${reward} ${rewardType.toUpperCase()}`}</p>
+        </div>
+      </button>
+    </div>
+  );
+};
+
+const Badge = ({ badge }: { badge: BadgeType }) => {
+  const { description, reward, rewardType, title } = badge;
+
+  return (
+    <div
+      className={classNames(gradientBg, "rounded-lg p-[2px] mt-2 shadow-md")}
+    >
+      <div className="flex items-center justify-between p-4 bg-slate-200 rounded-lg">
+        <div>
+          <p className="text-lg font-medium capitalize">{title}</p>
+          <p className="text-xs capitalize text-slate-600">{description}</p>
+        </div>
+        <div>
+          <p className="text-lg text-nowrap">{`+ ${reward} ${rewardType.toUpperCase()}`}</p>
         </div>
       </div>
     </div>

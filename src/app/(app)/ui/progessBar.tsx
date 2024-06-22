@@ -2,7 +2,7 @@ import { classNames } from "@/utils";
 import { gradientBg } from "./constants";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/lib/store/store";
-import { Stat, StatType, User, UserDb } from "@/app/api/interfaces/user";
+import { Stat, Resource, User, UserDb } from "@/app/api/interfaces/user";
 import { computeProgress } from "@/utils/computeProgress";
 import { setUser } from "@/app/lib/store/features/user/slice";
 
@@ -84,12 +84,12 @@ export const ProgressBarWithTitle = ({ stat }: { stat: Stat }) => {
   );
 };
 
-const statTypeToTitle = (statType: StatType): string => {
-  const mapper: Record<StatType, string> = {
-    [StatType.APPROVES]: "PR approved",
-    [StatType.COMMENTS]: "comments made",
-    [StatType.PR]: "PR merged",
-    [StatType.XP]: "",
+const statTypeToTitle = (statType: Resource): string => {
+  const mapper: Record<Resource, string> = {
+    [Resource.APPROVES]: "PR approved",
+    [Resource.COMMENTS]: "comments made",
+    [Resource.PR]: "PR merged",
+    [Resource.XP]: "",
   };
 
   return mapper[statType];
