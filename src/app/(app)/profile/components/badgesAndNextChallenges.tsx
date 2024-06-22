@@ -5,7 +5,7 @@ import { BadgePopover } from "./badgePopover";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/lib/store/store";
 import {
-  BadgeWithUnlockedBoolean,
+  Badge as BadgeType,
   RewardType,
   Stat,
   User,
@@ -89,7 +89,7 @@ export const BadgesAndNextChallenges = () => {
   );
 };
 
-const BadgeToClaim = ({ badge }: { badge: BadgeWithUnlockedBoolean }) => {
+const BadgeToClaim = ({ badge }: { badge: BadgeType }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.user);
 
@@ -101,7 +101,10 @@ const BadgeToClaim = ({ badge }: { badge: BadgeWithUnlockedBoolean }) => {
   const handleClaimBadge = () => {
     const updatedUser = {
       authUserId: user.authUserId,
-      badges: [...user.badges.unlocked, { ...badge, unlockedAt: new Date() }],
+      badges: [
+        ...user.badges.unlocked,
+        { ...badge, unlockedAt: new Date(), unlocked: true },
+      ],
     } as UserDb;
 
     const stateUser: User = {
@@ -109,7 +112,7 @@ const BadgeToClaim = ({ badge }: { badge: BadgeWithUnlockedBoolean }) => {
       badges: {
         unlocked: [
           ...user.badges.unlocked,
-          { ...badge, unlockedAt: new Date().toISOString() },
+          { ...badge, unlockedAt: new Date().toISOString(), unlocked: true },
         ],
         locked: user.badges.locked.filter(({ id }) => id !== badge.id),
       },
@@ -120,8 +123,8 @@ const BadgeToClaim = ({ badge }: { badge: BadgeWithUnlockedBoolean }) => {
         ...user.stats.xp,
         user: user.stats.xp.user + badge.reward,
       };
+      
       updatedUser.stats = { ...user.stats, xp: updatedXp };
-
       stateUser.stats = { ...user.stats, xp: updatedXp };
     }
 
@@ -158,7 +161,7 @@ const BadgeToClaim = ({ badge }: { badge: BadgeWithUnlockedBoolean }) => {
   );
 };
 
-const Badge = ({ badge }: { badge: BadgeWithUnlockedBoolean }) => {
+const Badge = ({ badge }: { badge: BadgeType }) => {
   const { description, reward, rewardType, title } = badge;
 
   return (

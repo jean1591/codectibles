@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Badge, BadgeWithUnlockedAt, BadgeWithUnlockedBoolean, Resource, User, UserDb } from "../interfaces/user";
+import { Badge, Resource, User, UserDb } from "../interfaces/user";
 import { createClient } from "@/utils/supabase/server";
 import { DbError, DbTable } from "../interfaces/database";
 
@@ -48,19 +48,17 @@ export async function GET(request: NextRequest): Promise<NextResponse<User>> {
     return NextResponse.json(user);
 }
 
-const computeUserBadges = (userBadges: BadgeWithUnlockedAt[], badges: Badge[], prCount: number): BadgeWithUnlockedBoolean[] => {
+const computeUserBadges = (userBadges: Badge[], badges: Badge[], prCount: number): Badge[] => {
     const lockedBadges = badges.filter(badge => !userBadges.map(userBadge => userBadge.id).includes(badge.id))
-
     const lockedPrBadges = lockedBadges.filter(badge => badge.type === Resource.PR)
 
-    return [...computePrBadges(prCount, lockedPrBadges)]
+    return [...getPrBadgesToClaim(prCount, lockedPrBadges)]
 }
 
-const computePrBadges = (prCount: number, badges: Badge[]): BadgeWithUnlockedBoolean[] => {
+const getPrBadgesToClaim = (prCount: number, badges: Badge[]): Badge[] => {
     return badges
         .map(badge => ({ ...badge, unlocked: prCount > badge.threshold }))
-        .sort((a, b) => a.threshold - b.threshold)
-        .sort((a, b) => a.unlocked === b.unlocked ? 0 : a ? -1 : 1)
+        .sort((a, b) => a.threshold - b.threshold);
 }
 
 export async function PUT(request: NextRequest): Promise<NextResponse> {
