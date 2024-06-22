@@ -11,10 +11,15 @@ import { setUser } from "@/app/lib/store/features/user/slice";
 export default function Profile() {
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  useEffect(() => {    
     (async function getUser() {
+      const prResponse = await fetch("/api/pr");
+      await prResponse.json();
+
       const userResponse = await fetch("/api/user");
       const user = (await userResponse.json()) as User;
+
+      console.log('🚀 ~ user:', user);
 
       dispatch(setUser(user));
     })();

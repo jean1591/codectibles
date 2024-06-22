@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { User, UserDb } from "../interfaces/user";
+import { Badge, BadgeWithUnlockedAt, BadgeWithUnlockedBoolean, Resource, User, UserDb } from "../interfaces/user";
 import { createClient } from "@/utils/supabase/server";
 import { DbError, DbTable } from "../interfaces/database";
 
@@ -33,14 +33,33 @@ export async function GET(request: NextRequest): Promise<NextResponse<User>> {
         throw new Error("No badges found");
     }
 
+    const { count: prCount } = await supabase
+        .from(DbTable.PR)
+        .select("*", { count: "exact", head: true })
+        .eq("authUserId", authUser.id);
+
     const user: User = {
         ...dbUser, badges: {
             unlocked: dbUser.badges,
-            locked: badges.filter(badge => !dbUser.badges.map(userBadge => userBadge.id).includes(badge.id))
+            locked: computeUserBadges(dbUser.badges, badges, prCount ?? 0)
         }
     }
 
     return NextResponse.json(user);
+}
+
+const computeUserBadges = (userBadges: BadgeWithUnlockedAt[], badges: Badge[], prCount: number): BadgeWithUnlockedBoolean[] => {
+    const lockedBadges = badges.filter(badge => !userBadges.map(userBadge => userBadge.id).includes(badge.id))
+
+    const lockedPrBadges = lockedBadges.filter(badge => badge.type === Resource.PR)
+
+    return [...computePrBadges(prCount, lockedPrBadges)]
+}
+
+const computePrBadges = (prCount: number, badges: Badge[]): BadgeWithUnlockedBoolean[] => {
+    return badges
+        .map(badge => ({ ...badge, unlocked: prCount > badge.threshold }))
+        .sort((a, b) => a.unlocked === b.unlocked ? 0 : a ? -1 : 1)
 }
 
 export async function PUT(request: NextRequest): Promise<NextResponse> {

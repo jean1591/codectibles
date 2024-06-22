@@ -1,13 +1,14 @@
 export type User = Omit<UserDb, 'badges'> & {
     badges: {
         unlocked: BadgeWithUnlockedAt[];
-        locked: Badge[];
+        locked: BadgeWithUnlockedBoolean[];
     }
 }
 
 export interface UserDb {
     authUserId: string,
     badges: BadgeWithUnlockedAt[];
+    fetchedAt: string,
     id: string;
     level: number;
     stats: Stats;
@@ -22,9 +23,12 @@ export interface Badge {
     reward: number;
     rewardType: RewardType;
     title: string;
+    threshold: number;
+    type: Resource
 }
 
 export type BadgeWithUnlockedAt = { unlockedAt: string } & Badge
+export type BadgeWithUnlockedBoolean = { unlocked: boolean } & Badge
 
 export enum RewardType {
     XP = "xp",
@@ -44,7 +48,7 @@ export interface Stats {
 }
 
 export interface Stat {
-    id: StatType;
+    id: Resource;
     nextmilestone: number;
     previousmilestone: number;
     reward: number;
@@ -52,7 +56,7 @@ export interface Stat {
     user: number;
 }
 
-export enum StatType {
+export enum Resource {
     APPROVES = 'approves',
     COMMENTS = 'comments',
     PR = 'pr',
