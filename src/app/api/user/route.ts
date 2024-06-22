@@ -59,6 +59,7 @@ const computeUserBadges = (userBadges: BadgeWithUnlockedAt[], badges: Badge[], p
 const computePrBadges = (prCount: number, badges: Badge[]): BadgeWithUnlockedBoolean[] => {
     return badges
         .map(badge => ({ ...badge, unlocked: prCount > badge.threshold }))
+        .sort((a, b) => a.threshold - b.threshold)
         .sort((a, b) => a.unlocked === b.unlocked ? 0 : a ? -1 : 1)
 }
 
