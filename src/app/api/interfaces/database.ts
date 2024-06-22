@@ -1,4 +1,5 @@
 export enum DbTable {
+  BADGE = "badge",
   PR = "pr",
   USER = "user",
 }

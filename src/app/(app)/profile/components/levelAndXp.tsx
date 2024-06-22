@@ -1,7 +1,27 @@
 import { classNames } from "@/utils";
 import { ProgressBar, gradientBg } from "../../ui";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/lib/store/store";
 
 export const LevelAndXp = () => {
+  const { user } = useSelector((state: RootState) => state.user);
+
+  // TODO: display skeleton
+  if (!user) {
+    return <></>;
+  }
+
+  const {
+    level,
+    stats: { xp },
+  } = user;
+
+  const progress = Math.ceil(
+    ((xp.user - xp.previousmilestone) /
+      (xp.nextmilestone - xp.previousmilestone)) *
+      100
+  );
+
   return (
     <div className="bg-slate-200 rounded-lg p-4 lg:p-8 shadow-lg">
       <div className="flex items-center justify-between">
@@ -11,16 +31,16 @@ export const LevelAndXp = () => {
             "inline-block text-transparent bg-clip-text text-3xl font-medium text-left"
           )}
         >
-          Level 76
+          {`Level ${level}`}
         </p>
-        <p className="text-xl text-right">3653 XP</p>
+        <p className="text-xl text-right">{`${xp.user} XP`}</p>
       </div>
 
       <div className="mt-4">
         <ProgressBar
-          lowerBound="3500 XP"
-          upperBound="5000 XP"
-          progress={45.3}
+          lowerBound={`${xp.previousmilestone} XP`}
+          upperBound={`${xp.nextmilestone} XP`}
+          progress={progress}
         />
       </div>
     </div>
