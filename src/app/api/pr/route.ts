@@ -72,19 +72,30 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         .select("claimed, claimed.count()")
         .eq("authUserId", user.id);
 
-    const prCount = claimedCount?.reduce((acc, current) => {
-        return acc + current.count
-    }, 0)
+    if (!claimedCount) {
+        throw new Error("No PR found");
+    }
+
+    let prToClaim = 0;
+    let prClaimed = 0;
+
+    claimedCount.forEach(pr => {
+        if (pr.claimed) {
+            prClaimed = pr.count
+        } else {
+            prToClaim = pr.count
+        }
+    })
 
     /* Update user */
     const updatedUser = {
         fetchedAt: new Date().toISOString(),
-        prToClaim: prCount,
+        prToClaim,
         stats: {
             ...stats,
             [Resource.PR]: {
                 ...stats.pr,
-                user: prCount ?? 0
+                user: (prToClaim + prClaimed) ?? 0
             }
         },
     } as UserDb;
@@ -100,7 +111,26 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         });
     }
 
-    return NextResponse.json({ prToClaimCount: prCount });
+    return NextResponse.json({ success: true });
+}
+
+export async function PUT(request: NextRequest): Promise<NextResponse> {
+    const supabase = createClient();
+
+    const { authUserId, claimed }: { authUserId: string; claimed: boolean } = await request.json();
+
+    const { error: updateUserError } = await supabase
+        .from(DbTable.PR)
+        .update({ claimed })
+        .eq("authUserId", authUserId);
+
+    if (updateUserError) {
+        console.error(`${DbError.UPDATE}: PR"`, {
+            error: JSON.stringify(updateUserError, null, 2),
+        });
+    }
+
+    return NextResponse.json({ success: true });
 }
 
 const getLatestGithubMergedPr = async (
