@@ -5,10 +5,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/server";
 import { decrypt } from "@/utils/hash";
 import { Resource, UserDb } from "../interfaces/user";
+import { getPrType } from "../utils/pr";
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
     /* Fetch user data from DB */
     const supabase = createClient();
+
     const {
         data: { user },
     } = await supabase.auth.getUser();
@@ -52,11 +54,12 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     /* Insert new PR */
     const { error } = await supabase.from(DbTable.PR).insert(
         prToSave.map((pr) => ({
+            authUserId: user.id,
             claimed: false,
+            prType: getPrType(pr.title),
             mergedAt: pr.pull_request.merged_at,
             prId: pr.id,
             prNumber: pr.number,
-            authUserId: user.id,
         }))
     );
 

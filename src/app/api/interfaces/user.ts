@@ -1,3 +1,5 @@
+import { ConventionalCommitType } from "./pr";
+
 export type User = Omit<UserDb, 'badges'> & {
     badges: {
         unlocked: Badge[];
@@ -24,7 +26,7 @@ export interface Badge {
     rewardType: RewardType;
     threshold: number;
     title: string;
-    type: Resource;
+    type: ConventionalCommitType;
     unlocked: boolean;
     unlockedAt: string | null;
 }

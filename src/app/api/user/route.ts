@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Badge, Resource, User, UserDb } from "../interfaces/user";
+import { User, UserDb } from "../interfaces/user";
 import { createClient } from "@/utils/supabase/server";
 import { DbError, DbTable } from "../interfaces/database";
 import { computeUserBadges } from "../utils/badges";
@@ -34,16 +34,17 @@ export async function GET(request: NextRequest): Promise<NextResponse<User>> {
         throw new Error("No badges found");
     }
 
-    const { count: prCount } = await supabase
+    const { data: prTypeCount } = await supabase
         .from(DbTable.PR)
-        .select("*", { count: "exact", head: true })
+        .select("prType, prType.count()")
         .eq("authUserId", authUser.id);
 
     // TODO: use claimed, unlocked and locked
     const user: User = {
-        ...dbUser, badges: {
+        ...dbUser,
+        badges: {
             unlocked: dbUser.badges,
-            locked: computeUserBadges(dbUser.badges, badges, prCount ?? 0)
+            locked: computeUserBadges(dbUser.badges, badges, prTypeCount ?? [])
         }
     }
 
