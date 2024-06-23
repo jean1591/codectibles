@@ -5,10 +5,13 @@ import { BadgesAndNextChallenges } from "./components/badgesAndNextChallenges";
 import { LevelAndXp } from "./components/levelAndXp";
 import { Milestones } from "./components/milestones";
 import { User } from "@/app/api/interfaces/user";
-import { useDispatch } from "react-redux";
-import { setUser } from "@/app/lib/store/features/user/slice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setUser,
+} from "@/app/lib/store/features/user/slice";
 import { classNames } from "@/utils";
 import { gradientBg } from "../ui";
+import { RootState } from "@/app/lib/store/store";
 
 export default function Profile() {
   const dispatch = useDispatch();
@@ -41,17 +44,38 @@ export default function Profile() {
 }
 
 const LatestPr = () => {
+  const { user } = useSelector(
+    (state: RootState) => state.user
+  );
+
+  // TODO: display skeleton
+  if (user === null) {
+    return <></>;
+  }
+
+  const {prToClaim} = user
+
+  if (prToClaim === 0) {
+    return (
+      <div className="bg-slate-200 rounded-lg p-4 lg:p-8 shadow-lg">
+        <div className="flex items-center justify-between">
+          <p className="text-xl font-medium text-left">No new merged PR</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-slate-200 rounded-lg p-4 lg:p-8 shadow-lg">
       <div className="flex items-center justify-between">
-        <p className="text-xl font-medium text-left">4 new PR merged</p>
+        <p className="text-xl font-medium text-left">{`${prToClaim} new PR merged`}</p>
         <button
           className={classNames(
             gradientBg,
             "text-slate-100 py-1 px-4 rounded-md text-base text-right animate-bounce"
           )}
         >
-          + 160 XP
+          {`+ ${prToClaim * 40} XP`}
         </button>
       </div>
     </div>

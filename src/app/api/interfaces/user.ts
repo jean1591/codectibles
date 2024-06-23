@@ -13,6 +13,7 @@ export interface UserDb {
     fetchedAt: string,
     id: string;
     level: number;
+    prToClaim: number;
     stats: Stats;
     token: string;
     username: string;
