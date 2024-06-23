@@ -4,14 +4,12 @@ import { Badge } from "../interfaces/user"
 interface PrTypeCount { prType: string; count: number }
 
 export const computeUserBadges = (userBadges: Badge[], badges: Badge[], prTypeCount: PrTypeCount[]): Badge[] => {
-    // Remove badges claimed by user
     const lockedBadges = badges.filter(badge => !userBadges.map(userBadge => userBadge.id).includes(badge.id))
 
     return [...getConventionalCommitBadgesToClaim(lockedBadges, prTypeCount)]
 }
 
 const getConventionalCommitBadgesToClaim = (lockedBadges: Badge[], prTypeCount: PrTypeCount[]): Badge[] => {
-    // Compute conventional commits
     const conventionalCommitBadges = lockedBadges.filter(badge => conventionalCommitType.includes(badge.type))
 
     // Reformat prTypeCount to be search O(1)
