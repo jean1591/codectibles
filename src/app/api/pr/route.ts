@@ -67,14 +67,19 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         console.error(`${DbError.INSERT}: PR"`, { error });
     }
 
-    const { count: prCount } = await supabase
+    const { data: claimedCount } = await supabase
         .from(DbTable.PR)
-        .select("*", { count: "exact", head: true })
+        .select("claimed, claimed.count()")
         .eq("authUserId", user.id);
+
+    const prCount = claimedCount?.reduce((acc, current) => {
+        return acc + current.count
+    }, 0)
 
     /* Update user */
     const updatedUser = {
         fetchedAt: new Date().toISOString(),
+        prToClaim: prCount,
         stats: {
             ...stats,
             [Resource.PR]: {
@@ -95,7 +100,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         });
     }
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ prToClaimCount: prCount });
 }
 
 const getLatestGithubMergedPr = async (
