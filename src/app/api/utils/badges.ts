@@ -18,6 +18,6 @@ const getConventionalCommitBadgesToClaim = (lockedBadges: Badge[], prTypeCount: 
     }, {} as Record<ConventionalCommitType, number>)
 
     return conventionalCommitBadges
-        .map(badge => ({ ...badge, unlocked: formatedPrTypeCount[badge.type] > badge.threshold }))
+        .map(badge => ({ ...badge, unlocked: formatedPrTypeCount[badge.type] >= badge.threshold }))
         .sort((a, b) => a.threshold - b.threshold);
 }

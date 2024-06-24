@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { BadgesAndNextChallenges } from "./components/badgesAndNextChallenges";
+import { Badges } from "./components/badges";
 import { LevelAndXp } from "./components/levelAndXp";
 import { Milestones } from "./components/milestones";
 import { User } from "@/app/api/interfaces/user";
@@ -57,7 +57,7 @@ export default function Profile() {
       </div>
 
       <div className="flex-1">
-        <BadgesAndNextChallenges />
+        <Badges />
       </div>
     </div>
   );

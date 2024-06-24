@@ -13,7 +13,7 @@ import {
 } from "@/app/api/interfaces/user";
 import { setUser } from "@/app/lib/store/features/user/slice";
 
-export const BadgesAndNextChallenges = () => {
+export const Badges = () => {
   const { user } = useSelector((state: RootState) => state.user);
   const [isPopoverVisible, setIsPopoverVisibe] = useState(false);
   const [selectedCell, setSelectedCell] = useState<number | null>(null);
@@ -39,11 +39,11 @@ export const BadgesAndNextChallenges = () => {
 
   return (
     <div className="bg-slate-200 rounded-lg p-4 lg:p-8 shadow-lg">
-      {/* BADGES */}
-      <div>
-        <p className="text-2xl font-medium">Badges</p>
+      <p className="text-2xl font-medium">Badges</p>
 
-        <div className="mt-8 grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-4 xl:grid-cols-5 grid-flow-row items-center justify-center gap-4">
+      {/* CLAIMED BADGES */}
+      {unlocked.length > 0 && (
+        <div className="mt-4 grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-4 xl:grid-cols-5 grid-flow-row items-center justify-center gap-4">
           {unlocked.map((badge, index) => (
             <div
               onClick={() => handleBadgeOnClick(index)}
@@ -67,23 +67,19 @@ export const BadgesAndNextChallenges = () => {
             </div>
           ))}
         </div>
-      </div>
+      )}
 
       {/* NEXT BADGES */}
-      <div className="mt-12">
-        <p className="text-2xl font-medium">Next badges</p>
-
-        <div className="mt-8">
-          {locked.map((badge) => (
-            <div key={badge.id}>
-              {badge.unlocked ? (
-                <BadgeToClaim badge={badge} />
-              ) : (
-                <Badge badge={badge} />
-              )}
-            </div>
-          ))}
-        </div>
+      <div className="mt-4">
+        {locked.map((badge) => (
+          <div key={badge.id}>
+            {badge.unlocked ? (
+              <BadgeToClaim badge={badge} />
+            ) : (
+              <Badge badge={badge} />
+            )}
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -123,7 +119,7 @@ const BadgeToClaim = ({ badge }: { badge: BadgeType }) => {
         ...user.stats.xp,
         user: user.stats.xp.user + badge.reward,
       };
-      
+
       updatedUser.stats = { ...user.stats, xp: updatedXp };
       stateUser.stats = { ...user.stats, xp: updatedXp };
     }
