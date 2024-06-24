@@ -41,14 +41,13 @@ export async function GET(request: Request) {
 
     const { data: users } = await supabase
       .from(DbTable.USER)
-      .select("user_name")
-      .eq("auth_user_id", authUser.id);
+      .select("username")
+      .eq("authUserId", authUser.id);
 
     if (!users || users.length === 0) {
       const { error } = await supabase.from(DbTable.USER).insert({
-        auth_user_id: authUser.id,
-        coins: 0,
-        user_name: authUser.user_metadata.user_name,
+        authUserId: authUser.id,
+        username: authUser.user_metadata.user_name,
       });
 
       if (error) {

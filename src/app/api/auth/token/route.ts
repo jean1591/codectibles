@@ -4,7 +4,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/server";
 import { encrypt } from "@/utils/hash";
 
-
 export async function PUT(request: NextRequest): Promise<NextResponse> {
   const { token } = await request.json();
 
@@ -22,7 +21,7 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
   const { error } = await supabase
     .from(DbTable.USER)
     .update({ token: hashedToken })
-    .eq("auth_user_id", user.id);
+    .eq("authUserId", user.id);
 
   if (error) {
     console.error(`${DbError.UPDATE}: USER"`, {
