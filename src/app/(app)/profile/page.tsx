@@ -7,11 +7,12 @@ import { Milestones } from "./components/milestones";
 import { User } from "@/app/api/interfaces/user";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/app/lib/store/features/user/slice";
+import { PrToClaim } from "./components/prToClaim";
 
 export default function Profile() {
   const dispatch = useDispatch();
 
-  useEffect(() => {    
+  useEffect(() => {
     (async function getUser() {
       const prResponse = await fetch("/api/pr");
       await prResponse.json();
@@ -27,6 +28,7 @@ export default function Profile() {
     <div className="lg:flex items-start justify-center gap-4 space-y-4 lg:space-y-0">
       <div className="lg:flex-col flex-1 space-y-4">
         <LevelAndXp />
+        <PrToClaim />
         <Milestones />
       </div>
 

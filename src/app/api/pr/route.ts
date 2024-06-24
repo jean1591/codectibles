@@ -67,19 +67,35 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         console.error(`${DbError.INSERT}: PR"`, { error });
     }
 
-    const { count: prCount } = await supabase
+    const { data: claimedCount } = await supabase
         .from(DbTable.PR)
-        .select("*", { count: "exact", head: true })
+        .select("claimed, claimed.count()")
         .eq("authUserId", user.id);
+
+    if (!claimedCount) {
+        throw new Error("No PR found");
+    }
+
+    let prToClaim = 0;
+    let prClaimed = 0;
+
+    claimedCount.forEach(pr => {
+        if (pr.claimed) {
+            prClaimed = pr.count
+        } else {
+            prToClaim = pr.count
+        }
+    })
 
     /* Update user */
     const updatedUser = {
         fetchedAt: new Date().toISOString(),
+        prToClaim,
         stats: {
             ...stats,
             [Resource.PR]: {
                 ...stats.pr,
-                user: prCount ?? 0
+                user: (prToClaim + prClaimed) ?? 0
             }
         },
     } as UserDb;
@@ -91,6 +107,25 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     if (updateUserError) {
         console.error(`${DbError.UPDATE}: USER"`, {
+            error: JSON.stringify(updateUserError, null, 2),
+        });
+    }
+
+    return NextResponse.json({ success: true });
+}
+
+export async function PUT(request: NextRequest): Promise<NextResponse> {
+    const supabase = createClient();
+
+    const { authUserId, claimed }: { authUserId: string; claimed: boolean } = await request.json();
+
+    const { error: updateUserError } = await supabase
+        .from(DbTable.PR)
+        .update({ claimed })
+        .eq("authUserId", authUserId);
+
+    if (updateUserError) {
+        console.error(`${DbError.UPDATE}: PR"`, {
             error: JSON.stringify(updateUserError, null, 2),
         });
     }
