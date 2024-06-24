@@ -14,9 +14,6 @@ export default function Profile() {
   const dispatch = useDispatch();
   const [shouldRedirect, setShouldRedirect] = useState(false);
 
-  console.log('🚀 ~ shouldRedirect:', shouldRedirect);
-
-
   useEffect(() => {
     (async function getUser() {
       try {
