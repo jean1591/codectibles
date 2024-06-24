@@ -57,7 +57,9 @@ export const ProgressBarWithTitle = ({ stat }: { stat: Stat }) => {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <p className="text-xl font-medium text-left">{`${stat.user} ${statTypeToTitle(stat.id)}`}</p>
+        <p className="text-xl font-medium text-left">{`${
+          stat.user
+        } ${statTypeToTitle(stat.id)}`}</p>
         {progress >= 100 ? (
           <button
             onClick={handleClaimMilestone}
@@ -112,15 +114,8 @@ export const ProgressBar = ({
           style={{ width: `${progress}%` }}
         />
       </div>
-      <div className="mt-4 flex items-center justify-between text-base font-medium">
-        <p
-          className={classNames(
-            gradientBg,
-            "inline-block text-left text-transparent bg-clip-text"
-          )}
-        >
-          {lowerBound}
-        </p>
+      <div className="mt-2 flex items-center justify-between text-sm font-medium">
+        <p className="text-left">{lowerBound}</p>
         <p className="text-right">{upperBound}</p>
       </div>
     </div>

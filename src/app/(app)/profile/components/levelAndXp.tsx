@@ -63,7 +63,7 @@ const NextLevelButton = () => {
       stats: { xp: xpStat },
     } = user;
 
-    const updatedLevel = level + 1
+    const updatedLevel = level + 1;
 
     const updatedXp: Stat = {
       ...xpStat,
@@ -76,7 +76,6 @@ const NextLevelButton = () => {
       level: updatedLevel,
       stats: { ...user.stats, xp: updatedXp },
     } as UserDb;
-
 
     (async function updateUser() {
       await fetch("/api/user", {
@@ -109,5 +108,12 @@ const NextLevelButton = () => {
 };
 
 const Xp = ({ value }: { value: number }) => {
-  return <p className="text-xl text-right">{`${value} XP`}</p>;
+  return (
+    <p
+      className={classNames(
+        gradientBg,
+        "text-xl text-right font-medium inline-block text-transparent bg-clip-text"
+      )}
+    >{`${value} XP`}</p>
+  );
 };
