@@ -15,7 +15,7 @@ export const Navbar = () => {
         href="/profile"
         className={classNames(
           page === "profile" ? "bg-slate-800" : "bg-none",
-          "hover:bg-slate-700 px-4 py-2 rounded-lg text-slate-300 text-base font-medium uppercase"
+          "hover:bg-slate-700 px-4 py-2 rounded-lg text-slate-100 text-base font-medium uppercase"
         )}
       >
         profile

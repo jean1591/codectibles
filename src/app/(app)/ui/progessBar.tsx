@@ -57,9 +57,12 @@ export const ProgressBarWithTitle = ({ stat }: { stat: Stat }) => {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <p className="text-xl font-medium text-left">{`${
-          stat.user
-        } ${statTypeToTitle(stat.id)}`}</p>
+        <div className="flex items-center justify-start gap-x-4 text-xl font-medium text-left">
+          <p>{statTypeToTitle(stat.id)}</p>
+          <span className="inline-flex items-center rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700 ring-1 ring-inset ring-slate-600/20">
+            {stat.user}
+          </span>
+        </div>
         {progress >= 100 ? (
           <button
             onClick={handleClaimMilestone}

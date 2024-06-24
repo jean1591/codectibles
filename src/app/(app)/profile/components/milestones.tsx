@@ -15,7 +15,7 @@ export const Milestones = () => {
   } = user;
 
   return (
-    <div className="bg-slate-200 rounded-lg p-4 lg:p-8 shadow-lg">
+    <div className="bg-slate-100 rounded-lg p-4 lg:p-8 shadow-lg">
       <ProgressBarWithTitle stat={pr} />
       <div className="mt-8">
         <ProgressBarWithTitle stat={comments} />

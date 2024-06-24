@@ -15,7 +15,7 @@ export default function RootLayout({
     <StoreProvider>
       <html lang="fr">
         <body
-          className={classNames(inter.className, "bg-slate-300 text-slate-800")}
+          className={classNames(inter.className, "bg-slate-200 text-slate-800")}
         >
           {children}
         </body>
