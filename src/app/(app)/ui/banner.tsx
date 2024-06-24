@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
 import { RootState } from "@/app/lib/store/store";
 import { useSelector } from "react-redux";
 
 export const Banner = () => {
-  const {user} = useSelector((state: RootState) => state.user)
+  const { user } = useSelector((state: RootState) => state.user);
 
   // TODO: display skeleton
   if (!user) {
