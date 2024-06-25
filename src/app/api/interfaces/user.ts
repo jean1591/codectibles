@@ -1,4 +1,4 @@
-import { ConventionalCommitType } from "./pr";
+import { ConventionalCommitType } from "./github";
 
 export type User = Omit<UserDb, 'badges'> & {
     badges: {

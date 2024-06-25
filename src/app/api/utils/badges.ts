@@ -1,4 +1,4 @@
-import { ConventionalCommitType, conventionalCommitType } from "../interfaces/pr";
+import { ConventionalCommitType, conventionalCommitType } from "../interfaces/github";
 import { Badge } from "../interfaces/user"
 
 interface PrTypeCount { prType: string; count: number }
