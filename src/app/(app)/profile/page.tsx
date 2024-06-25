@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Badges } from "./components/badges";
 import { LevelAndXp } from "./components/levelAndXp";
 import { LevelAndXp as LevelAndXpSkeleton } from "./components/skeleton/levelAndXp";
+import { PrToClaim as PrToClaimSkeleton } from "./components/skeleton/prToClaim";
 import { Milestones } from "./components/milestones";
 import { User } from "@/app/api/interfaces/user";
 import { useDispatch } from "react-redux";
@@ -54,9 +55,10 @@ export default function Profile() {
 
   if (isLoading) {
     return (
-      <div className="lg:flex items-start justify-center gap-4 space-y-4 lg:space-y-0">
+      <div className="lg:flex items-start justify-center gap-4 space-y-4 lg:space-y-0 animate-pulse">
       <div className="lg:flex-col flex-1 space-y-4">
         <LevelAndXpSkeleton />
+        <PrToClaimSkeleton />
       </div>
 
       <div className="flex-1">
