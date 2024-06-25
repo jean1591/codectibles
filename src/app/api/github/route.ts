@@ -148,7 +148,7 @@ const updateUser = async (supabase: SupabaseClient, userId: string, stats: Stats
         return { ...acc, [current.type]: current.count }
     }, {} as Record<"comments" | "approves", number>)
 
-    /* Update user */
+    /* User */
     const updatedUser = {
         fetchedAt: new Date().toISOString(),
         prToClaim,

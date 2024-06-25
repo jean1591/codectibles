@@ -35,7 +35,6 @@ export default function Profile() {
       const prResponse = await fetch("/api/github");
       await prResponse.json();
 
-
       const userResponse = await fetch("/api/user");
       const user = (await userResponse.json()) as User;
 

@@ -92,7 +92,8 @@ export enum EventTypes {
     PULL_REQUEST_REVIEW_COMMENT_EVENT = "PullRequestReviewCommentEvent",
     PULL_REQUEST_REVIEW_EVENT = "PullRequestReviewEvent"
 }
-export const eventTypes = ["PullRequestReviewCommentEvent", "PullRequestReviewEvent"]
+export const eventTypes = [EventTypes.PULL_REQUEST_REVIEW_COMMENT_EVENT, EventTypes.PULL_REQUEST_REVIEW_EVENT]
+
 export interface PullRequestReviewCommentEvent {
     id: string;
     type: EventTypes.PULL_REQUEST_REVIEW_COMMENT_EVENT;
