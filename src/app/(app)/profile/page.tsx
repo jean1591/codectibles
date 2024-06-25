@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Badges } from "./components/badges";
 import { LevelAndXp } from "./components/levelAndXp";
+import { LevelAndXp as LevelAndXpSkeleton } from "./components/skeleton/levelAndXp";
 import { Milestones } from "./components/milestones";
 import { User } from "@/app/api/interfaces/user";
 import { useDispatch } from "react-redux";
@@ -13,6 +14,7 @@ import { redirect } from "next/navigation";
 export default function Profile() {
   const dispatch = useDispatch();
   const [shouldRedirect, setShouldRedirect] = useState(false);
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     (async function getUser() {
@@ -39,6 +41,8 @@ export default function Profile() {
       const user = (await userResponse.json()) as User;
 
       dispatch(setUser(user));
+
+      setIsLoading(false)
     })();
   }, []);
 
@@ -47,6 +51,18 @@ export default function Profile() {
       redirect("/token");
     }
   }, [shouldRedirect]);
+
+  if (isLoading) {
+    return (
+      <div className="lg:flex items-start justify-center gap-4 space-y-4 lg:space-y-0">
+      <div className="lg:flex-col flex-1 space-y-4">
+        <LevelAndXpSkeleton />
+      </div>
+
+      <div className="flex-1">
+      </div>
+    </div>)
+  }
 
   return (
     <div className="lg:flex items-start justify-center gap-4 space-y-4 lg:space-y-0">
