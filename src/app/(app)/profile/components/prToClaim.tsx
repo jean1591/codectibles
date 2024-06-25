@@ -39,7 +39,7 @@ export const PrToClaim = () => {
     })();
 
     (async function updatePr() {
-      await fetch("/api/pr", {
+      await fetch("/api/github", {
         method: "PUT",
         body: JSON.stringify({
           authUserId: user.authUserId,
