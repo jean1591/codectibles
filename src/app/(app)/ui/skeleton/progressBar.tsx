@@ -1,3 +1,21 @@
+export const ProgressBarWithTitle = () => {
+  return (
+    <div>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center justify-start gap-x-4 text-xl font-medium text-left">
+          <p className="bg-slate-300 text-slate-300">USER DETAILS</p>
+        </div>
+        <p className="bg-slate-300 text-slate-300 text-base text-right">+ 100 XP</p>
+      </div>
+
+      <div className="mt-4">
+        <ProgressBar
+        />
+      </div>
+    </div>
+  );
+};
+
 export const ProgressBar = () => {
   return (
     <div>
