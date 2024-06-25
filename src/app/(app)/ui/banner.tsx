@@ -7,7 +7,6 @@ import { Banner as BannerSkeleton } from "./skeleton/banner";
 export const Banner = () => {
   const { user } = useSelector((state: RootState) => state.user);
 
-  // TODO: display skeleton
   if (!user) {
     return <BannerSkeleton />;
   }

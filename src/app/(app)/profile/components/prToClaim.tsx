@@ -4,6 +4,7 @@ import { RootState } from "@/app/lib/store/store";
 import { classNames } from "@/utils";
 import { useDispatch, useSelector } from "react-redux";
 import { gradientBg } from "../../ui";
+import { PrToClaim as PrToClaimSkeleton } from "./skeleton/prToClaim";
 
 const REWARD_PER_PR = 40;
 
@@ -11,9 +12,8 @@ export const PrToClaim = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.user);
 
-  // TODO: display skeleton
   if (user === null) {
-    return <></>;
+    return <PrToClaimSkeleton />;
   }
 
   const { prToClaim } = user;
