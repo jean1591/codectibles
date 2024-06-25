@@ -32,8 +32,6 @@ export default function Profile() {
         return
       }
 
-      const eventsResponse = await fetch("/api/events");
-      await eventsResponse.json();
       const prResponse = await fetch("/api/pr");
       await prResponse.json();
 
