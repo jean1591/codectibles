@@ -4,7 +4,8 @@ import { Badge } from "../interfaces/user"
 interface PrTypeCount { prType: string; count: number }
 
 export const computeUserBadges = (userBadges: Badge[], badges: Badge[], prTypeCount: PrTypeCount[]): Badge[] => {
-    const lockedBadges = badges.filter(badge => !userBadges.map(userBadge => userBadge.id).includes(badge.id))
+    const claimedBadges = userBadges.map(userBadge => userBadge.id)
+    const lockedBadges = badges.filter(badge => !claimedBadges.includes(badge.id))
 
     return [...getConventionalCommitBadgesToClaim(lockedBadges, prTypeCount)]
 }
