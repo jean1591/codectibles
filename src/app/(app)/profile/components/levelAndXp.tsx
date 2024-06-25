@@ -67,7 +67,7 @@ const NextLevelButton = () => {
 
     const updatedXp: Stat = {
       ...xpStat,
-      nextmilestone: updatedLevel ** 3 * 10,
+      nextmilestone: updatedLevel ** 2 * 10,
       previousmilestone: xpStat.nextmilestone,
     };
 
