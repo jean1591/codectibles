@@ -79,3 +79,43 @@ export interface Reactions {
     rocket: number;
     eyes: number;
 }
+
+export interface DbEvent {
+    authUserId: string;
+    createdAt: string;
+    eventId: string;
+    prId: number;
+    type: "approves" | "comments";
+}
+
+export enum EventTypes {
+    PULL_REQUEST_REVIEW_COMMENT_EVENT = "PullRequestReviewCommentEvent",
+    PULL_REQUEST_REVIEW_EVENT = "PullRequestReviewEvent"
+}
+export const eventTypes = ["PullRequestReviewCommentEvent", "PullRequestReviewEvent"]
+export interface PullRequestReviewCommentEvent {
+    id: string;
+    type: EventTypes.PULL_REQUEST_REVIEW_COMMENT_EVENT;
+    payload: {
+        pull_request: {
+            id: number;
+        }
+    };
+    created_at: string;
+}
+
+export interface PullRequestReviewEvent {
+    id: string;
+    type: EventTypes.PULL_REQUEST_REVIEW_EVENT;
+    payload: {
+        review: {
+            state: "commented" | "approved";
+        };
+        pull_request: {
+            id: number;
+        }
+    };
+    created_at: string;
+}
+
+export type Event = PullRequestReviewCommentEvent | PullRequestReviewEvent

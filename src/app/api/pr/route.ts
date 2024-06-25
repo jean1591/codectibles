@@ -3,10 +3,10 @@ import { GithubIssue, Issue } from "../interfaces/github";
 import { NextRequest, NextResponse } from "next/server";
 
 import { createClient } from "@/utils/supabase/server";
-import { decrypt } from "@/utils/hash";
-import { Resource, Stats, User, UserDb } from "../interfaces/user";
+import { Resource, Stats, UserDb } from "../interfaces/user";
 import { getPrType } from "../utils/pr";
 import { SupabaseClient } from "@supabase/supabase-js";
+import { getUserDetails } from "../utils/github";
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
     /* Fetch user data from DB */
@@ -70,25 +70,6 @@ const getLatestGithubMergedPr = async (
 
     return githubIssues.items.filter((pr) => pr.pull_request.merged_at !== null);
 };
-
-const getUserDetails = async (supabase: SupabaseClient, userId: string): Promise<Pick<User, 'fetchedAt' | 'stats' | 'token' | 'username'>> => {
-    const { data: users } = await supabase
-        .from(DbTable.USER)
-        .select("fetchedAt, stats, token, username")
-        .eq("authUserId", userId);
-
-    if (!users || users.length === 0) {
-        throw new Error(`No users found for id ${userId}`);
-    }
-
-    const { fetchedAt, stats,
-        token: hashedToken, username,
-    } = users[0];
-
-    const token = decrypt(hashedToken);
-
-    return { fetchedAt, stats, token, username }
-}
 
 const getPrNotSavedInDb = async (supabase: SupabaseClient, userId: string, githubPr: Issue[]): Promise<Issue[]> => {
     const { data: dbPr } = await supabase

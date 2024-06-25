@@ -92,7 +92,7 @@ export const ProgressBarWithTitle = ({ stat }: { stat: Stat }) => {
 const statTypeToTitle = (statType: Resource): string => {
   const mapper: Record<Resource, string> = {
     [Resource.APPROVES]: "PR approved",
-    [Resource.COMMENTS]: "comments made",
+    [Resource.COMMENTS]: "Comments made",
     [Resource.PR]: "PR merged",
     [Resource.XP]: "",
   };

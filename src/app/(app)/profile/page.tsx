@@ -32,8 +32,11 @@ export default function Profile() {
         return
       }
 
+      const eventsResponse = await fetch("/api/events");
+      await eventsResponse.json();
       const prResponse = await fetch("/api/pr");
       await prResponse.json();
+
 
       const userResponse = await fetch("/api/user");
       const user = (await userResponse.json()) as User;
