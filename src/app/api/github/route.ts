@@ -4,9 +4,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { createClient } from "@/utils/supabase/server";
 import { Resource, Stats, UserDb } from "../interfaces/user";
-import { getPrType } from "../utils/pr";
 import { SupabaseClient } from "@supabase/supabase-js";
-import { getUserDetails } from "../utils/github";
+import { getPrType, getUserDetails } from "../utils/github";
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
     /* Fetch user data from DB */

@@ -32,7 +32,7 @@ export default function Profile() {
         return
       }
 
-      const prResponse = await fetch("/api/pr");
+      const prResponse = await fetch("/api/github");
       await prResponse.json();
 
 
