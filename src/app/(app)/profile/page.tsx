@@ -1,15 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Badges } from "./components/badges";
 import { LevelAndXp } from "./components/levelAndXp";
-import { Milestones } from "./components/milestones";
 import { User } from "@/app/api/interfaces/user";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/app/lib/store/features/user/slice";
-import { PrToClaim } from "./components/prToClaim";
 import { redirect } from "next/navigation";
 import { Activities } from "./components/activities";
+import { Badges } from "./components/badges";
 
 export default function Profile() {
   const dispatch = useDispatch();
@@ -35,9 +33,6 @@ export default function Profile() {
         return;
       }
 
-      const prResponse = await fetch("/api/github");
-      await prResponse.json();
-
       const userResponse = await fetch("/api/user");
       const user = (await userResponse.json()) as User;
 
@@ -55,8 +50,6 @@ export default function Profile() {
     <div className="lg:flex items-start justify-center gap-4 space-y-4 lg:space-y-0">
       <div className="lg:flex-col flex-1 space-y-4">
         <LevelAndXp />
-        <PrToClaim />
-        <Milestones />
         <Activities />
       </div>
 
