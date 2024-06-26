@@ -2,7 +2,7 @@ const fakeBadges = [1, 2, 3, 4, 5];
 
 export const Badges = () => {
   return (
-    <div className="bg-slate-100 rounded-lg p-4 lg:p-8 shadow-lg">
+    <div className="bg-slate-100 rounded-lg p-4 lg:p-8 shadow-lg animate-pulse">
       <p className="text-2xl font-medium">Badges</p>
       <div className="mt-4">
         {fakeBadges.map((badge) => (
