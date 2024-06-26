@@ -1,3 +1,5 @@
+import JSConfetti from 'js-confetti'
+
 import { classNames } from "@/utils";
 import { gradientBg } from "./constants";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,6 +9,8 @@ import { computeProgress } from "@/utils/computeProgress";
 import { setUser } from "@/app/lib/store/features/user/slice";
 
 export const ProgressBarWithTitle = ({ stat }: { stat: Stat }) => {
+  let jsConfetti  = new JSConfetti()
+
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.user);
 
@@ -15,6 +19,8 @@ export const ProgressBarWithTitle = ({ stat }: { stat: Stat }) => {
   }
 
   const handleClaimMilestone = () => {
+    jsConfetti.addConfetti()
+
     const updatedXp: Stat = {
       ...user.stats.xp,
       user: user.stats.xp.user + stat.reward,

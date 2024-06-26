@@ -1,3 +1,5 @@
+import JSConfetti from 'js-confetti'
+
 import { classNames } from "@/utils";
 import { ProgressBar, gradientBg } from "../../ui";
 import { useDispatch, useSelector } from "react-redux";
@@ -51,6 +53,8 @@ export const LevelAndXp = () => {
 };
 
 const NextLevelButton = () => {
+  let jsConfetti  = new JSConfetti()
+
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.user);
 
@@ -59,6 +63,8 @@ const NextLevelButton = () => {
   }
 
   const handleClaimLevel = () => {
+    jsConfetti.addConfetti()
+
     const {
       level,
       stats: { xp: xpStat },
