@@ -14,6 +14,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setActivities } from "@/app/lib/store/features/user/slice";
 import { RootState } from "@/app/lib/store/store";
+import { Activities as ActivitiesSkeleton } from "./skeleton/activities";
 
 const activityTypeMapper: Record<
   ActivityType,
@@ -51,7 +52,7 @@ export const Activities = () => {
 
   // TODO: create skeleton
   if (!activities) {
-    return <></>;
+    return <ActivitiesSkeleton />;
   }
 
   return (
