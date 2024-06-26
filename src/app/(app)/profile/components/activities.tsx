@@ -1,57 +1,70 @@
 import { PiUserCheck, PiIdentificationBadge, PiArrowUpRight} from "react-icons/pi";
 
 import { classNames } from "@/utils";
+import { IconType } from "react-icons";
+
+enum ActivityType {
+  ACCOUNT_CREATED= "accountCreated,",
+  BADGE_CLAIMED= "badgeClaimed,",
+  LEVEL_UP= "levelUp",
+}
 
 const activities = [
   {
     id: "1",
-    type: 'accountCreated',
-    content: 'Created',
+    type: ActivityType.ACCOUNT_CREATED,
     target: 'account',
     datetime: '2020-09-20',
-    icon: PiUserCheck,
   },
   {
     id: "2",
-    type: 'levelUp',
-    content: 'Level up to',
+    type: ActivityType.LEVEL_UP,
     target: 'level 2',
     datetime: '2020-09-22',
-    icon: PiArrowUpRight,
   },
   {
     id: "3",
-    type: 'levelUp',
-    content: 'Level up to',
+    type: ActivityType.LEVEL_UP,
     target: 'level 3',
     datetime: '2020-09-28',
-    icon: PiArrowUpRight,
   },
   {
     id: "4",
-    type: 'badgeClaimed',
-    content: 'Claimed badge',
+    type: ActivityType.BADGE_CLAIMED,
     target: 'Feature Pro',
     datetime: '2020-09-30',
-    icon: PiIdentificationBadge,
   },
   {
     id: "5",
-    type: 'levelUp',
-    content: 'Level up to',
+    type: ActivityType.LEVEL_UP,
     target: 'level 4',
     datetime: '2020-10-04',
-    icon: PiArrowUpRight,
   },
   {
     id: "6",
-    type: 'badgeClaimed',
-    content: 'Claimed badge',
+    type: ActivityType.BADGE_CLAIMED,
     target: 'Feature Pro',
     datetime: '2020-09-30',
-    icon: PiIdentificationBadge,
   },
 ]
+
+const activityTypeMapper: Record<ActivityType, {bgColor: string; content:string; icon: IconType}> = {
+  [ActivityType.ACCOUNT_CREATED]: {
+    bgColor: "bg-slate-400",
+    content: 'Created',
+    icon: PiUserCheck,
+  },
+  [ActivityType.BADGE_CLAIMED]: {
+    bgColor: "bg-green-400",
+    content: 'Claimed badge',
+    icon: PiIdentificationBadge,
+  },
+  [ActivityType.LEVEL_UP]: {
+    bgColor: "bg-blue-400",
+    content: 'Level up to',
+    icon: PiArrowUpRight,
+  },
+}
 
 export const Activities = () => {
   return (
@@ -60,7 +73,11 @@ export const Activities = () => {
 
       <div className="mt-8 flow-root h-52 overflow-scroll">
       <ul role="list" className="-mb-8">
-        {activities.map((event, eventIdx) => (
+        {activities.map((event, eventIdx) => {
+          const activityDetails = activityTypeMapper[event.type as ActivityType]
+          const Icon = activityDetails.icon
+          
+          return (
           <li key={event.id}>
             <div className="relative pb-8">
               {eventIdx !== activities.length - 1 ? (
@@ -70,19 +87,17 @@ export const Activities = () => {
                 <div>
                   <span
                     className={classNames(
-                      event.type === 'accountCreated' ? "bg-slate-400" : "",
-                      event.type === 'levelUp' ? "bg-blue-400" : "",
-                      event.type === 'badgeClaimed' ? "bg-green-400" : "",
+                      activityDetails.bgColor,
                       'flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-slate-100',
                     )}
                   >
-                    <event.icon className="h-5 w-5 text-slate-100" />
+                    <Icon className="h-5 w-5 text-slate-100" />
                   </span>
                 </div>
                 <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
                   <div>
                     <p className="text-sm text-slate-500">
-                      {event.content}{' '}
+                      {activityDetails.content}{' '}
                       <span className="font-medium text-slate-900">
                         {event.target}
                       </span>
@@ -95,7 +110,7 @@ export const Activities = () => {
               </div>
             </div>
           </li>
-        ))}
+        )})}
       </ul>
     </div>
     </div>
