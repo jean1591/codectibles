@@ -12,15 +12,15 @@ import {
   UserDb,
 } from "@/app/api/interfaces/user";
 import { setUser } from "@/app/lib/store/features/user/slice";
+import { Badges as BadgesSkeleton } from "./skeleton/badges";
 
 export const Badges = () => {
   const { user } = useSelector((state: RootState) => state.user);
   const [isPopoverVisible, setIsPopoverVisibe] = useState(false);
   const [selectedCell, setSelectedCell] = useState<number | null>(null);
 
-  // TODO: display skeleton
   if (!user) {
-    return <></>;
+    return <BadgesSkeleton />;
   }
 
   const {
@@ -89,7 +89,6 @@ const BadgeToClaim = ({ badge }: { badge: BadgeType }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.user);
 
-  // TODO: display skeleton
   if (!user) {
     return <></>;
   }

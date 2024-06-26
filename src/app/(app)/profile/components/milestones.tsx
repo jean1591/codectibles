@@ -1,13 +1,13 @@
 import { useSelector } from "react-redux";
 import { ProgressBarWithTitle } from "../../ui";
 import { RootState } from "@/app/lib/store/store";
+import { Milestones as MilestonesSkeleton } from "./skeleton/milestones";
 
 export const Milestones = () => {
   const { user } = useSelector((state: RootState) => state.user);
 
-  // TODO: display skeleton
   if (!user) {
-    return <></>;
+    return <MilestonesSkeleton />;
   }
 
   const {

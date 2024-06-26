@@ -18,18 +18,20 @@ export default function Profile() {
     (async function getUser() {
       try {
         const tokenResponse = await fetch("/api/user/token");
-        const { token } = (await tokenResponse.json()) as { token: string | null };
+        const { token } = (await tokenResponse.json()) as {
+          token: string | null;
+        };
 
         if (token === null) {
           setShouldRedirect(true);
 
-          return
+          return;
         }
       } catch (error) {
-        console.error(error)
+        console.error(error);
         setShouldRedirect(true);
 
-        return
+        return;
       }
 
       const prResponse = await fetch("/api/github");
