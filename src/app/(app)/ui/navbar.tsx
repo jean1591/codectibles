@@ -14,11 +14,24 @@ export const Navbar = () => {
       <Link
         href="/profile"
         className={classNames(
-          page === "profile" ? "bg-slate-800" : "bg-none",
-          "hover:bg-slate-700 px-4 py-2 rounded-lg text-slate-100 text-base font-medium uppercase"
+          page === "profile"
+            ? "bg-slate-700 text-slate-100"
+            : "bg-none hover:bg-slate-700 text-slate-600 hover:text-slate-100",
+          "px-4 py-2 rounded-lg text-base font-medium uppercase"
         )}
       >
         profile
+      </Link>
+      <Link
+        href="/quests"
+        className={classNames(
+          page === "quests"
+          ? "bg-slate-700 text-slate-100"
+          : "bg-none hover:bg-slate-700 text-slate-600 hover:text-slate-100",
+          "px-4 py-2 rounded-lg text-base font-medium uppercase"
+        )}
+      >
+        Quests
       </Link>
 
       <p
