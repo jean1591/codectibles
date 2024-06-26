@@ -185,7 +185,7 @@ const getLatestEvents = async (
     token: string,
     username: string
 ): Promise<Event[]> => {
-    const url = `https://api.github.com/users/${username}/events`;
+    const url = `https://api.github.com/users/${username}/events?per_page=100`;
 
     const eventsResponse = await fetch(url, {
         method: "GET",
@@ -211,7 +211,7 @@ const getEventsNotSavedInDb = async (supabase: SupabaseClient, userId: string, e
     const dbEventIds = dbEvents?.map((event: { eventId: string }) => event.eventId) ?? [];
 
     const isEventPrApproved = (event: Event) => event.type === EventTypes.PULL_REQUEST_REVIEW_EVENT && event.payload.review.state === "approved"
-    const isEventPrCommented = (event: Event) => event.type === EventTypes.PULL_REQUEST_REVIEW_EVENT
+    const isEventPrCommented = (event: Event) => event.type === EventTypes.PULL_REQUEST_REVIEW_COMMENT_EVENT
 
     return events
         .filter((event) => isEventPrApproved(event) || isEventPrCommented(event))
