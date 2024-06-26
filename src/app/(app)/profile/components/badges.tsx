@@ -11,8 +11,9 @@ import {
   User,
   UserDb,
 } from "@/app/api/interfaces/user";
-import { setUser } from "@/app/lib/store/features/user/slice";
+import { setActivities, setUser } from "@/app/lib/store/features/user/slice";
 import { Badges as BadgesSkeleton } from "./skeleton/badges";
+import { Activity, ActivityType } from "@/app/api/interfaces/activity";
 
 export const Badges = () => {
   const { user } = useSelector((state: RootState) => state.user);
@@ -87,9 +88,9 @@ export const Badges = () => {
 
 const BadgeToClaim = ({ badge }: { badge: BadgeType }) => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state: RootState) => state.user);
+  const { user, activities } = useSelector((state: RootState) => state.user);
 
-  if (!user) {
+  if (!user || !activities) {
     return <></>;
   }
 
@@ -123,14 +124,28 @@ const BadgeToClaim = ({ badge }: { badge: BadgeType }) => {
       stateUser.stats = { ...user.stats, xp: updatedXp };
     }
 
+    const activity = {
+      authUserId: user.authUserId,
+      createdAt: new Date().toISOString(),
+      details: badge.title,
+      type: ActivityType.BADGE_CLAIMED,
+    } as Activity;
+
     (async function updateUser() {
       await fetch("/api/user", {
         method: "PUT",
         body: JSON.stringify({ user: updatedUser }),
         headers: { "Content-Type": "application/json" },
       });
+
+      await fetch("/api/activity", {
+        method: "POST",
+        body: JSON.stringify({ activity }),
+        headers: { "Content-Type": "application/json" },
+      });
     })();
 
+    dispatch(setActivities([{...activity, createdAt: activity.createdAt.slice(0, 10)}, ...activities]));
     dispatch(setUser(stateUser));
   };
 

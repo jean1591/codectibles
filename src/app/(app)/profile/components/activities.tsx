@@ -6,13 +6,14 @@ import {
 
 import { classNames } from "@/utils";
 import { IconType } from "react-icons";
-import { Activity, ActivityType } from "@/app/api/interfaces/activity";
+import {
+  Activity as TypeActivity,
+  ActivityType,
+} from "@/app/api/interfaces/activity";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setActivities } from "@/app/lib/store/features/user/slice";
 import { RootState } from "@/app/lib/store/store";
-
-// TODO: add activity upon level up and badge claim
 
 const activityTypeMapper: Record<
   ActivityType,
@@ -42,7 +43,7 @@ export const Activities = () => {
   useEffect(() => {
     (async function getActivities() {
       const activitiesResponse = await fetch("/api/activity");
-      const activities = (await activitiesResponse.json()) as Activity[];
+      const activities = (await activitiesResponse.json()) as TypeActivity[];
 
       dispatch(setActivities(activities));
     })();
@@ -59,48 +60,63 @@ export const Activities = () => {
 
       <div className="mt-8 flow-root max-h-52 overflow-scroll">
         <ul role="list" className="-mb-8">
-          {activities.map((activity, eventIdx) => {
-            const activityDetails =
-              activityTypeMapper[activity.type];
-            const Icon = activityDetails.icon;
-
-            return (
-              <li key={activity.id}>
-                <div className="relative pb-8">
-                  {eventIdx !== activities.length - 1 ? (
-                    <span className="absolute left-4 top-4 -ml-px h-full w-0.5 bg-slate-300" />
-                  ) : null}
-                  <div className="relative flex space-x-3">
-                    <div>
-                      <span
-                        className={classNames(
-                          activityDetails.bgColor,
-                          "flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-slate-100"
-                        )}
-                      >
-                        <Icon className="h-5 w-5 text-slate-100" />
-                      </span>
-                    </div>
-                    <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
-                      <div>
-                        <p className="text-sm text-slate-500">
-                          {activityDetails.content}{" "}
-                          <span className="font-medium text-slate-900">
-                            {activity.details}
-                          </span>
-                        </p>
-                      </div>
-                      <div className="whitespace-nowrap text-right text-sm text-slate-500">
-                        <p>{activity.createdAt}</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </li>
-            );
-          })}
+          {activities.map((activity, activityIdx) => (
+            <Activity
+              activity={activity}
+              activityIdx={activityIdx}
+              activitiesLength={activities.length}
+            />
+          ))}
         </ul>
       </div>
     </div>
+  );
+};
+
+const Activity = ({
+  activity,
+  activityIdx,
+  activitiesLength,
+}: {
+  activity: TypeActivity;
+  activityIdx: number;
+  activitiesLength: number;
+}) => {
+  const activityDetails = activityTypeMapper[activity.type];
+  const Icon = activityDetails.icon;
+
+  return (
+    <li key={activity.id}>
+      <div className="relative pb-8">
+        {activityIdx !== activitiesLength - 1 ? (
+          <span className="absolute left-4 top-4 -ml-px h-full w-0.5 bg-slate-300" />
+        ) : null}
+        <div className="relative flex space-x-3">
+          <div>
+            <span
+              className={classNames(
+                activityDetails.bgColor,
+                "flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-slate-100"
+              )}
+            >
+              <Icon className="h-5 w-5 text-slate-100" />
+            </span>
+          </div>
+          <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
+            <div>
+              <p className="text-sm text-slate-500">
+                {activityDetails.content}{" "}
+                <span className="font-medium text-slate-900">
+                  {activity.details}
+                </span>
+              </p>
+            </div>
+            <div className="whitespace-nowrap text-right text-sm text-slate-500">
+              <p>{activity.createdAt}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
   );
 };

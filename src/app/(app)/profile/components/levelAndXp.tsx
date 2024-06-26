@@ -3,8 +3,9 @@ import { ProgressBar, gradientBg } from "../../ui";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/lib/store/store";
 import { Stat, User, UserDb } from "@/app/api/interfaces/user";
-import { setUser } from "@/app/lib/store/features/user/slice";
+import { setActivities, setUser } from "@/app/lib/store/features/user/slice";
 import { LevelAndXp as LevelAndXpSkeleton } from "./skeleton/levelAndXp";
+import { Activity, ActivityType } from "@/app/api/interfaces/activity";
 
 export const LevelAndXp = () => {
   const { user } = useSelector((state: RootState) => state.user);
@@ -51,9 +52,9 @@ export const LevelAndXp = () => {
 
 const NextLevelButton = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state: RootState) => state.user);
+  const { user, activities } = useSelector((state: RootState) => state.user);
 
-  if (!user) {
+  if (!user || !activities) {
     return <></>;
   }
 
@@ -77,10 +78,23 @@ const NextLevelButton = () => {
       stats: { ...user.stats, xp: updatedXp },
     } as UserDb;
 
+    const activity = {
+      authUserId: user.authUserId,
+      createdAt: new Date().toISOString(),
+      details: `level ${updatedLevel}`,
+      type: ActivityType.LEVEL_UP,
+    } as Activity;
+
     (async function updateUser() {
       await fetch("/api/user", {
         method: "PUT",
         body: JSON.stringify({ user: updatedUser }),
+        headers: { "Content-Type": "application/json" },
+      });
+
+      await fetch("/api/activity", {
+        method: "POST",
+        body: JSON.stringify({ activity }),
         headers: { "Content-Type": "application/json" },
       });
     })();
@@ -91,6 +105,7 @@ const NextLevelButton = () => {
       stats: { ...user.stats, xp: updatedXp },
     };
 
+    dispatch(setActivities([{...activity, createdAt: activity.createdAt.slice(0, 10)}, ...activities]));
     dispatch(setUser(stateUser));
   };
 
