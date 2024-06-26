@@ -5,7 +5,7 @@ export const Activities = () => {
     <div className="bg-slate-100 rounded-lg p-4 lg:p-8 shadow-lg">
       <p className="text-2xl font-medium">Activities</p>
 
-      <div className="mt-8 flow-root max-h-52 overflow-scroll">
+      <div className="mt-8 flow-root max-h-96 overflow-scroll">
         <ul role="list" className="-mb-8">
           {fakeActivities.map((activity, activityIdx) => (
             <Activity
@@ -29,7 +29,7 @@ const Activity = ({
 }) => {
   return (
     <li>
-      <div className="relative pb-8">
+      <div className="relative pb-8 animate-pulse">
         {activityIdx !== activitiesLength - 1 ? (
           <span className="absolute left-4 top-4 -ml-px h-full w-0.5 bg-slate-300" />
         ) : null}

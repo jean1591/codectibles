@@ -1,4 +1,5 @@
 import { Banner, Navbar } from "./ui/";
+import { NavbarFooter } from "./ui/navbarFooter";
 
 export default function Layout({
   children,
@@ -6,15 +7,21 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="px-4 mx-auto max-w-7xl">
-      <Banner />
+    <div>
+      <div className="px-4 mx-auto max-w-7xl">
+        <Banner />
 
-      <div className="my-4 grid grid-cols-7 gap-x-12">
-        <div className="hidden lg:block lg:col-span-1">
-          <Navbar />
+        <div className="my-4 grid grid-cols-7 gap-x-12">
+          <div className="hidden lg:block lg:col-span-1">
+            <Navbar />
+          </div>
+
+          <div className="col-span-7 lg:col-span-6">{children}</div>
         </div>
+      </div>
 
-        <div className="col-span-7 lg:col-span-6">{children}</div>
+      <div className="block lg:hidden w-full">
+        <NavbarFooter />
       </div>
     </div>
   );
