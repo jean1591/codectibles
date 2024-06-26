@@ -13,37 +13,37 @@ const activities = [
   {
     id: "1",
     type: ActivityType.ACCOUNT_CREATED,
-    target: 'account',
+    details: 'account',
     datetime: '2020-09-20',
   },
   {
     id: "2",
     type: ActivityType.LEVEL_UP,
-    target: 'level 2',
+    details: 'level 2',
     datetime: '2020-09-22',
   },
   {
     id: "3",
     type: ActivityType.LEVEL_UP,
-    target: 'level 3',
+    details: 'level 3',
     datetime: '2020-09-28',
   },
   {
     id: "4",
     type: ActivityType.BADGE_CLAIMED,
-    target: 'Feature Pro',
+    details: 'Feature Pro',
     datetime: '2020-09-30',
   },
   {
     id: "5",
     type: ActivityType.LEVEL_UP,
-    target: 'level 4',
+    details: 'level 4',
     datetime: '2020-10-04',
   },
   {
     id: "6",
     type: ActivityType.BADGE_CLAIMED,
-    target: 'Feature Pro',
+    details: 'Feature Pro',
     datetime: '2020-09-30',
   },
 ]
@@ -99,7 +99,7 @@ export const Activities = () => {
                     <p className="text-sm text-slate-500">
                       {activityDetails.content}{' '}
                       <span className="font-medium text-slate-900">
-                        {event.target}
+                        {event.details}
                       </span>
                     </p>
                   </div>
