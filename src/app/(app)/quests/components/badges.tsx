@@ -1,4 +1,4 @@
-import JSConfetti from 'js-confetti'
+import JSConfetti from "js-confetti";
 
 import { classNames } from "@/utils";
 import { gradientBg } from "../../ui";
@@ -11,10 +11,7 @@ import {
   User,
   UserDb,
 } from "@/app/api/interfaces/user";
-import {
-  addActivity,
-  setUser,
-} from "@/app/lib/store/features/user/slice";
+import { addActivity, setUser } from "@/app/lib/store/features/user/slice";
 import { Badges as BadgesSkeleton } from "./skeleton/badges";
 import { Activity, ActivityType } from "@/app/api/interfaces/activity";
 
@@ -49,7 +46,7 @@ export const Badges = () => {
 };
 
 const BadgeToClaim = ({ badge }: { badge: BadgeType }) => {
-  let jsConfetti  = new JSConfetti()
+  let jsConfetti = new JSConfetti();
 
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.user);
@@ -59,7 +56,7 @@ const BadgeToClaim = ({ badge }: { badge: BadgeType }) => {
   }
 
   const handleClaimBadge = () => {
-    jsConfetti.addConfetti()
+    jsConfetti.addConfetti();
 
     const updatedUser = {
       authUserId: user.authUserId,

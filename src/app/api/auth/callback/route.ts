@@ -5,7 +5,6 @@ import { DbError, DbTable } from "@/app/api/interfaces/database";
 import { ActivityType } from "../../interfaces/activity";
 import { SupabaseClient } from "@supabase/supabase-js";
 
-
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
 

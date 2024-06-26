@@ -185,7 +185,7 @@ const getLatestEvents = async (
     token: string,
     username: string
 ): Promise<Event[]> => {
-    const url = `https://api.github.com/users/${username}/events?per_page=100`;
+    const url = `https://api.github.com/users/${username}/events`;
 
     const eventsResponse = await fetch(url, {
         method: "GET",

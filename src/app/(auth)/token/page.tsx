@@ -59,7 +59,7 @@ export default function TokenPage() {
           }}
           type="text"
           id="token"
-          className="w-full bg-slate-300 border-0 p-0 placeholder:text-slate-600"
+          className="w-full bg-slate-100 p-1 placeholder:text-slate-600"
           placeholder="ghp_whgD..."
         />
       </div>

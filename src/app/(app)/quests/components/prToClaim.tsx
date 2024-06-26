@@ -1,4 +1,6 @@
-import { Stat, User, UserDb } from "@/app/api/interfaces/user";
+import JSConfetti from "js-confetti";
+
+import{ Stat, User, UserDb } from "@/app/api/interfaces/user";
 import { setUser } from "@/app/lib/store/features/user/slice";
 import { RootState } from "@/app/lib/store/store";
 import { classNames } from "@/utils";
@@ -19,6 +21,9 @@ export const PrToClaim = () => {
   const { prToClaim } = user;
 
   const handleClaimPr = () => {
+    let jsConfetti = new JSConfetti();
+    jsConfetti.addConfetti();
+
     const updatedXp: Stat = {
       ...user.stats.xp,
       user: user.stats.xp.user + prToClaim * REWARD_PER_PR,
