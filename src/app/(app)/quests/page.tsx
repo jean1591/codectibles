@@ -11,6 +11,7 @@ import { Badges } from "./components/badges";
 
 export default function Quests() {
   const dispatch = useDispatch();
+  
   useEffect(() => {
     (async function getUser() {
       const prResponse = await fetch("/api/github");
