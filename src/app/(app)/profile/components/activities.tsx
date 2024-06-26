@@ -62,6 +62,7 @@ export const Activities = () => {
         <ul role="list" className="-mb-8">
           {activities.map((activity, activityIdx) => (
             <Activity
+              key={activity.id}
               activity={activity}
               activityIdx={activityIdx}
               activitiesLength={activities.length}
@@ -86,7 +87,7 @@ const Activity = ({
   const Icon = activityDetails.icon;
 
   return (
-    <li key={activity.id}>
+    <li>
       <div className="relative pb-8">
         {activityIdx !== activitiesLength - 1 ? (
           <span className="absolute left-4 top-4 -ml-px h-full w-0.5 bg-slate-300" />

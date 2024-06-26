@@ -11,7 +11,10 @@ import {
   User,
   UserDb,
 } from "@/app/api/interfaces/user";
-import { setActivities, setUser } from "@/app/lib/store/features/user/slice";
+import {
+  addActivity,
+  setUser,
+} from "@/app/lib/store/features/user/slice";
 import { Badges as BadgesSkeleton } from "./skeleton/badges";
 import { Activity, ActivityType } from "@/app/api/interfaces/activity";
 
@@ -88,9 +91,9 @@ export const Badges = () => {
 
 const BadgeToClaim = ({ badge }: { badge: BadgeType }) => {
   const dispatch = useDispatch();
-  const { user, activities } = useSelector((state: RootState) => state.user);
+  const { user } = useSelector((state: RootState) => state.user);
 
-  if (!user || !activities) {
+  if (!user) {
     return <></>;
   }
 
@@ -145,7 +148,9 @@ const BadgeToClaim = ({ badge }: { badge: BadgeType }) => {
       });
     })();
 
-    dispatch(setActivities([{...activity, createdAt: activity.createdAt.slice(0, 10)}, ...activities]));
+    dispatch(
+      addActivity({ ...activity, createdAt: activity.createdAt.slice(0, 10) })
+    );
     dispatch(setUser(stateUser));
   };
 

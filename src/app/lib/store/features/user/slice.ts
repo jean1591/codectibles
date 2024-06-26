@@ -17,6 +17,13 @@ export const userSlice = createSlice({
   name: "userSlice",
   initialState,
   reducers: {
+    addActivity: (state, action: PayloadAction<Activity>) => {
+      if (state.activities) {
+        state.activities = [action.payload, ...state.activities];
+      } else {
+        state.activities = [action.payload]
+      }
+    },
     setActivities: (state, action: PayloadAction<Activity[] | null>) => {
       state.activities = action.payload;
     },
@@ -26,6 +33,6 @@ export const userSlice = createSlice({
   },
 });
 
-export const { setActivities, setUser } = userSlice.actions;
+export const { addActivity, setActivities, setUser } = userSlice.actions;
 
 export default userSlice.reducer;

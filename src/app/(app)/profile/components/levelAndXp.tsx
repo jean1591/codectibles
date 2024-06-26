@@ -3,7 +3,7 @@ import { ProgressBar, gradientBg } from "../../ui";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/lib/store/store";
 import { Stat, User, UserDb } from "@/app/api/interfaces/user";
-import { setActivities, setUser } from "@/app/lib/store/features/user/slice";
+import { addActivity, setUser } from "@/app/lib/store/features/user/slice";
 import { LevelAndXp as LevelAndXpSkeleton } from "./skeleton/levelAndXp";
 import { Activity, ActivityType } from "@/app/api/interfaces/activity";
 
@@ -52,9 +52,9 @@ export const LevelAndXp = () => {
 
 const NextLevelButton = () => {
   const dispatch = useDispatch();
-  const { user, activities } = useSelector((state: RootState) => state.user);
+  const { user } = useSelector((state: RootState) => state.user);
 
-  if (!user || !activities) {
+  if (!user) {
     return <></>;
   }
 
@@ -105,7 +105,9 @@ const NextLevelButton = () => {
       stats: { ...user.stats, xp: updatedXp },
     };
 
-    dispatch(setActivities([{...activity, createdAt: activity.createdAt.slice(0, 10)}, ...activities]));
+    dispatch(
+      addActivity({ ...activity, createdAt: activity.createdAt.slice(0, 10) })
+    );
     dispatch(setUser(stateUser));
   };
 
