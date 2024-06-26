@@ -5,12 +5,13 @@ export const ProgressBarWithTitle = () => {
         <div className="flex items-center justify-start gap-x-4 text-xl font-medium text-left">
           <p className="bg-slate-300 text-slate-300">USER DETAILS</p>
         </div>
-        <p className="bg-slate-300 text-slate-300 text-base text-right">+ 100 XP</p>
+        <p className="bg-slate-300 text-slate-300 text-base text-right">
+          + 100 XP
+        </p>
       </div>
 
       <div className="mt-4">
-        <ProgressBar
-        />
+        <ProgressBar />
       </div>
     </div>
   );
@@ -26,8 +27,8 @@ export const ProgressBar = () => {
         />
       </div>
       <div className="mt-2 flex items-center justify-between text-sm font-medium">
-        <p className="text-left bg-slate-300 text-salte-300 rounded"></p>
-        <p className="text-right bg-slate-300 text-salte-300 rounded"></p>
+        <p className="text-left bg-slate-300 text-slate-300 rounded">10</p>
+        <p className="text-right bg-slate-300 text-slate-300 rounded">100</p>
       </div>
     </div>
   );

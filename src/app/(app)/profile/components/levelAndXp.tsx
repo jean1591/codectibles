@@ -6,7 +6,6 @@ import { Stat, User, UserDb } from "@/app/api/interfaces/user";
 import { setUser } from "@/app/lib/store/features/user/slice";
 import { LevelAndXp as LevelAndXpSkeleton } from "./skeleton/levelAndXp";
 
-
 export const LevelAndXp = () => {
   const { user } = useSelector((state: RootState) => state.user);
 

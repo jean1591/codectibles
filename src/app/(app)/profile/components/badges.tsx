@@ -14,14 +14,13 @@ import {
 import { setUser } from "@/app/lib/store/features/user/slice";
 import { Badges as BadgesSkeleton } from "./skeleton/badges";
 
-
 export const Badges = () => {
   const { user } = useSelector((state: RootState) => state.user);
   const [isPopoverVisible, setIsPopoverVisibe] = useState(false);
   const [selectedCell, setSelectedCell] = useState<number | null>(null);
 
   if (!user) {
-    return <BadgesSkeleton />
+    return <BadgesSkeleton />;
   }
 
   const {
