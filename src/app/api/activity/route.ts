@@ -36,7 +36,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   const { error } = await supabase.from(DbTable.ACTIVITY).insert(activity);
 
   if (error) {
-      console.error(`${DbError.INSERT}: ACTIVITY"`, { error });
+      console.error(`${DbError.INSERT}: ACTIVITY`, { error });
   }
 
   return NextResponse.json({ success: true });

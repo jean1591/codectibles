@@ -50,7 +50,6 @@ export const Activities = () => {
     })();
   }, []);
 
-  // TODO: create skeleton
   if (!activities) {
     return <ActivitiesSkeleton />;
   }
