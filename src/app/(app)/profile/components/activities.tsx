@@ -50,17 +50,17 @@ const activities = [
 
 const activityTypeMapper: Record<ActivityType, {bgColor: string; content:string; icon: IconType}> = {
   [ActivityType.ACCOUNT_CREATED]: {
-    bgColor: "bg-slate-400",
+    bgColor: "bg-gradient-to-tr from-slate-500 to-slate-200",
     content: 'Created',
     icon: PiUserCheck,
   },
   [ActivityType.BADGE_CLAIMED]: {
-    bgColor: "bg-green-400",
+    bgColor: "bg-gradient-to-tr from-green-500 to-green-200",
     content: 'Claimed badge',
     icon: PiIdentificationBadge,
   },
   [ActivityType.LEVEL_UP]: {
-    bgColor: "bg-blue-400",
+    bgColor: "bg-gradient-to-tr from-blue-500 to-blue-200",
     content: 'Level up to',
     icon: PiArrowUpRight,
   },
