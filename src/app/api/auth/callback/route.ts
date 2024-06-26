@@ -2,6 +2,9 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { type CookieOptions, createServerClient } from "@supabase/ssr";
 import { DbError, DbTable } from "@/app/api/interfaces/database";
+import { ActivityType } from "../../interfaces/activity";
+import { SupabaseClient } from "@supabase/supabase-js";
+
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
@@ -45,14 +48,7 @@ export async function GET(request: Request) {
       .eq("authUserId", authUser.id);
 
     if (!users || users.length === 0) {
-      const { error } = await supabase.from(DbTable.USER).insert({
-        authUserId: authUser.id,
-        username: authUser.user_metadata.user_name,
-      });
-
-      if (error) {
-        console.error(`${DbError.INSERT}: USER"`, { error });
-      }
+      await createUser(supabase, authUser.id, authUser.user_metadata.user_name)
     }
 
     if (!error) {
@@ -62,4 +58,23 @@ export async function GET(request: Request) {
 
   // return the user to an error page with instructions
   return NextResponse.redirect(`${origin}/auth/auth-code-error`);
+}
+
+const createUser = async (supabase: SupabaseClient, userId: string, username: string) => {
+  const { error: insertUserError } = await supabase.from(DbTable.USER).insert({
+    authUserId: userId,
+    username: username,
+  });
+  const { error: insertActivityError } = await supabase.from(DbTable.ACTIVITY).insert({
+    authUserId: userId,
+    type: ActivityType.ACCOUNT_CREATED,
+    details: "account"
+  });
+
+  if (insertUserError) {
+    console.error(`${DbError.INSERT}: USER"`, { error: insertUserError });
+  }
+  if (insertActivityError) {
+    console.error(`${DbError.INSERT}: ACTIVITY"`, { error: insertActivityError });
+  }
 }

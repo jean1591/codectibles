@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { setUser } from "@/app/lib/store/features/user/slice";
 import { PrToClaim } from "./components/prToClaim";
 import { redirect } from "next/navigation";
+import { Activities } from "./components/activities";
 
 export default function Profile() {
   const dispatch = useDispatch();
@@ -56,6 +57,7 @@ export default function Profile() {
         <LevelAndXp />
         <PrToClaim />
         <Milestones />
+        <Activities />
       </div>
 
       <div className="flex-1">

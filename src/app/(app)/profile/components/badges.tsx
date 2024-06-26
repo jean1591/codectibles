@@ -11,8 +11,12 @@ import {
   User,
   UserDb,
 } from "@/app/api/interfaces/user";
-import { setUser } from "@/app/lib/store/features/user/slice";
+import {
+  addActivity,
+  setUser,
+} from "@/app/lib/store/features/user/slice";
 import { Badges as BadgesSkeleton } from "./skeleton/badges";
+import { Activity, ActivityType } from "@/app/api/interfaces/activity";
 
 export const Badges = () => {
   const { user } = useSelector((state: RootState) => state.user);
@@ -43,7 +47,7 @@ export const Badges = () => {
 
       {/* CLAIMED BADGES */}
       {unlocked.length > 0 && (
-        <div className="mt-4 grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-4 xl:grid-cols-5 grid-flow-row items-center justify-center gap-4">
+        <div className="mt-8 grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-4 xl:grid-cols-5 grid-flow-row items-center justify-center gap-4">
           {unlocked.map((badge, index) => (
             <div
               onClick={() => handleBadgeOnClick(index)}
@@ -70,7 +74,7 @@ export const Badges = () => {
       )}
 
       {/* NEXT BADGES */}
-      <div className="mt-4">
+      <div className="mt-8">
         {locked.map((badge) => (
           <div key={badge.id}>
             {badge.unlocked ? (
@@ -123,14 +127,30 @@ const BadgeToClaim = ({ badge }: { badge: BadgeType }) => {
       stateUser.stats = { ...user.stats, xp: updatedXp };
     }
 
+    const activity = {
+      authUserId: user.authUserId,
+      createdAt: new Date().toISOString(),
+      details: badge.title,
+      type: ActivityType.BADGE_CLAIMED,
+    } as Activity;
+
     (async function updateUser() {
       await fetch("/api/user", {
         method: "PUT",
         body: JSON.stringify({ user: updatedUser }),
         headers: { "Content-Type": "application/json" },
       });
+
+      await fetch("/api/activity", {
+        method: "POST",
+        body: JSON.stringify({ activity }),
+        headers: { "Content-Type": "application/json" },
+      });
     })();
 
+    dispatch(
+      addActivity({ ...activity, createdAt: activity.createdAt.slice(0, 10) })
+    );
     dispatch(setUser(stateUser));
   };
 

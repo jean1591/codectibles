@@ -1,4 +1,5 @@
 export enum DbTable {
+  ACTIVITY = "activity",
   BADGE = "badge",
   EVENT = "event",
   PR = "pr",
