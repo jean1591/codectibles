@@ -43,7 +43,7 @@ export const Badges = () => {
 
       {/* CLAIMED BADGES */}
       {unlocked.length > 0 && (
-        <div className="mt-4 grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-4 xl:grid-cols-5 grid-flow-row items-center justify-center gap-4">
+        <div className="mt-8 grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-4 xl:grid-cols-5 grid-flow-row items-center justify-center gap-4">
           {unlocked.map((badge, index) => (
             <div
               onClick={() => handleBadgeOnClick(index)}
@@ -70,7 +70,7 @@ export const Badges = () => {
       )}
 
       {/* NEXT BADGES */}
-      <div className="mt-4">
+      <div className="mt-8">
         {locked.map((badge) => (
           <div key={badge.id}>
             {badge.unlocked ? (
