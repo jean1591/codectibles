@@ -1,7 +1,7 @@
 import { classNames } from "@/utils";
 import { UnlockedCollectible } from "./collectibles";
 import { qualityToThemeMapper } from "../utils/mappers";
-import { Collectible, Quality } from "../interface/tmp";
+import { Collectible, Quality } from "@/app/api/interfaces/collectible";
 
 export const QualitySection = ({
   collectibles,

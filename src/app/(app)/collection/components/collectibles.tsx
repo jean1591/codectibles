@@ -1,6 +1,6 @@
 import { classNames } from "@/utils";
 import { qualityToThemeMapper } from "../utils/mappers";
-import { Quality } from "../interface/tmp";
+import { Quality } from "@/app/api/interfaces/collectible";
 
 const LockedBgTheme =
   "bg-gradient-to-tr from-slate-300 via-slate-100 to-slate-300 border-slate-300";

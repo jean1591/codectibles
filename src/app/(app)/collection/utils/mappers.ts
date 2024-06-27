@@ -1,4 +1,4 @@
-import { Quality } from "../interface/tmp";
+import { Quality } from "@/app/api/interfaces/collectible";
 
 const legendaryBgTheme =
 "bg-gradient-to-tr from-purple-600 to-pink-300 border-purple-600";
