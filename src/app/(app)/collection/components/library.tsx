@@ -9,7 +9,17 @@ export const Library = ({
   collectibles: Collectible[];
   maxCollectiblesSize: number;
 }) => {
-  const missingItemsCount = maxCollectiblesSize - collectibles.length;
+  const uniqueCollectiblesLength = collectibles.reduce(
+    (acc, current) => {
+      if (acc.icons.includes(current.icon)) {
+        return acc;
+      }
+      return { count: acc.count + 1, icons: [...acc.icons, current.icon] };
+    },
+    { count: 0, icons: [] } as { count: number; icons: string[] }
+  );
+  
+  const missingItemsCount = maxCollectiblesSize - uniqueCollectiblesLength.count;
 
   const commonItems = collectibles.filter(
     (item) => item.quality === Quality.COMMON
@@ -20,7 +30,7 @@ export const Library = ({
   const legendaryItems = collectibles.filter(
     (item) => item.quality === Quality.LEGENDARY
   );
-  
+
   return (
     <div>
       <p className="text-3xl font-medium">Animals</p>
