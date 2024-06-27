@@ -3,14 +3,19 @@
 import { useEffect, useState } from "react";
 import { LevelAndXp } from "./components/levelAndXp";
 import { User } from "@/app/api/interfaces/user";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "@/app/lib/store/features/user/slice";
 import { redirect } from "next/navigation";
 import { Activities } from "./components/activities";
 import { Badges } from "./components/badges";
+import { RootState } from "@/app/lib/store/store";
+import { EmojiCardsModal } from "./components/emojiCardsModal";
 
 export default function Profile() {
   const dispatch = useDispatch();
+  const { displayGetEmojisModal } = useSelector(
+    (state: RootState) => state.interactions
+  );
   const [shouldRedirect, setShouldRedirect] = useState(false);
 
   useEffect(() => {
@@ -56,6 +61,8 @@ export default function Profile() {
       <div className="flex-1">
         <Badges />
       </div>
+
+      {displayGetEmojisModal && <EmojiCardsModal />}
     </div>
   );
 }
