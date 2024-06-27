@@ -1,11 +1,11 @@
 import { Quality } from "../interface/tmp";
 
-const commonBgTheme =
-    "bg-gradient-to-tr from-violet-500 to-indigo-300 border-violet-500";
-const rareBgTheme =
-    "bg-gradient-to-tr from-red-500 to-orange-300 border-red-500";
 const legendaryBgTheme =
-    "bg-gradient-to-tr from-yellow-400 via-amber-300 to-yellow-100 border-yellow-400";
+"bg-gradient-to-tr from-purple-600 to-pink-300 border-purple-600";
+const rareBgTheme =
+"bg-gradient-to-tr from-blue-400 to-cyan-200 border-blue-400";
+const commonBgTheme =
+    "bg-gradient-to-tr from-green-500 via-lime-500 to-yellow-100 border-green-500";
 
 export const qualityToThemeMapper: Record<Quality, string> = {
     [Quality.COMMON]: commonBgTheme,
