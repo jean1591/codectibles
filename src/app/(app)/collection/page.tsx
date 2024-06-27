@@ -2,72 +2,38 @@ import { LockedCollectible } from "./components/collectibles";
 import { QualitySection } from "./components/quality";
 import { Collectible, Quality } from "./interface/tmp";
 
-const allMammals = [
+const allAnimals = [
+  "🐌",
+  "🐙",
+  "🐛",
+  "🐝",
+  "🐞",
+  "🐡",
+  "🐢",
+  "🐨",
+  "🐭",
+  "🐮",
+  "🐯",
+  "🐰",
+  "🐱",
+  "🐳",
   "🐵",
   "🐶",
-  "🦊",
-  "🐱",
-  "🦁",
-  "🐯",
-  "🐮",
   "🐷",
-  "🐭",
+  "🐸",
   "🐹",
-  "🐰",
   "🐻",
   "🐻‍❄️",
-  "🐨",
   "🐼",
-];
-
-const mammals: Collectible[] = [
-  { icon: "🐷", quality: Quality.COMMON, count: 3 },
-  { icon: "🐻", quality: Quality.RARE, count: 2 },
-  { icon: "🦁", quality: Quality.COMMON, count: 14 },
-  { icon: "🦁", quality: Quality.LEGENDARY, count: 1 },
-  { icon: "🦊", quality: Quality.COMMON, count: 1 },
-];
-const marines = [
-  "🐸",
-  "🐊",
-  "🐢",
-  "🦎",
-  "🐍",
-  "🐳",
-  "🐋",
-  "🐬",
-  "🦭",
-  "🐟",
-  "🐠",
-  "🐡",
-  "🦈",
-  "🐙",
-  "🐚",
-  "🪸",
   "🦀",
+  "🦁",
+  "🦊",
   "🦞",
-  "🦐",
-  "🦑",
-  "🦪",
-];
-const bugs = [
-  "🐌",
-  "🦋",
-  "🐛",
-  "🐜",
-  "🐝",
+  "🦭",
   "🪲",
-  "🐞",
-  "🦗",
-  "🪳",
-  "🕷️",
-  "🕸️",
-  "🦂",
-  "🦟",
-  "🪰",
-  "🪱",
 ];
-const flowers = [
+const AllLegends = ["🐲", "🐉", "🦕", "🦄", "🦖", "🦠"];
+const AllFlowers = [
   "💐",
   "🌸",
   "💮",
@@ -89,22 +55,27 @@ const flowers = [
   "🍀",
   "🍄",
 ];
-const legends = ["🐲", "🐉", "🦕", "🦄", "🦖", "🦠", "🪨"];
+
+const animals: Collectible[] = [
+  { icon: "🐷", quality: Quality.COMMON, count: 3 },
+  { icon: "🐻", quality: Quality.RARE, count: 2 },
+  { icon: "🦁", quality: Quality.COMMON, count: 14 },
+  { icon: "🦁", quality: Quality.LEGENDARY, count: 1 },
+  { icon: "🦊", quality: Quality.COMMON, count: 1 },
+];
 
 export default function Collection() {
-  const collection = {
-    mammals,
-  };
+  const collection = {animals};
 
-  const missingAnimalsCount = allMammals.length - collection.mammals.length;
+  const missingAnimalsCount = allAnimals.length - collection.animals.length;
 
-  const commonItems = collection.mammals.filter(
+  const commonItems = collection.animals.filter(
     (item) => item.quality === Quality.COMMON
   );
-  const rareItems = collection.mammals.filter(
+  const rareItems = collection.animals.filter(
     (item) => item.quality === Quality.RARE
   );
-  const legendaryItems = collection.mammals.filter(
+  const legendaryItems = collection.animals.filter(
     (item) => item.quality === Quality.LEGENDARY
   );
 
@@ -120,17 +91,11 @@ export default function Collection() {
       </div>
 
       <div className="mt-8">
-        <QualitySection
-          quality={Quality.RARE}
-          collectibles={rareItems}
-        />
+        <QualitySection quality={Quality.RARE} collectibles={rareItems} />
       </div>
 
       <div className="mt-8">
-        <QualitySection
-          quality={Quality.COMMON}
-          collectibles={commonItems}
-        />
+        <QualitySection quality={Quality.COMMON} collectibles={commonItems} />
       </div>
 
       <div className="mt-8">
@@ -138,9 +103,11 @@ export default function Collection() {
           Locked
         </p>
         <div className="mt-4 flex items-center justify-start flex-wrap gap-4">
-          {Array.from({ length: missingAnimalsCount }, (_, index) => index).map((index) => (
-            <LockedCollectible key={index} />
-          ))}
+          {Array.from({ length: missingAnimalsCount }, (_, index) => index).map(
+            (index) => (
+              <LockedCollectible key={index} />
+            )
+          )}
         </div>
       </div>
     </div>
