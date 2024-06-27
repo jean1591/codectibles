@@ -40,7 +40,7 @@ export const userSlice = createSlice({
       state.activities = action.payload;
     },
     addCollectible: (state, action: PayloadAction<Collectible>) => {
-      state.collectibles = [action.payload, ...state.collectibles];
+      state.collectibles = [...state.collectibles, action.payload];
     },
     setCollectibles: (state, action: PayloadAction<Collectible[]>) => {
       state.collectibles = action.payload;
