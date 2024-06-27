@@ -1,8 +1,13 @@
+export enum CollectibleType {
+    ANIMALS = "animals",
+    FLOWERS = "flowers"
+}
 
 export interface Collectible {
+    count: number;
     icon: string;
     quality: Quality;
-    count: number;
+    type: CollectibleType;
 }
 
 export enum Quality {
