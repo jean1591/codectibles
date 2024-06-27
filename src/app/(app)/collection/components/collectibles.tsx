@@ -26,9 +26,9 @@ export const UnlockedCollectible = ({
       <p className="text-4xl">{icon}</p>
       <p
         className={classNames(
-          quality === Quality.COMMON ? "border-violet-500" : "",
-          quality === Quality.RARE ? "border-red-500" : "",
-          quality === Quality.LEGENDARY ? "border-yellow-400" : "",
+            quality === Quality.LEGENDARY ? "border-purple-600" : "",
+            quality === Quality.RARE ? "border-blue-400" : "",
+            quality === Quality.COMMON ? "border-green-500" : "",
           "absolute flex items-center justify-center h-5 w-5 bg-slate-200 rounded-full border-[1px] text-semibold text-xs bottom-1 right-1"
         )}
       >
