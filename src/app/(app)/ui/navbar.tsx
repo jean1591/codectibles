@@ -31,7 +31,7 @@ export const Navbar = () => {
           "px-4 py-2 rounded-lg text-slate-400 text-base font-medium uppercase"
         )}
       >
-        pets
+        collection
       </p>
     </div>
   );

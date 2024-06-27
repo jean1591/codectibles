@@ -42,7 +42,7 @@ export default function Profile() {
 
   useEffect(() => {
     if (shouldRedirect) {
-      redirect("/token");
+      redirect("/login");
     }
   }, [shouldRedirect]);
 

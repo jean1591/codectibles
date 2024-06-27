@@ -27,7 +27,7 @@ export const NavbarFooter = () => {
         </Link>
       ))}
       <p className={classNames("p-4 text-slate-400 font-medium uppercase")}>
-        pets
+        collection
       </p>
     </div>
   );
