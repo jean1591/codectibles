@@ -4,60 +4,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/app/lib/store/store";
 import { Library } from "./components/library";
 import { CollectibleType } from "@/app/api/interfaces/collectible";
-
-const allAnimals = [
-  "🐌",
-  "🐙",
-  "🐛",
-  "🐝",
-  "🐞",
-  "🐡",
-  "🐢",
-  "🐨",
-  "🐭",
-  "🐮",
-  "🐯",
-  "🐰",
-  "🐱",
-  "🐳",
-  "🐵",
-  "🐶",
-  "🐷",
-  "🐸",
-  "🐹",
-  "🐻",
-  "🐻‍❄️",
-  "🐼",
-  "🦀",
-  "🦁",
-  "🦊",
-  "🦞",
-  "🦭",
-  "🪲",
-];
-const AllLegends = ["🐲", "🐉", "🦕", "🦄", "🦖", "🦠"];
-const AllFlowers = [
-  "💐",
-  "🌸",
-  "💮",
-  "🪷",
-  "🏵️",
-  "🌹",
-  "🌺",
-  "🌻",
-  "🌼",
-  "🌷",
-  "🌱",
-  "🪴",
-  "🌲",
-  "🌳",
-  "🌴",
-  "🌵",
-  "🌾",
-  "🌿",
-  "🍀",
-  "🍄",
-];
+import { allAnimalEmojis } from "./utils/collectibles";
 
 export default function Collection() {
   const { collectibles } = useSelector((state: RootState) => state.user);
@@ -70,7 +17,7 @@ export default function Collection() {
 
   return (
     <div>
-      <Library collectibles={animals} maxCollectiblesSize={allAnimals.length} />
+      <Library collectibles={animals} maxCollectiblesSize={allAnimalEmojis.length} />
     </div>
   );
 }
