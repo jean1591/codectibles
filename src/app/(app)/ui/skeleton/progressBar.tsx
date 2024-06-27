@@ -1,7 +1,7 @@
 export const ProgressBarWithTitle = () => {
   return (
     <div>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between animate-pulse">
         <div className="flex items-center justify-start gap-x-4 text-xl font-medium text-left">
           <p className="bg-slate-300 text-slate-300">USER DETAILS</p>
         </div>
