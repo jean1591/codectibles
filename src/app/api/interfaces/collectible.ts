@@ -2,12 +2,15 @@ export enum CollectibleType {
     ANIMALS = "animals",
     FLOWERS = "flowers"
 }
-
-export interface Collectible {
-    count: number;
+export interface BaseCollectible {
     icon: string;
+    label: string;
     quality: Quality;
     type: CollectibleType;
+}
+
+export interface Collectible extends BaseCollectible {
+    count: number;
 }
 
 export enum Quality {
