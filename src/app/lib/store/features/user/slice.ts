@@ -4,15 +4,6 @@ import { User } from "@/app/api/interfaces/user";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 
-const tmpCollectibles: Collectible[] = [
-  { icon: "🐷", label: "pig", quality: Quality.COMMON, count: 3, type: CollectibleType.ANIMALS },
-  { icon: "🦁", label: "lion", quality: Quality.COMMON, count: 14, type: CollectibleType.ANIMALS },
-  { icon: "🦊", label: "fox", quality: Quality.COMMON, count: 1, type: CollectibleType.ANIMALS },
-  { icon: "🐻", label: "bear", quality: Quality.RARE, count: 2, type: CollectibleType.ANIMALS },
-  { icon: "🦁", label: "lion", quality: Quality.LEGENDARY, count: 1, type: CollectibleType.ANIMALS },
-  { icon: "🐶", label: "dog", quality: Quality.LEGENDARY, count: 1, type: CollectibleType.ANIMALS },
-]
-
 // TODO: change activities: Activity[] | null to activities: Activity[] and use [] as empty state
 export interface UserSlice {
   activities: Activity[] | null
@@ -23,7 +14,7 @@ export interface UserSlice {
 
 const initialState: UserSlice = {
   activities: null,
-  collectibles: tmpCollectibles,
+  collectibles: [],
   collectiblesToClaim: [],
   user: null,
 };

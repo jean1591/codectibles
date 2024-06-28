@@ -2,15 +2,20 @@
 
 import { useEffect } from "react";
 import { User } from "@/app/api/interfaces/user";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "@/app/lib/store/features/user/slice";
 import { LevelAndXp } from "../profile/components/levelAndXp";
 import { PrToClaim } from "./components/prToClaim";
 import { Milestones } from "./components/milestones";
 import { Badges } from "./components/badges";
+import { EmojiCardsModal } from "../profile/components/emojiCardsModal";
+import { RootState } from "@/app/lib/store/store";
 
 export default function Quests() {
   const dispatch = useDispatch();
+  const { displayGetEmojisModal } = useSelector(
+    (state: RootState) => state.interactions
+  );
   
   useEffect(() => {
     (async function getUser() {
@@ -35,6 +40,8 @@ export default function Quests() {
       <div className="flex-1">
         <Badges />
       </div>
+
+      {displayGetEmojisModal && <EmojiCardsModal />}
     </div>
   );
 }
