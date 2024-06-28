@@ -8,8 +8,6 @@ import { SupabaseClient } from "@supabase/supabase-js";
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
 
-  console.log('🚀 ~ { searchParams, origin }:', { searchParams, origin });
-
   const code = searchParams.get("code");
   // if "next" is in param, use it as the redirect URL
   const next = searchParams.get("next") ?? "/";
@@ -53,7 +51,7 @@ export async function GET(request: Request) {
     }
 
     if (!error) {
-      return NextResponse.redirect(`"https://codectibles.fr"`);
+      return NextResponse.redirect(`${origin}${next}`);
     }
   }
 
