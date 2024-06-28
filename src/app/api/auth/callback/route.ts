@@ -51,7 +51,7 @@ export async function GET(request: Request) {
     }
 
     if (!error) {
-      return NextResponse.redirect(`${origin}${next}`);
+      return NextResponse.redirect(process?.env?.NEXT_PUBLIC_SITE_URL!);
     }
   }
 
