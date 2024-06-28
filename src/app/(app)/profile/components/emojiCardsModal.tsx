@@ -93,6 +93,7 @@ export const EmojiCardsModal = () => {
 
                 <div className="mt-8">
                   <button
+                  onClick={() => dispatch(setDisplayGetEmojisModal(false))}
                     className={classNames(
                       gradientBg,
                       "p-2 text-base text-slate-100 font-semibold uppercase rounded-lg w-full lg:w-1/3"

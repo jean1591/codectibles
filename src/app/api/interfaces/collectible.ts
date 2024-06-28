@@ -2,6 +2,7 @@ export enum CollectibleType {
     ANIMALS = "animals",
     FLOWERS = "flowers"
 }
+
 export interface BaseCollectible {
     icon: string;
     label: string;
