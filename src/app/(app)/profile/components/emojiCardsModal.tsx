@@ -16,6 +16,7 @@ import { PiGift } from "react-icons/pi";
 import { useDispatch, useSelector } from "react-redux";
 import { qualityToThemeMapper } from "../../collection/utils/mappers";
 import { gradientBg } from "../../ui";
+import Link from "next/link";
 
 export const EmojiCardsModal = () => {
   const dispatch = useDispatch();
@@ -66,7 +67,11 @@ export const EmojiCardsModal = () => {
                 >
                   Level {user.level} unlocked !
                 </DialogTitle>
-                <div className="mt-8">
+                <p className="mt-4 lg:mt-8 text-2xl font-medium text-slate-500">
+                  🎁 Get 3 random emojis 🎁
+                </p>
+
+                <div className="mt-4">
                   <div className="hidden lg:flex items-center justify-center gap-x-8">
                     {collectiblesToClaim.map((collectible) => (
                       <EmojiCard
@@ -77,13 +82,24 @@ export const EmojiCardsModal = () => {
                   </div>
 
                   <div className="block lg:hidden">
-                  {collectiblesToClaim.map((collectible) => (
+                    {collectiblesToClaim.map((collectible) => (
                       <SmallEmojiCard
                         key={collectible.label}
                         collectible={collectible}
                       />
                     ))}
                   </div>
+                </div>
+
+                <div className="mt-8">
+                  <button
+                    className={classNames(
+                      gradientBg,
+                      "p-2 text-base text-slate-100 font-semibold uppercase rounded-lg w-full lg:w-1/3"
+                    )}
+                  >
+                    <Link href="/collection">Go to collection</Link>
+                  </button>
                 </div>
               </div>
             </div>
@@ -110,11 +126,6 @@ const EmojiCard = ({ collectible }: { collectible: BaseCollectible }) => {
         )
       )
     );
-
-    // Close modal on last emoji claimed
-    if (collectiblesToClaim.length === 1) {
-      dispatch(setDisplayGetEmojisModal(false));
-    }
   };
 
   return (
@@ -156,10 +167,10 @@ const EmojiCard = ({ collectible }: { collectible: BaseCollectible }) => {
               onClick={onClaimCollectible}
               className={classNames(
                 qualityToThemeMapper[quality],
-                "p-2 text-base text-slate-100 font-semibold uppercase rounded-lg w-full"
+                "p-2 text-base text-slate-100 font-semibold uppercase rounded-lg w-full animate-wiggle"
               )}
             >
-              Get {label}
+              Collect
             </button>
           </div>
         </div>
@@ -184,11 +195,6 @@ const SmallEmojiCard = ({ collectible }: { collectible: BaseCollectible }) => {
         )
       )
     );
-
-    // Close modal on last emoji claimed
-    if (collectiblesToClaim.length === 1) {
-      dispatch(setDisplayGetEmojisModal(false));
-    }
   };
 
   return (
@@ -235,7 +241,7 @@ const SmallEmojiCard = ({ collectible }: { collectible: BaseCollectible }) => {
                 "p-2 text-base text-slate-100 font-semibold uppercase rounded-lg w-full"
               )}
             >
-              Get {label}
+              Collect {label}
             </button>
           </div>
         </div>
