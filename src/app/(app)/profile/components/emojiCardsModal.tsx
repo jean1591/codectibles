@@ -77,6 +77,7 @@ export const EmojiCardsModal = () => {
                       <EmojiCard
                         key={collectible.label}
                         collectible={collectible}
+                        authUserId={user.authUserId}
                       />
                     ))}
                   </div>
@@ -86,6 +87,7 @@ export const EmojiCardsModal = () => {
                       <SmallEmojiCard
                         key={collectible.label}
                         collectible={collectible}
+                        authUserId={user.authUserId}
                       />
                     ))}
                   </div>
@@ -93,7 +95,7 @@ export const EmojiCardsModal = () => {
 
                 <div className="mt-8">
                   <button
-                  onClick={() => dispatch(setDisplayGetEmojisModal(false))}
+                    onClick={() => dispatch(setDisplayGetEmojisModal(false))}
                     className={classNames(
                       gradientBg,
                       "p-2 text-base text-slate-100 font-semibold uppercase rounded-lg w-full lg:w-1/3"
@@ -111,13 +113,23 @@ export const EmojiCardsModal = () => {
   );
 };
 
-const EmojiCard = ({ collectible }: { collectible: BaseCollectible }) => {
+// TODO: create a component for both EmojiCard and SmallEmojiCard with shared updateCollectibles
+const EmojiCard = ({ authUserId, collectible }: { authUserId: string; collectible: BaseCollectible }) => {
   const { icon, label, quality } = collectible;
 
   const dispatch = useDispatch();
   const { collectiblesToClaim } = useSelector((state: RootState) => state.user);
 
   const onClaimCollectible = () => {
+    (async function updateCollectibles() {
+      await fetch(`/api/collectible/user/${authUserId}`, {
+        method: "POST",
+        body: JSON.stringify({ collectible }),
+        headers: { "Content-Type": "application/json" },
+      });
+    })();
+
+
     dispatch(addCollectible(collectible));
     dispatch(
       setCollectiblesToClaim(
@@ -180,13 +192,22 @@ const EmojiCard = ({ collectible }: { collectible: BaseCollectible }) => {
   );
 };
 
-const SmallEmojiCard = ({ collectible }: { collectible: BaseCollectible }) => {
+const SmallEmojiCard = ({ authUserId, collectible }: { authUserId: string; collectible: BaseCollectible }) => {
   const { icon, label, quality } = collectible;
 
   const dispatch = useDispatch();
   const { collectiblesToClaim } = useSelector((state: RootState) => state.user);
 
   const onClaimCollectible = () => {
+    (async function updateCollectibles() {
+      await fetch(`/api/collectible/user/${authUserId}`, {
+        method: "POST",
+        body: JSON.stringify({ collectible }),
+        headers: { "Content-Type": "application/json" },
+      });
+    })();
+
+
     dispatch(addCollectible(collectible));
     dispatch(
       setCollectiblesToClaim(

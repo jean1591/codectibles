@@ -12,6 +12,11 @@ import { User } from "@/app/api/interfaces/user";
 export default function Collection() {
   const dispatch = useDispatch();
   
+  const { collectibles } = useSelector((state: RootState) => state.user);
+  const animals = collectibles.filter(
+    (collectible) => collectible.type === CollectibleType.ANIMALS
+  );
+  
   useEffect(() => {
     (async function getCollectibles() {
       const userResponse = await fetch("/api/user");
@@ -25,11 +30,6 @@ export default function Collection() {
       dispatch(setCollectibles(collectibles));
     })();
   }, []);
-  const { collectibles } = useSelector((state: RootState) => state.user);
-
-  const animals = collectibles.filter(
-    (collectible) => collectible.type === CollectibleType.ANIMALS
-  );
 
   return (
     <div>
