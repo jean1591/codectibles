@@ -34,20 +34,24 @@ export const userSlice = createSlice({
     setActivities: (state, action: PayloadAction<Activity[] | null>) => {
       state.activities = action.payload;
     },
-    addCollectible: (state, action: PayloadAction<BaseCollectible>) => {
-      const { icon, quality } = action.payload
+    addCollectibles: (state, action: PayloadAction<BaseCollectible[]>) => {
+      const collectibles = action.payload
 
-      const findFunction = (collectible: Collectible) => collectible.icon === icon && collectible.quality === quality
-      const excludeFunction = (collectible: Collectible) => !(collectible.icon === icon && collectible.quality === quality)
+      collectibles.forEach((collectible) => {
+        const { icon, quality } = collectible
 
-      const newCollectibleInCollectibles = state.collectibles.find(findFunction)
+        const findFunction = (collectible: Collectible) => collectible.icon === icon && collectible.quality === quality
+        const excludeFunction = (collectible: Collectible) => !(collectible.icon === icon && collectible.quality === quality)
 
-      if (!newCollectibleInCollectibles) {
-        state.collectibles = [...state.collectibles, { ...action.payload, count: 1, }];
-      } else {
-        state.collectibles = [...state.collectibles.filter(excludeFunction),
-        { ...newCollectibleInCollectibles, count: newCollectibleInCollectibles.count + 1 }]
-      }
+        const newCollectibleInCollectibles = state.collectibles.find(findFunction)
+
+        if (!newCollectibleInCollectibles) {
+          state.collectibles = [...state.collectibles, { ...collectible, count: 1, }];
+        } else {
+          state.collectibles = [...state.collectibles.filter(excludeFunction),
+          { ...newCollectibleInCollectibles, count: newCollectibleInCollectibles.count + 1 }]
+        }
+      })
     },
     setCollectibles: (state, action: PayloadAction<Collectible[]>) => {
       state.collectibles = action.payload;
@@ -61,6 +65,6 @@ export const userSlice = createSlice({
   },
 });
 
-export const { addActivity, addCollectible, setActivities, setCollectibles, setCollectiblesToClaim, setUser } = userSlice.actions;
+export const { addActivity, addCollectibles, setActivities, setCollectibles, setCollectiblesToClaim, setUser } = userSlice.actions;
 
 export default userSlice.reducer;

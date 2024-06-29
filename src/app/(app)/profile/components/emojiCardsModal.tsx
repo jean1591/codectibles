@@ -1,7 +1,7 @@
 import { BaseCollectible } from "@/app/api/interfaces/collectible";
 import { setDisplayGetEmojisModal } from "@/app/lib/store/features/interactions/slice";
 import {
-  addCollectible,
+  addCollectibles,
   setCollectiblesToClaim,
 } from "@/app/lib/store/features/user/slice";
 import { RootState } from "@/app/lib/store/store";
@@ -24,13 +24,26 @@ export const EmojiCardsModal = () => {
   const { displayGetEmojisModal } = useSelector(
     (state: RootState) => state.interactions
   );
-  const { user, collectiblesToClaim } = useSelector(
+  const { user, collectiblesToClaim, collectibles } = useSelector(
     (state: RootState) => state.user
   );
 
   if (!user) {
     return <></>;
   }
+
+  const onClaimCollectibles = () => {
+    (async function updateCollectibles() {
+      await fetch(`/api/collectible/user/${user.authUserId}`, {
+        method: "POST",
+        body: JSON.stringify({ collectibles: collectiblesToClaim }),
+        headers: { "Content-Type": "application/json" },
+      });
+    })();
+
+    dispatch(addCollectibles(collectiblesToClaim));
+    dispatch(setCollectiblesToClaim([]));
+  };
 
   return (
     <Dialog
@@ -67,17 +80,16 @@ export const EmojiCardsModal = () => {
                 >
                   Level {user.level} unlocked !
                 </DialogTitle>
-                <p className="mt-4 lg:mt-8 text-2xl font-medium text-slate-500">
-                  🎁 Get 3 random emojis 🎁
-                </p>
-
-                <div className="mt-4">
+                <div
+                  className={classNames(
+                    collectiblesToClaim.length > 0 ? "mt-8 lg:mt-12" : ""
+                  )}
+                >
                   <div className="hidden lg:flex items-center justify-center gap-x-8">
                     {collectiblesToClaim.map((collectible) => (
                       <EmojiCard
                         key={collectible.label}
                         collectible={collectible}
-                        authUserId={user.authUserId}
                       />
                     ))}
                   </div>
@@ -87,22 +99,33 @@ export const EmojiCardsModal = () => {
                       <SmallEmojiCard
                         key={collectible.label}
                         collectible={collectible}
-                        authUserId={user.authUserId}
                       />
                     ))}
                   </div>
                 </div>
 
                 <div className="mt-8">
-                  <button
-                    onClick={() => dispatch(setDisplayGetEmojisModal(false))}
-                    className={classNames(
-                      gradientBg,
-                      "p-2 text-base text-slate-100 font-semibold uppercase rounded-lg w-full lg:w-1/3"
-                    )}
-                  >
-                    <Link href="/collection">Go to collection</Link>
-                  </button>
+                  {collectiblesToClaim.length > 0 ? (
+                    <button
+                      onClick={onClaimCollectibles}
+                      className={classNames(
+                        gradientBg,
+                        "rounded-lg w-full lg:w-1/3 shadow-md"
+                      )}
+                    >
+                      <p className="p-2 text-lg text-slate-100 font-semibold uppercase ">🎁 Claim emojis 🎁</p>
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => dispatch(setDisplayGetEmojisModal(false))}
+                      className={classNames(
+                        gradientBg,
+                        "p-2 text-lg text-slate-100 font-semibold uppercase rounded-lg w-full lg:w-1/3 shadow-md"
+                      )}
+                    >
+                      <Link href="/collection">Go to collection</Link>
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -113,39 +136,14 @@ export const EmojiCardsModal = () => {
   );
 };
 
-// TODO: create a component for both EmojiCard and SmallEmojiCard with shared updateCollectibles
-const EmojiCard = ({ authUserId, collectible }: { authUserId: string; collectible: BaseCollectible }) => {
+const EmojiCard = ({ collectible }: { collectible: BaseCollectible }) => {
   const { icon, label, quality } = collectible;
-
-  const dispatch = useDispatch();
-  const { collectiblesToClaim } = useSelector((state: RootState) => state.user);
-
-  const onClaimCollectible = () => {
-    (async function updateCollectibles() {
-      await fetch(`/api/collectible/user/${authUserId}`, {
-        method: "POST",
-        body: JSON.stringify({ collectible }),
-        headers: { "Content-Type": "application/json" },
-      });
-    })();
-
-
-    dispatch(addCollectible(collectible));
-    dispatch(
-      setCollectiblesToClaim(
-        collectiblesToClaim.filter(
-          (collectible) =>
-            !(collectible.icon === icon && collectible.quality === quality)
-        )
-      )
-    );
-  };
 
   return (
     <div
       className={classNames(
         qualityToThemeMapper[quality],
-        "rounded-lg p-1 mt-2 shadow-md"
+        "rounded-lg p-1 mt-2 shadow-xl"
       )}
     >
       <div className="py-8 px-12 flex items-start justify-center bg-slate-50 rounded-lg">
@@ -174,50 +172,14 @@ const EmojiCard = ({ authUserId, collectible }: { authUserId: string; collectibl
               Rarity
             </p>
           </div>
-
-          <div className="mt-8">
-            <button
-              onClick={onClaimCollectible}
-              className={classNames(
-                qualityToThemeMapper[quality],
-                "p-2 text-base text-slate-100 font-semibold uppercase rounded-lg w-full animate-wiggle"
-              )}
-            >
-              Collect
-            </button>
-          </div>
         </div>
       </div>
     </div>
   );
 };
 
-const SmallEmojiCard = ({ authUserId, collectible }: { authUserId: string; collectible: BaseCollectible }) => {
+const SmallEmojiCard = ({ collectible }: { collectible: BaseCollectible }) => {
   const { icon, label, quality } = collectible;
-
-  const dispatch = useDispatch();
-  const { collectiblesToClaim } = useSelector((state: RootState) => state.user);
-
-  const onClaimCollectible = () => {
-    (async function updateCollectibles() {
-      await fetch(`/api/collectible/user/${authUserId}`, {
-        method: "POST",
-        body: JSON.stringify({ collectible }),
-        headers: { "Content-Type": "application/json" },
-      });
-    })();
-
-
-    dispatch(addCollectible(collectible));
-    dispatch(
-      setCollectiblesToClaim(
-        collectiblesToClaim.filter(
-          (collectible) =>
-            !(collectible.icon === icon && collectible.quality === quality)
-        )
-      )
-    );
-  };
 
   return (
     <div
@@ -253,18 +215,6 @@ const SmallEmojiCard = ({ authUserId, collectible }: { authUserId: string; colle
                 Rarity
               </p>
             </div>
-          </div>
-
-          <div className="mt-4">
-            <button
-              onClick={onClaimCollectible}
-              className={classNames(
-                qualityToThemeMapper[quality],
-                "p-2 text-base text-slate-100 font-semibold uppercase rounded-lg w-full"
-              )}
-            >
-              Collect {label}
-            </button>
           </div>
         </div>
       </div>
