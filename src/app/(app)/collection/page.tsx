@@ -8,15 +8,16 @@ import { allAnimalEmojis } from "./utils/collectibles";
 import { useEffect } from "react";
 import { setCollectibles, setUser } from "@/app/lib/store/features/user/slice";
 import { User } from "@/app/api/interfaces/user";
+import { Library as LibrarySkeleton } from "./components/skeleton/library";
 
 export default function Collection() {
   const dispatch = useDispatch();
-  
+
   const { collectibles } = useSelector((state: RootState) => state.user);
   const animals = collectibles.filter(
     (collectible) => collectible.type === CollectibleType.ANIMALS
   );
-  
+
   useEffect(() => {
     (async function getCollectibles() {
       const userResponse = await fetch("/api/user");
@@ -24,16 +25,25 @@ export default function Collection() {
 
       dispatch(setUser(user));
 
-      const collectiblesResponse = await fetch(`/api/collectible/user/${user.authUserId}`);
+      const collectiblesResponse = await fetch(
+        `/api/collectible/user/${user.authUserId}`
+      );
       const collectibles = (await collectiblesResponse.json()) as Collectible[];
 
       dispatch(setCollectibles(collectibles));
     })();
   }, []);
 
+  if (collectibles.length === 0) {
+    return <LibrarySkeleton />;
+  }
+
   return (
     <div>
-      <Library collectibles={animals} maxCollectiblesSize={allAnimalEmojis.length} />
+      <Library
+        collectibles={animals}
+        maxCollectiblesSize={allAnimalEmojis.length}
+      />
     </div>
   );
 }
