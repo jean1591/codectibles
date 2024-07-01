@@ -7,7 +7,7 @@ import { gradientBg } from "@/app/(app)/ui";
 
 export const Hero = () => {
   return (
-    <div className="md:flex items-center justify-between">
+    <div className="md:flex items-center justify-between gap-x-4">
       <div className="flex-1">
         <div className="text-5xl font-extrabold text-center md:text-left text-slate-700">
           <p>Gamify your</p>
@@ -20,12 +20,12 @@ export const Hero = () => {
             Github experience !
           </p>
         </div>
-        <p className="mt-8 text-center md:text-left text-lg">
+        <p className="mt-4 text-center md:text-left text-lg">
           Earn rewards for your contributions, collect unique animals, and level
           up your coding journey.
         </p>
 
-        <div className="mt-8 md:mt-12 flex items-center justify-center md:justify-start">
+        <div className="mt-12 md:mt-12 flex items-center justify-center md:justify-start">
           <Link
             href="/login"
             className="uppercase text-base bg-slate-800 hover:bg-slate-600 text-slate-100 rounded-md px-12 py-4"

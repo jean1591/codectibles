@@ -13,7 +13,7 @@ export const Navbar = () => {
         <div className="flex items-center justify-end gap-x-4 lg:gap-x-24">
           <div className="flex items-center justify-center gap-x-4 lg:gap-x-8">
             <Link href="#features">Features</Link>
-            <Link href="#features">Features</Link>
+            <Link href="#how-it-works">How it works</Link>
             <Link href="#faq">FAQ</Link>
           </div>
 
