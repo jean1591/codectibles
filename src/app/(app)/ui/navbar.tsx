@@ -26,13 +26,6 @@ export const Navbar = () => {
           {label}
         </Link>
       ))}
-      <p
-        className={classNames(
-          "px-4 py-2 rounded-lg text-slate-400 text-base font-medium uppercase"
-        )}
-      >
-        pets
-      </p>
     </div>
   );
 };

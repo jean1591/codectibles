@@ -1,9 +1,9 @@
 {
-  "name": "code-kingdom",
+  "name": "codectibles",
   "version": "1.0.0",
   "author": {
     "name": "jean robertou",
-    "url": "https://code-kingdom.jeanrobertou.com"
+    "url": "https://codectibles.fr"
   },
   "private": false,
   "scripts": {
@@ -13,7 +13,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@headlessui/react": "^2.0.3",
+    "@headlessui/react": "^2.1",
     "@reduxjs/toolkit": "^2.2.3",
     "@supabase/ssr": "^0.3.0",
     "@supabase/supabase-js": "^2.43.4",

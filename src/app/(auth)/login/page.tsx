@@ -1,21 +1,31 @@
-"use client";
-
 import { PiGithubLogo } from "react-icons/pi";
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/server";
 import { classNames } from "@/utils";
 import { gradientBg } from "@/app/(app)/ui";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
-async function signInWithGithub() {
-  const supabase = createClient();
+export default async function LoginPage() {
+  const signIn = async () => {
+    "use server";
 
-  await supabase.auth.signInWithOAuth({
-    provider: "github",
-    options: {
-      redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/callback`,    },
-  });
-}
+    const origin = headers().get("origin");
+    
+    const supabase = createClient();
+    const { error, data } = await supabase.auth.signInWithOAuth({
+      provider: "github",
+      options: {
+        redirectTo: `${origin}/api/auth/callback`,
+      },
+    });
 
-export default function LoginPage() {
+    if (error) {
+      console.log(error);
+    } else {
+      return redirect(data.url);
+    }
+  };
+
   return (
     <div>
       <div className="flex min-h-full flex-1 items-center justify-center py-12">
@@ -32,13 +42,12 @@ export default function LoginPage() {
             </span>
           </h2>
 
-          <button
-            onClick={signInWithGithub}
-            className="w-full flex items-center justify-center gap-x-2 rounded-md bg-slate-800 hover:bg-slate-700 px-4 py-2 text-base font-semibold leading-6 text-slate-300"
-          >
-            <PiGithubLogo className="h-6 w-6" />
-            Github
-          </button>
+          <form action={signIn}>
+            <button className="w-full flex items-center justify-center gap-x-2 rounded-md bg-slate-800 hover:bg-slate-700 px-4 py-2 text-base font-semibold leading-6 text-slate-300">
+              <PiGithubLogo className="h-6 w-6" />
+              Github
+            </button>
+          </form>
         </div>
       </div>
     </div>

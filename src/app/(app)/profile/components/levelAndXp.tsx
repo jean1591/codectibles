@@ -1,13 +1,19 @@
-import JSConfetti from 'js-confetti'
-
-import { classNames } from "@/utils";
-import { ProgressBar, gradientBg } from "../../ui";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/app/lib/store/store";
-import { Stat, User, UserDb } from "@/app/api/interfaces/user";
-import { addActivity, setUser } from "@/app/lib/store/features/user/slice";
-import { LevelAndXp as LevelAndXpSkeleton } from "./skeleton/levelAndXp";
 import { Activity, ActivityType } from "@/app/api/interfaces/activity";
+import { ProgressBar, gradientBg } from "../../ui";
+import { Stat, User, UserDb } from "@/app/api/interfaces/user";
+import {
+  addActivity,
+  setCollectiblesToClaim,
+  setUser,
+} from "@/app/lib/store/features/user/slice";
+import { useDispatch, useSelector } from "react-redux";
+
+import JSConfetti from "js-confetti";
+import { LevelAndXp as LevelAndXpSkeleton } from "./skeleton/levelAndXp";
+import { RootState } from "@/app/lib/store/store";
+import { classNames } from "@/utils";
+import { getRandomEmojis } from "../utils/getRandomEmojis";
+import { setDisplayGetEmojisModal } from "@/app/lib/store/features/interactions/slice";
 
 export const LevelAndXp = () => {
   const { user } = useSelector((state: RootState) => state.user);
@@ -53,7 +59,7 @@ export const LevelAndXp = () => {
 };
 
 const NextLevelButton = () => {
-  let jsConfetti  = new JSConfetti()
+  let jsConfetti = new JSConfetti();
 
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.user);
@@ -63,7 +69,7 @@ const NextLevelButton = () => {
   }
 
   const handleClaimLevel = () => {
-    jsConfetti.addConfetti()
+    jsConfetti.addConfetti();
 
     const {
       level,
@@ -115,6 +121,10 @@ const NextLevelButton = () => {
       addActivity({ ...activity, createdAt: activity.createdAt.slice(0, 10) })
     );
     dispatch(setUser(stateUser));
+
+    // TODO: cannot exist emojis modal
+    dispatch(setDisplayGetEmojisModal(true));
+    dispatch(setCollectiblesToClaim(getRandomEmojis()));
   };
 
   return (

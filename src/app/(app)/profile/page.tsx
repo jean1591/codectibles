@@ -3,15 +3,20 @@
 import { useEffect, useState } from "react";
 import { LevelAndXp } from "./components/levelAndXp";
 import { User } from "@/app/api/interfaces/user";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "@/app/lib/store/features/user/slice";
 import { redirect } from "next/navigation";
 import { Activities } from "./components/activities";
 import { Badges } from "./components/badges";
+import { RootState } from "@/app/lib/store/store";
+import { EmojiCardsModal } from "./components/emojiCardsModal";
 
 export default function Profile() {
   const dispatch = useDispatch();
-  const [shouldRedirect, setShouldRedirect] = useState(false);
+  const { displayGetEmojisModal } = useSelector(
+    (state: RootState) => state.interactions
+  );
+  const [missingTokenRedirect, setMissingTokenRedirect] = useState(false);
 
   useEffect(() => {
     (async function getUser() {
@@ -22,13 +27,13 @@ export default function Profile() {
         };
 
         if (token === null) {
-          setShouldRedirect(true);
+          setMissingTokenRedirect(true);
 
           return;
         }
       } catch (error) {
         console.error(error);
-        setShouldRedirect(true);
+        setMissingTokenRedirect(true);
 
         return;
       }
@@ -41,10 +46,10 @@ export default function Profile() {
   }, []);
 
   useEffect(() => {
-    if (shouldRedirect) {
+    if (missingTokenRedirect) {
       redirect("/token");
     }
-  }, [shouldRedirect]);
+  }, [missingTokenRedirect]);
 
   return (
     <div className="lg:flex items-start justify-center gap-4 space-y-4 lg:space-y-0">
@@ -56,6 +61,8 @@ export default function Profile() {
       <div className="flex-1">
         <Badges />
       </div>
+
+      {displayGetEmojisModal && <EmojiCardsModal />}
     </div>
   );
 }
