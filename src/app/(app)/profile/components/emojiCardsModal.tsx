@@ -118,15 +118,30 @@ export const EmojiCardsModal = () => {
                       </p>
                     </button>
                   ) : (
-                    <button
-                      onClick={() => dispatch(setDisplayGetEmojisModal(false))}
-                      className={classNames(
-                        gradientBg,
-                        "p-2 text-lg text-slate-100 font-semibold uppercase rounded-lg w-full lg:w-1/3 shadow-md"
-                      )}
-                    >
-                      <Link href="/collection">Go to collection</Link>
-                    </button>
+                    <div className="lg:flex items-center justify-end gap-x-4">
+                      <button
+                        onClick={() =>
+                          dispatch(setDisplayGetEmojisModal(false))
+                        }
+                        className={classNames(
+                          gradientBg,
+                          "p-2 text-lg text-slate-100 font-semibold uppercase rounded-lg w-full shadow-md"
+                        )}
+                      >
+                        <Link className="text-nowrap px-4" href="/collection">
+                          Go to collection
+                        </Link>
+                      </button>
+
+                      <button
+                        onClick={() =>
+                          dispatch(setDisplayGetEmojisModal(false))
+                        }
+                        className="mt-4 lg:mt-0 bg-gradient-to-r from-red-500 to-red-300 p-2 text-lg text-slate-100 font-semibold uppercase rounded-lg w-full shadow-md"
+                      >
+                        <p className="px-4">Close</p>
+                      </button>
+                    </div>
                   )}
                 </div>
               </div>
