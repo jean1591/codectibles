@@ -10,9 +10,8 @@ export const Navbar = () => {
           🦁
         </Link>
 
-        <div className="flex items-center justify-end gap-x-24">
-          <div className="flex items-center justify-center gap-x-8">
-            <Link href="#hero">Hero</Link>
+        <div className="flex items-center justify-end gap-x-4 lg:gap-x-24">
+          <div className="flex items-center justify-center gap-x-4 lg:gap-x-8">
             <Link href="#features">Features</Link>
             <Link href="#features">Features</Link>
             <Link href="#faq">FAQ</Link>
