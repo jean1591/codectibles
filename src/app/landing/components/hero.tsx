@@ -7,9 +7,9 @@ import { gradientBg } from "@/app/(app)/ui";
 
 export const Hero = () => {
   return (
-    <div className="lg:flex items-center justify-between">
+    <div className="md:flex items-center justify-between">
       <div className="flex-1">
-        <div className="text-5xl font-extrabold text-center lg:text-left text-slate-700">
+        <div className="text-5xl font-extrabold text-center md:text-left text-slate-700">
           <p>Gamify your</p>
           <p
             className={classNames(
@@ -20,12 +20,12 @@ export const Hero = () => {
             Github experience !
           </p>
         </div>
-        <p className="mt-8 text-lg">
+        <p className="mt-8 text-center md:text-left text-lg">
           Earn rewards for your contributions, collect unique animals, and level
           up your coding journey.
         </p>
 
-        <div className="mt-8 lg:mt-12 flex items-center justify-center lg:justify-start">
+        <div className="mt-8 md:mt-12 flex items-center justify-center md:justify-start">
           <Link
             href="/login"
             className="uppercase text-base bg-slate-800 hover:bg-slate-600 text-slate-100 rounded-md px-12 py-4"
@@ -35,7 +35,7 @@ export const Hero = () => {
         </div>
       </div>
 
-      <div className="mt-16 lg:mt-0 flex-1">
+      <div className="mt-16 md:mt-0 flex-1">
         <PrToClaim />
       </div>
     </div>
@@ -49,7 +49,7 @@ const PrToClaim = () => {
   };
 
   return (
-    <div className="bg-slate-100 rounded-lg p-4 lg:p-8 shadow-lg">
+    <div className="bg-slate-100 rounded-lg p-4 md:p-8 shadow-lg">
       <div className="flex items-center justify-between">
         <p className="text-xl font-medium text-left">3 new PR merge !</p>
         <button
