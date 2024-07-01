@@ -1,21 +1,22 @@
-import { setDisplayGetEmojisModal } from "@/app/lib/store/features/interactions/slice";
-import {
-  addCollectibles,
-  setCollectiblesToClaim,
-} from "@/app/lib/store/features/user/slice";
-import { RootState } from "@/app/lib/store/store";
-import { classNames } from "@/utils";
 import {
   Dialog,
   DialogBackdrop,
   DialogPanel,
   DialogTitle,
 } from "@headlessui/react";
+import { EmojiCard, SmallEmojiCard } from "./emojiCard";
+import {
+  addCollectibles,
+  setCollectiblesToClaim,
+} from "@/app/lib/store/features/user/slice";
+import { useDispatch, useSelector } from "react-redux";
+
 import Link from "next/link";
 import { PiGift } from "react-icons/pi";
-import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/app/lib/store/store";
+import { classNames } from "@/utils";
 import { gradientBg } from "../../ui";
-import { EmojiCard, SmallEmojiCard } from "./emojiCard";
+import { setDisplayGetEmojisModal } from "@/app/lib/store/features/interactions/slice";
 
 export const EmojiCardsModal = () => {
   const dispatch = useDispatch();
@@ -48,7 +49,7 @@ export const EmojiCardsModal = () => {
     <Dialog
       className="relative z-10"
       open={displayGetEmojisModal}
-      onClose={() => dispatch(setDisplayGetEmojisModal(false))}
+      onClose={() => null}
     >
       <DialogBackdrop
         transition
@@ -112,7 +113,9 @@ export const EmojiCardsModal = () => {
                         "rounded-lg w-full lg:w-1/3 shadow-md"
                       )}
                     >
-                      <p className="p-2 text-lg text-slate-100 font-semibold uppercase ">🎁 Claim emojis 🎁</p>
+                      <p className="p-2 text-lg text-slate-100 font-semibold uppercase ">
+                        🎁 Claim emojis 🎁
+                      </p>
                     </button>
                   ) : (
                     <button
