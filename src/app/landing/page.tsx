@@ -1,3 +1,9 @@
+import { Hero } from "./components/hero";
+
 export default function Landing() {
-  return <div>Landing Page</div>;
+  return (
+    <div className="mt-24">
+      <Hero />
+    </div>
+  );
 }
