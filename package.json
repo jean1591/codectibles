@@ -1,9 +1,9 @@
 {
-  "name": "code-kingdom",
+  "name": "codectibles",
   "version": "1.0.0",
   "author": {
     "name": "jean robertou",
-    "url": "https://code-kingdom.jeanrobertou.com"
+    "url": "https://codectibles.fr"
   },
   "private": false,
   "scripts": {
