@@ -30,7 +30,7 @@ export default function TokenPage() {
             "inline-block text-transparent bg-clip-text"
           )}
         >
-          Code Zoo
+          Codectibles
         </span>
       </h2>
 

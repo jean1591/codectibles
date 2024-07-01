@@ -16,7 +16,7 @@ export default function Profile() {
   const { displayGetEmojisModal } = useSelector(
     (state: RootState) => state.interactions
   );
-  const [shouldRedirect, setShouldRedirect] = useState(false);
+  const [missingTokenRedirect, setMissingTokenRedirect] = useState(false);
 
   useEffect(() => {
     (async function getUser() {
@@ -27,13 +27,13 @@ export default function Profile() {
         };
 
         if (token === null) {
-          setShouldRedirect(true);
+          setMissingTokenRedirect(true);
 
           return;
         }
       } catch (error) {
         console.error(error);
-        setShouldRedirect(true);
+        setMissingTokenRedirect(true);
 
         return;
       }
@@ -46,10 +46,10 @@ export default function Profile() {
   }, []);
 
   useEffect(() => {
-    if (shouldRedirect) {
-      redirect("/login");
+    if (missingTokenRedirect) {
+      redirect("/token");
     }
-  }, [shouldRedirect]);
+  }, [missingTokenRedirect]);
 
   return (
     <div className="lg:flex items-start justify-center gap-4 space-y-4 lg:space-y-0">
