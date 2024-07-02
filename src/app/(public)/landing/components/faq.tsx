@@ -52,7 +52,7 @@ const faq: FaqItem[] = [
 
 export const Faq = () => {
   return (
-    <div id="#faq">
+    <div id="faq">
       <div className="text-center">
         <p
           className={classNames(

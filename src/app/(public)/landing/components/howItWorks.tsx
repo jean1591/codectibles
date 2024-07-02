@@ -34,7 +34,7 @@ export const HowItWorks = () => {
     "justify-center text-center md:justify-start md:text-left";
 
   return (
-    <div id="#how-it-works">
+    <div id="how-it-works">
       <div className="text-center">
         <p
           className={classNames(

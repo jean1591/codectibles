@@ -4,7 +4,7 @@ import { gradientBg } from "@/app/(app)/ui";
 
 export const Pricing = () => {
   return (
-    <div id="#pricing">
+    <div id="pricing">
       <div className="text-center">
         <p
           className={classNames(

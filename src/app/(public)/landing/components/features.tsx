@@ -29,7 +29,7 @@ const features: TypeFeature[] = [
 
 export const Features = () => {
   return (
-    <div id="#features">
+    <div id="features">
       <div className="text-center">
         <p
           className={classNames(
