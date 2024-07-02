@@ -57,9 +57,8 @@ export const HowItWorks = () => {
           const displayBorderBottom = index < steps.length - 1;
 
           return (
-            <div>
+            <div key={title}>
               <div
-                key={title}
                 className={classNames(flexDirection, "mt-12 flex items-center")}
               >
                 <div className="w-7/12">
