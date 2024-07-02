@@ -25,6 +25,7 @@ export const Navbar = () => {
           </Link>
         </div>
       </div>
+
       <hr className={classNames(gradientBg, "flex-grow h-1 rounded-full")}></hr>
     </div>
   );

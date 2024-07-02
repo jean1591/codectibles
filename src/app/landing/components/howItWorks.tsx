@@ -30,7 +30,8 @@ const steps: Step[] = [
 ];
 
 export const HowItWorks = () => {
-  let flexDirection = "justify-start text-left";
+  let flexDirection =
+    "justify-center text-center md:justify-start md:text-left";
 
   return (
     <div id="#how-it-works">
@@ -46,23 +47,32 @@ export const HowItWorks = () => {
       </div>
 
       <div className="mt-8 md:mt-12 w-full">
-        {steps.map(({ description, title }) => {
+        {steps.map(({ description, title }, index) => {
           flexDirection =
-            flexDirection === "justify-start text-left"
-              ? "justify-end text-right"
-              : "justify-start text-left";
+            flexDirection ===
+            "justify-center text-center md:justify-start md:text-left"
+              ? "justify-center text-center md:justify-end md:text-right"
+              : "justify-center text-center md:justify-start md:text-left";
+
+          const displayBorderBottom = index < steps.length - 1;
 
           return (
-            <div
-              key={title}
-              className={classNames(flexDirection, "mt-12 flex items-center")}
-            >
-              <div className="w-7/12">
-                <p className="mt-2 text-3xl font-extrabold text-slate-700">
-                  {title}
-                </p>
-                <p>{description}</p>
+            <div>
+              <div
+                key={title}
+                className={classNames(flexDirection, "mt-12 flex items-center")}
+              >
+                <div className="w-7/12">
+                  <p className="mt-2 text-3xl font-extrabold text-slate-700">
+                    {title}
+                  </p>
+                  <p>{description}</p>
+                </div>
               </div>
+
+              {displayBorderBottom && (
+                <hr className="mt-8 bg-slate-300 flex-grow h-[2px] rounded-full"></hr>
+              )}
             </div>
           );
         })}
