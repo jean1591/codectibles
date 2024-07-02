@@ -5,8 +5,8 @@ import { gradientBg } from "@/app/(app)/ui";
 export const Navbar = () => {
   return (
     <div>
-      <div className="flex items-center justify-between text-lg py-4">
-        <Link href="/landing" className="text-2xl">
+      <div className="flex items-center justify-center sm:justify-between text-base md:text-lg py-4">
+        <Link href="/landing" className="hidden sm:block text-2xl">
           🦁
         </Link>
 
