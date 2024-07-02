@@ -51,7 +51,7 @@ const PrToClaim = () => {
   return (
     <div className="bg-slate-100 rounded-lg p-4 md:p-8 shadow-lg">
       <div className="flex items-center justify-between">
-        <p className="text-xl font-medium text-left">3 new PR merge !</p>
+        <p className="text-xl font-medium text-left">3 new PR merged !</p>
         <button
           onClick={handleClaimPr}
           className={classNames(
