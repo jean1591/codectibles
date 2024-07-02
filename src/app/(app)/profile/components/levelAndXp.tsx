@@ -7,6 +7,7 @@ import {
   setUser,
 } from "@/app/lib/store/features/user/slice";
 import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useRef } from "react";
 
 import JSConfetti from "js-confetti";
 import { LevelAndXp as LevelAndXpSkeleton } from "./skeleton/levelAndXp";
@@ -59,17 +60,21 @@ export const LevelAndXp = () => {
 };
 
 const NextLevelButton = () => {
-  let jsConfetti = new JSConfetti();
-
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.user);
+
+  const jsConfetti = useRef<JSConfetti | null>(null);
 
   if (!user) {
     return <></>;
   }
 
+  useEffect(() => {
+    jsConfetti.current = new JSConfetti();
+  }, []);
+
   const handleClaimLevel = () => {
-    jsConfetti.addConfetti();
+    jsConfetti.current && jsConfetti.current.addConfetti();
 
     const {
       level,

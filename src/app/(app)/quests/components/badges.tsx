@@ -1,9 +1,4 @@
-import JSConfetti from "js-confetti";
-
-import { classNames } from "@/utils";
-import { gradientBg } from "../../ui";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/app/lib/store/store";
+import { Activity, ActivityType } from "@/app/api/interfaces/activity";
 import {
   Badge as BadgeType,
   RewardType,
@@ -12,8 +7,14 @@ import {
   UserDb,
 } from "@/app/api/interfaces/user";
 import { addActivity, setUser } from "@/app/lib/store/features/user/slice";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useRef } from "react";
+
 import { Badges as BadgesSkeleton } from "./skeleton/badges";
-import { Activity, ActivityType } from "@/app/api/interfaces/activity";
+import JSConfetti from "js-confetti";
+import { RootState } from "@/app/lib/store/store";
+import { classNames } from "@/utils";
+import { gradientBg } from "../../ui";
 
 // TODO: add progress (with % or progres bar)
 export const Badges = () => {
@@ -46,8 +47,6 @@ export const Badges = () => {
 };
 
 const BadgeToClaim = ({ badge }: { badge: BadgeType }) => {
-  let jsConfetti = new JSConfetti();
-
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.user);
 
@@ -55,8 +54,14 @@ const BadgeToClaim = ({ badge }: { badge: BadgeType }) => {
     return <></>;
   }
 
+  const jsConfetti = useRef<JSConfetti | null>(null);
+
+  useEffect(() => {
+    jsConfetti.current = new JSConfetti();
+  }, []);
+
   const handleClaimBadge = () => {
-    jsConfetti.addConfetti();
+    jsConfetti.current && jsConfetti.current.addConfetti();
 
     const updatedUser = {
       authUserId: user.authUserId,

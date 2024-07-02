@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+
 import JSConfetti from "js-confetti";
 import Link from "next/link";
 import { classNames } from "@/utils";
@@ -43,9 +45,14 @@ export const Hero = () => {
 };
 
 const PrToClaim = () => {
+  const jsConfetti = useRef<JSConfetti | null>(null);
+
+  useEffect(() => {
+    jsConfetti.current = new JSConfetti();
+  }, []);
+
   const handleClaimPr = () => {
-    let jsConfetti = new JSConfetti();
-    jsConfetti.addConfetti();
+    jsConfetti.current && jsConfetti.current.addConfetti();
   };
 
   return (

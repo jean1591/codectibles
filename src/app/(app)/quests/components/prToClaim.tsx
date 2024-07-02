@@ -1,12 +1,13 @@
-import JSConfetti from "js-confetti";
+import { Stat, User, UserDb } from "@/app/api/interfaces/user";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useRef } from "react";
 
-import{ Stat, User, UserDb } from "@/app/api/interfaces/user";
-import { setUser } from "@/app/lib/store/features/user/slice";
+import JSConfetti from "js-confetti";
+import { PrToClaim as PrToClaimSkeleton } from "./skeleton/prToClaim";
 import { RootState } from "@/app/lib/store/store";
 import { classNames } from "@/utils";
-import { useDispatch, useSelector } from "react-redux";
 import { gradientBg } from "../../ui";
-import { PrToClaim as PrToClaimSkeleton } from "./skeleton/prToClaim";
+import { setUser } from "@/app/lib/store/features/user/slice";
 
 const REWARD_PER_PR = 40;
 
@@ -18,11 +19,16 @@ export const PrToClaim = () => {
     return <PrToClaimSkeleton />;
   }
 
+  const jsConfetti = useRef<JSConfetti | null>(null);
+
+  useEffect(() => {
+    jsConfetti.current = new JSConfetti();
+  }, []);
+
   const { prToClaim } = user;
 
   const handleClaimPr = () => {
-    let jsConfetti = new JSConfetti();
-    jsConfetti.addConfetti();
+    jsConfetti.current && jsConfetti.current.addConfetti();
 
     const updatedXp: Stat = {
       ...user.stats.xp,
