@@ -25,7 +25,7 @@ export const Hero = () => {
           up your coding journey.
         </p>
 
-        <div className="mt-12 md:mt-12 flex items-center justify-center md:justify-start">
+        <div className="mt-12 flex items-center justify-center md:justify-start">
           <Link
             href="/login"
             className="uppercase text-base bg-slate-800 hover:bg-slate-600 text-slate-100 rounded-md px-12 py-4"

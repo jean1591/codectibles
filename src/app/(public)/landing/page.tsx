@@ -2,6 +2,7 @@ import { Faq } from "./components/faq";
 import { Features } from "./components/features";
 import { Hero } from "./components/hero";
 import { HowItWorks } from "./components/howItWorks";
+import { LastCta } from "./components/lastCta";
 
 export default function Landing() {
   return (
@@ -15,6 +16,9 @@ export default function Landing() {
       </div>
       <div className="mt-24 md:mt-32">
         <Faq />
+      </div>
+      <div className="mt-16 md:mt-32">
+        <LastCta />
       </div>
     </div>
   );
