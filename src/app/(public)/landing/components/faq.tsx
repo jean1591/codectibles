@@ -67,7 +67,7 @@ export const Faq = () => {
       <div className="mt-8 md:mt-12 divide-y divide-slate-500 ">
         {faq.map(({ question, answer }) => (
           <Disclosure as="div" className="p-6" key={question}>
-            <DisclosureButton className="group flex w-full items-center justify-between">
+            <DisclosureButton className="group flex w-full items-center justify-center md:justify-between">
               <span className="text-lg font-medium group-data-[hover]:text-slate-600">
                 {question}
               </span>

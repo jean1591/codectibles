@@ -3,7 +3,7 @@ import { gradientBg } from "@/app/(app)/ui";
 
 export default function ToS() {
   return (
-    <div className="px-4 mx-auto w-full lg:max-w-5xl">
+    <div>
       <p
         className={classNames(
           gradientBg,
