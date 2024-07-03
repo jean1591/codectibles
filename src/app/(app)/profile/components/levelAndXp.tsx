@@ -65,13 +65,13 @@ const NextLevelButton = () => {
 
   const jsConfetti = useRef<JSConfetti | null>(null);
 
-  if (!user) {
-    return <></>;
-  }
-
   useEffect(() => {
     jsConfetti.current = new JSConfetti();
   }, []);
+
+  if (!user) {
+    return <></>;
+  }
 
   const handleClaimLevel = () => {
     jsConfetti.current && jsConfetti.current.addConfetti();

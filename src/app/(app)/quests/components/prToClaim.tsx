@@ -15,15 +15,15 @@ export const PrToClaim = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.user);
 
-  if (user === null) {
-    return <PrToClaimSkeleton />;
-  }
-
   const jsConfetti = useRef<JSConfetti | null>(null);
 
   useEffect(() => {
     jsConfetti.current = new JSConfetti();
   }, []);
+
+  if (!user) {
+    return <></>;
+  }
 
   const { prToClaim } = user;
 

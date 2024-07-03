@@ -50,15 +50,15 @@ const BadgeToClaim = ({ badge }: { badge: BadgeType }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.user);
 
-  if (!user) {
-    return <></>;
-  }
-
   const jsConfetti = useRef<JSConfetti | null>(null);
 
   useEffect(() => {
     jsConfetti.current = new JSConfetti();
   }, []);
+
+  if (!user) {
+    return <></>;
+  }
 
   const handleClaimBadge = () => {
     jsConfetti.current && jsConfetti.current.addConfetti();
