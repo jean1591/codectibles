@@ -7,8 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Library } from "./components/library";
 import { Library as LibrarySkeleton } from "./components/skeleton/library";
 import { RootState } from "@/app/lib/store/store";
-import { User } from "@/app/api/interfaces/user";
-import { allAnimalEmojis } from "./utils/collectibles";
+import { allAnimalEmojis } from "@/app/api/collectible/constants/collectibles";
 import { useEffect } from "react";
 
 export default function Collection() {

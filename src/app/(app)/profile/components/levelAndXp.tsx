@@ -127,7 +127,6 @@ const NextLevelButton = () => {
     );
     dispatch(setUser(stateUser));
 
-    // TODO: cannot exist emojis modal
     dispatch(setDisplayGetEmojisModal(true));
     dispatch(setCollectiblesToClaim(getRandomEmojis()));
   };

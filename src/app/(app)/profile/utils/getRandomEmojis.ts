@@ -1,6 +1,6 @@
 import { BaseCollectible, Quality } from "@/app/api/interfaces/collectible";
 
-import { allAnimalEmojis } from "../../collection/utils/collectibles";
+import { allAnimalEmojis } from "@/app/api/collectible/constants/collectibles";
 
 const getRandomQuality = (legendaryThreshold: number = 5): Quality => {
   const rareThreshold = legendaryThreshold + 15;
