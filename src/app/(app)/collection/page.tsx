@@ -1,14 +1,15 @@
 "use client";
 
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/app/lib/store/store";
-import { Library } from "./components/library";
 import { Collectible, CollectibleType } from "@/app/api/interfaces/collectible";
+import { setCollectibles, setUser } from "@/app/lib/store/features/user/slice";
+import { useDispatch, useSelector } from "react-redux";
+
+import { Library } from "./components/library";
+import { Library as LibrarySkeleton } from "./components/skeleton/library";
+import { RootState } from "@/app/lib/store/store";
+import { User } from "@/app/api/interfaces/user";
 import { allAnimalEmojis } from "./utils/collectibles";
 import { useEffect } from "react";
-import { setCollectibles, setUser } from "@/app/lib/store/features/user/slice";
-import { User } from "@/app/api/interfaces/user";
-import { Library as LibrarySkeleton } from "./components/skeleton/library";
 
 export default function Collection() {
   const dispatch = useDispatch();

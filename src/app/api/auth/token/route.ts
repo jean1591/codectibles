@@ -8,6 +8,7 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
   const { token } = await request.json();
 
   const supabase = createClient();
+
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -16,7 +17,7 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
     throw new Error("User is not connected");
   }
 
-  const hashedToken = encrypt(token)
+  const hashedToken = encrypt(token);
 
   const { error } = await supabase
     .from(DbTable.USER)
