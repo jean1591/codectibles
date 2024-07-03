@@ -22,11 +22,11 @@ export const Pricing = () => {
             <Link
               href="https://github.com/sponsors/jean1591"
               target="_blank"
-              className="bg-slate-800 hover:bg-slate-600 text-slate-100 p-1 rounded-md"
+              className="bg-slate-800 hover:bg-slate-600 text-slate-100 px-2 py-1 rounded-md"
             >
               Github
             </Link>{" "}
-            if you'd like to help 😘
+            if you'd like to help ☕️
           </p>
         </div>
       </div>

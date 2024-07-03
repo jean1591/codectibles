@@ -8,7 +8,7 @@ interface Step {
 
 const steps: Step[] = [
   {
-    title: "Github token 🏃‍➡️",
+    title: "Github token 🏃",
     description:
       "Create a personal access token from your GitHub account to securely connect with our app.",
   },
