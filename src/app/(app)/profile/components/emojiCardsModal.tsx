@@ -9,13 +9,13 @@ import {
   addCollectibles,
   setCollectiblesToClaim,
 } from "@/app/lib/store/features/user/slice";
+import { gradientBg, gradientText } from "../../ui";
 import { useDispatch, useSelector } from "react-redux";
 
 import Link from "next/link";
 import { PiGift } from "react-icons/pi";
 import { RootState } from "@/app/lib/store/store";
 import { classNames } from "@/utils";
-import { gradientBg } from "../../ui";
 import { setDisplayGetEmojisModal } from "@/app/lib/store/features/interactions/slice";
 
 export const EmojiCardsModal = () => {
@@ -74,8 +74,9 @@ export const EmojiCardsModal = () => {
               <div className="mt-8 text-center">
                 <DialogTitle
                   className={classNames(
+                    gradientText,
                     gradientBg,
-                    "inline-block text-transparent bg-clip-text text-2xl lg:text-3xl font-semibold leading-6"
+                    "text-2xl lg:text-3xl font-semibold leading-6"
                   )}
                 >
                   Level {user.level} unlocked !

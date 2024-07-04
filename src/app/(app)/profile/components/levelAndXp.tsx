@@ -1,5 +1,5 @@
 import { Activity, ActivityType } from "@/app/api/interfaces/activity";
-import { ProgressBar, gradientBg } from "../../ui";
+import { ProgressBar, gradientBg, gradientText } from "../../ui";
 import { Stat, User, UserDb } from "@/app/api/interfaces/user";
 import {
   addActivity,
@@ -39,8 +39,9 @@ export const LevelAndXp = () => {
       <div className="flex items-center justify-between">
         <p
           className={classNames(
+            gradientText,
             gradientBg,
-            "inline-block text-transparent bg-clip-text text-3xl font-medium text-left"
+            "text-3xl font-medium text-left"
           )}
         >
           {`Level ${level}`}
@@ -148,8 +149,9 @@ const Xp = ({ value }: { value: number }) => {
   return (
     <p
       className={classNames(
+        gradientText,
         gradientBg,
-        "text-xl text-right font-medium inline-block text-transparent bg-clip-text"
+        "text-xl text-right font-medium "
       )}
     >{`${value} XP`}</p>
   );

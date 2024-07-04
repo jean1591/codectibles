@@ -1,8 +1,9 @@
 "use client";
 
-import { gradientBg } from "@/app/(app)/ui";
-import { classNames } from "@/utils";
+import { gradientBg, gradientText } from "@/app/(app)/ui";
+
 import Image from "next/image";
+import { classNames } from "@/utils";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -25,12 +26,7 @@ export default function TokenPage() {
       <div>
         <h2 className="text-center text-2xl font-bold leading-9 tracking-tight">
           Save new Github token to access{" "}
-          <span
-            className={classNames(
-              gradientBg,
-              "inline-block text-transparent bg-clip-text"
-            )}
-          >
+          <span className={classNames(gradientText, gradientBg)}>
             Codectibles
           </span>
         </h2>

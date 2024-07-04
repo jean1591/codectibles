@@ -3,10 +3,10 @@ import {
   DisclosureButton,
   DisclosurePanel,
 } from "@headlessui/react";
+import { gradientBg, gradientText } from "@/app/(app)/ui";
 
 import { PiCaretDown } from "react-icons/pi";
 import { classNames } from "@/utils";
-import { gradientBg } from "@/app/(app)/ui";
 
 interface FaqItem {
   answer: string;
@@ -56,8 +56,9 @@ export const Faq = () => {
       <div className="text-center">
         <p
           className={classNames(
+            gradientText,
             gradientBg,
-            "inline-block text-transparent bg-clip-text text-4xl font-extrabold"
+            "text-4xl font-extrabold"
           )}
         >
           Any questions ?

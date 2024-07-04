@@ -1,6 +1,7 @@
+import { gradientBg, gradientText } from "@/app/(app)/ui";
+
 import Link from "next/link";
 import { classNames } from "@/utils";
-import { gradientBg } from "@/app/(app)/ui";
 
 const navigation = [
   { name: "Features", href: "/landing" },
@@ -34,10 +35,7 @@ export const Footer = () => {
           <Link
             href="https://jeanrobertou.com"
             target="_blank"
-            className={classNames(
-              gradientBg,
-              "inline-block text-transparent bg-clip-text"
-            )}
+            className={classNames(gradientText, gradientBg)}
           >
             Jean Robertou
           </Link>

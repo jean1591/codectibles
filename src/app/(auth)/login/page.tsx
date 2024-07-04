@@ -1,7 +1,8 @@
+import { gradientBg, gradientText } from "@/app/(app)/ui";
+
 import { PiGithubLogo } from "react-icons/pi";
-import { createClient } from "@/utils/supabase/server";
 import { classNames } from "@/utils";
-import { gradientBg } from "@/app/(app)/ui";
+import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -10,7 +11,7 @@ export default async function LoginPage() {
     "use server";
 
     const origin = headers().get("origin");
-    
+
     const supabase = createClient();
     const { error, data } = await supabase.auth.signInWithOAuth({
       provider: "github",
@@ -32,12 +33,7 @@ export default async function LoginPage() {
         <div className="w-full max-w-sm space-y-10 text-2xl font-bold text-center leading-9 tracking-tight">
           <h2>
             Sign in to{" "}
-            <span
-              className={classNames(
-                gradientBg,
-                "inline-block text-transparent bg-clip-text"
-              )}
-            >
+            <span className={classNames(gradientText, gradientBg)}>
               Codectibles
             </span>
           </h2>
