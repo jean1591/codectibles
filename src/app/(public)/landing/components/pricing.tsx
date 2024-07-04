@@ -1,6 +1,7 @@
+import { gradientBg, gradientText } from "@/app/(app)/ui";
+
 import Link from "next/link";
 import { classNames } from "@/utils";
-import { gradientBg } from "@/app/(app)/ui";
 
 export const Pricing = () => {
   return (
@@ -8,8 +9,9 @@ export const Pricing = () => {
       <div className="text-center">
         <p
           className={classNames(
+            gradientText,
             gradientBg,
-            "inline-block text-transparent bg-clip-text text-4xl font-extrabold"
+            "text-4xl font-extrabold"
           )}
         >
           Pricing

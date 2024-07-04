@@ -1,11 +1,11 @@
 "use client";
 
+import { gradientBg, gradientText } from "@/app/(app)/ui";
 import { useEffect, useRef } from "react";
 
 import JSConfetti from "js-confetti";
 import Link from "next/link";
 import { classNames } from "@/utils";
-import { gradientBg } from "@/app/(app)/ui";
 
 export const Hero = () => {
   return (
@@ -13,12 +13,7 @@ export const Hero = () => {
       <div className="flex-1">
         <div className="text-5xl font-extrabold text-center md:text-left text-slate-700">
           <p>Gamify your</p>
-          <p
-            className={classNames(
-              gradientBg,
-              "inline-block text-transparent bg-clip-text text-5xl pt-2"
-            )}
-          >
+          <p className={classNames(gradientText, gradientBg, "text-5xl pt-2")}>
             Github experience !
           </p>
         </div>

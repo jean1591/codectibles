@@ -1,7 +1,9 @@
-import { classNames } from "@/utils";
-import { UnlockedCollectible } from "./collectibles";
-import { qualityToThemeMapper } from "../utils/mappers";
 import { Collectible, Quality } from "@/app/api/interfaces/collectible";
+
+import { UnlockedCollectible } from "./collectibles";
+import { classNames } from "@/utils";
+import { gradientText } from "../../ui";
+import { qualityToThemeMapper } from "../utils/mappers";
 
 export const QualitySection = ({
   collectibles,
@@ -17,8 +19,9 @@ export const QualitySection = ({
       <div className="flex items-center justify-start gap-x-4 font-medium">
         <p
           className={classNames(
+            gradientText,
             qualityTheme,
-            "inline-block text-transparent bg-clip-text text-2xl text-left capitalize"
+            "text-2xl text-left capitalize"
           )}
         >
           {quality}

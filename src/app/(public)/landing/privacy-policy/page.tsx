@@ -1,13 +1,15 @@
+import { gradientBg, gradientText } from "@/app/(app)/ui";
+
 import { classNames } from "@/utils";
-import { gradientBg } from "@/app/(app)/ui";
 
 export default function PrivacyPolicy() {
   return (
     <div>
       <p
         className={classNames(
+          gradientText,
           gradientBg,
-          "mt-16 inline-block text-transparent bg-clip-text text-4xl md:text-5xl font-extrabold"
+          "mt-16 text-4xl md:text-5xl font-extrabold"
         )}
       >
         Privacy policy

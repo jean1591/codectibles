@@ -1,5 +1,6 @@
+import { gradientBg, gradientText } from "@/app/(app)/ui";
+
 import { classNames } from "@/utils";
-import { gradientBg } from "@/app/(app)/ui";
 
 interface TypeFeature {
   title: string;
@@ -33,8 +34,9 @@ export const Features = () => {
       <div className="text-center">
         <p
           className={classNames(
+            gradientText,
             gradientBg,
-            "inline-block text-transparent bg-clip-text text-4xl font-extrabold"
+            "text-4xl font-extrabold"
           )}
         >
           Features
