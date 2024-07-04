@@ -1,20 +1,20 @@
 import {
-  PiUserCheck,
-  PiIdentificationBadge,
-  PiArrowUpRight,
-} from "react-icons/pi";
-
-import { classNames } from "@/utils";
-import { IconType } from "react-icons";
-import {
-  Activity as TypeActivity,
   ActivityType,
+  Activity as TypeActivity,
 } from "@/app/api/interfaces/activity";
-import { useEffect } from "react";
+import {
+  PiArrowUpRight,
+  PiIdentificationBadge,
+  PiUserCheck,
+} from "react-icons/pi";
 import { useDispatch, useSelector } from "react-redux";
-import { setActivities } from "@/app/lib/store/features/user/slice";
-import { RootState } from "@/app/lib/store/store";
+
 import { Activities as ActivitiesSkeleton } from "./skeleton/activities";
+import { IconType } from "react-icons";
+import { RootState } from "@/app/lib/store/store";
+import { classNames } from "@/utils";
+import { setActivities } from "@/app/lib/store/features/user/slice";
+import { useEffect } from "react";
 
 const activityTypeMapper: Record<
   ActivityType,
@@ -59,16 +59,14 @@ export const Activities = () => {
       <p className="text-2xl font-medium">Activities</p>
 
       <div className="mt-8 flow-root max-h-96 overflow-scroll">
-        <ul role="list" className="-mb-8">
-          {activities.map((activity, activityIdx) => (
-            <Activity
-              key={activity.id}
-              activity={activity}
-              activityIdx={activityIdx}
-              activitiesLength={activities.length}
-            />
-          ))}
-        </ul>
+        {activities.map((activity, activityIdx) => (
+          <Activity
+            key={activity.id}
+            activity={activity}
+            activityIdx={activityIdx}
+            activitiesLength={activities.length}
+          />
+        ))}
       </div>
     </div>
   );
@@ -87,37 +85,35 @@ const Activity = ({
   const Icon = activityDetails.icon;
 
   return (
-    <li>
-      <div className="relative pb-8">
-        {activityIdx !== activitiesLength - 1 ? (
-          <span className="absolute left-4 top-4 -ml-px h-full w-0.5 bg-slate-300" />
-        ) : null}
-        <div className="relative flex space-x-3">
+    <div className="relative pb-8">
+      {activityIdx !== activitiesLength - 1 ? (
+        <span className="absolute left-4 top-4 -ml-px h-full w-0.5 bg-slate-300" />
+      ) : null}
+      <div className="relative flex space-x-3">
+        <div>
+          <span
+            className={classNames(
+              activityDetails.bgColor,
+              "flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-slate-100"
+            )}
+          >
+            <Icon className="h-5 w-5 text-slate-100" />
+          </span>
+        </div>
+        <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
           <div>
-            <span
-              className={classNames(
-                activityDetails.bgColor,
-                "flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-slate-100"
-              )}
-            >
-              <Icon className="h-5 w-5 text-slate-100" />
-            </span>
+            <p className="text-sm text-slate-500">
+              {activityDetails.content}{" "}
+              <span className="font-medium text-slate-900">
+                {activity.details}
+              </span>
+            </p>
           </div>
-          <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
-            <div>
-              <p className="text-sm text-slate-500">
-                {activityDetails.content}{" "}
-                <span className="font-medium text-slate-900">
-                  {activity.details}
-                </span>
-              </p>
-            </div>
-            <div className="whitespace-nowrap text-right text-sm text-slate-500">
-              <p>{activity.createdAt}</p>
-            </div>
+          <div className="whitespace-nowrap text-right text-sm text-slate-500">
+            <p>{activity.createdAt}</p>
           </div>
         </div>
       </div>
-    </li>
+    </div>
   );
 };

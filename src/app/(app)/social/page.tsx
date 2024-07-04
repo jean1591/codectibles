@@ -47,11 +47,6 @@ const LeaderBoard = () => {
       xp: 1234,
     },
     {
-      rank: 5,
-      username: "notjean1591",
-      xp: 1234,
-    },
-    {
       rank: 234,
       username: "jean1591",
       xp: 34,
@@ -63,23 +58,20 @@ const LeaderBoard = () => {
       <p className="text-2xl font-medium">Leaderboard</p>
 
       <div className="mt-8">
-        <ul role="list" className="divide-y divide-slate-200">
-          {leaderboard.map((leaderboardUser) => (
-            <li className="py-4">
+        <div className="divide-y divide-slate-200">
+          {leaderboard.map((leaderboardUser, index) => (
+            <div
+              key={leaderboardUser.rank}
+              className={classNames(index === 0 ? "pb-4" : "py-4")}
+            >
               {leaderboardUser.username === username ? (
-                <LeaderboardLoggedUser
-                  key={leaderboardUser.rank}
-                  leaderboardUser={leaderboardUser}
-                />
+                <LeaderboardLoggedUser leaderboardUser={leaderboardUser} />
               ) : (
-                <LeaderboardUser
-                  key={leaderboardUser.rank}
-                  leaderboardUser={leaderboardUser}
-                />
+                <LeaderboardUser leaderboardUser={leaderboardUser} />
               )}
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
     </div>
   );
@@ -89,7 +81,7 @@ const LeaderboardUser = ({ leaderboardUser }: { leaderboardUser: Rank }) => {
   const { rank, username, xp } = leaderboardUser;
 
   return (
-    <div className="grid grid-cols-4 text-lg font-medium">
+    <div className="grid grid-cols-4 text-lg font-medium gap-x-4">
       <p
         className={classNames(
           ["🥇", "🥈", "🥉"].includes(rank.toString()) ? "text-xl" : "text-lg",
@@ -112,7 +104,7 @@ const LeaderboardLoggedUser = ({
   const { rank, username, xp } = leaderboardUser;
 
   return (
-    <div className="grid grid-cols-4 text-lg font-medium">
+    <div className="grid grid-cols-4 text-lg font-medium gap-x-4">
       <p
         className={classNames(
           gradientBg,
@@ -123,11 +115,11 @@ const LeaderboardLoggedUser = ({
       >
         {rank}
       </p>
-      <p
-        className={classNames(gradientBg, gradientText, "text-left col-span-2")}
-      >
-        {username}
-      </p>
+      <div className="col-span-2">
+        <p className={classNames(gradientBg, gradientText, "text-left")}>
+          {username}
+        </p>
+      </div>
       <p className={classNames(gradientBg, gradientText, "text-right")}>
         {xp} XP
       </p>
