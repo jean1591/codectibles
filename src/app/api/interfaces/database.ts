@@ -4,6 +4,7 @@ export enum DbTable {
   COLLECTIBLE = "collectible",
   EVENT = "event",
   PR = "pr",
+  STAT = "stat",
   USER = "user",
 }
 
