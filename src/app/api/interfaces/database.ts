@@ -1,10 +1,10 @@
 export enum DbTable {
-  ACTIVITY = "activity",
-  BADGE = "badge",
-  COLLECTIBLE = "collectible",
-  EVENT = "event",
+  ACTIVITY = "activities",
+  BADGE = "badges",
+  COLLECTIBLE = "collectibles",
+  EVENT = "events",
   PR = "pr",
-  USER = "user",
+  USER = "users",
 }
 
 export enum DbError {
