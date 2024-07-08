@@ -1,0 +1,80 @@
+import { BaseCollectible, Collectible } from "@/app/api/interfaces/collectible";
+import { DbError, DbTable } from "../../../interfaces/database";
+import { NextRequest, NextResponse } from "next/server";
+
+import { createClient } from "@/utils/supabase/server";
+
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { userId: string } }
+): Promise<NextResponse> {
+  const supabase = createClient();
+  const { userId } = params;
+
+  const { data: collectibles } = await supabase
+    .from(DbTable.COLLECTIBLE)
+    .select("*")
+    .eq("userId", userId);
+
+  if (!collectibles) {
+    throw new Error(`No collectibles found for userId ${userId}`);
+  }
+
+  return NextResponse.json(collectibles);
+}
+
+// TODO: try with user.userId
+export async function POST(
+  request: NextRequest,
+  { params }: { params: { userId: string } }
+): Promise<NextResponse> {
+  const supabase = createClient();
+  const { userId } = params;
+
+  const { collectibles: newCollectibles }: { collectibles: BaseCollectible[] } =
+    await request.json();
+  const { data: collectibles } = await supabase
+    .from(DbTable.COLLECTIBLE)
+    .select("*")
+    .eq("userId", userId)
+    .in(
+      "icon",
+      newCollectibles.map(({ icon }) => icon)
+    );
+
+  if (!collectibles) {
+    throw new Error(`No collectibles found for userId ${userId}`);
+  }
+
+  const collectiblesUpsert: Collectible[] = newCollectibles.map(
+    (collectible) => {
+      const { icon, quality } = collectible;
+
+      const existingCollectible = collectibles.find(
+        (coll) => coll.icon === icon && coll.quality === quality
+      );
+
+      if (existingCollectible) {
+        return { ...existingCollectible, count: existingCollectible.count + 1 };
+      }
+
+      return { userId, ...collectible };
+    }
+  );
+
+  const { error } = await supabase
+    .from(DbTable.COLLECTIBLE)
+    .upsert(collectiblesUpsert, {
+      onConflict: "id",
+      ignoreDuplicates: false,
+      defaultToNull: false,
+    });
+
+  if (error) {
+    console.error(`${DbError.UPDATE}: COLLECTIBLE"`, {
+      error: JSON.stringify(error, null, 2),
+    });
+  }
+
+  return NextResponse.json({ success: true });
+}

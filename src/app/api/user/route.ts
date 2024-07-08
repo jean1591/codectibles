@@ -20,7 +20,7 @@ export async function GET(request: NextRequest): Promise<NextResponse<User>> {
 
   const { data: users } = await supabase
     .from(DbTable.USER)
-    .select("authUserId, badges, level, prToClaim, stats, token, username")
+    .select("authUserId, badges, id, level, prToClaim, stats, token, username")
     .eq("authUserId", authUser.id);
 
   if (!users || users.length === 0) {
