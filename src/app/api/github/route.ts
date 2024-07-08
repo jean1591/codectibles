@@ -55,13 +55,13 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 export async function PUT(request: NextRequest): Promise<NextResponse> {
   const supabase = createClient();
 
-  const { authUserId, claimed }: { authUserId: string; claimed: boolean } =
+  const { userId, claimed }: { userId: string; claimed: boolean } =
     await request.json();
 
   const { error: updateUserError } = await supabase
     .from(DbTable.PR)
     .update({ claimed })
-    .eq("authUserId", authUserId);
+    .eq("userId", userId);
 
   if (updateUserError) {
     console.error(`${DbError.UPDATE}: PR"`, {
@@ -210,17 +210,23 @@ const updateUser = async (
     });
   }
 
+  /* Stats */
+  const { data: statsDb } = await supabase
+    .from(DbTable.STAT)
+    .select("*")
+    .eq("userId", userId);
+
   const updatedStats = [
     {
-      ...stats.pr,
+      ...statsDb?.find((stat) => stat.type === Resource.PR),
       value: prToClaim + prClaimed ?? 0,
     },
     {
-      ...stats.approves,
+      ...statsDb?.find((stat) => stat.type === Resource.APPROVES),
       value: formatedEventTypeCount.approves ?? 0,
     },
     {
-      ...stats.comments,
+      ...statsDb?.find((stat) => stat.type === Resource.COMMENTS),
       value: formatedEventTypeCount.comments ?? 0,
     },
   ];

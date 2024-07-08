@@ -10,10 +10,10 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
   const supabase = createClient();
 
   const {
-    data: { user },
+    data: { user: authUser },
   } = await supabase.auth.getUser();
 
-  if (!user) {
+  if (!authUser) {
     throw new Error("User is not connected");
   }
 
@@ -22,7 +22,7 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
   const { error } = await supabase
     .from(DbTable.USER)
     .update({ token: hashedToken })
-    .eq("authUserId", user.id);
+    .eq("authUserId", authUser.id);
 
   if (error) {
     console.error(`${DbError.UPDATE}: USER"`, {

@@ -53,8 +53,8 @@ export const PrToClaim = () => {
       await fetch("/api/github", {
         method: "PUT",
         body: JSON.stringify({
-          authUserId: user.authUserId,
           claimed: true,
+          userId: user.id,
         }),
         headers: { "Content-Type": "application/json" },
       });
