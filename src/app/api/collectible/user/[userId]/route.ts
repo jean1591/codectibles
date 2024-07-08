@@ -23,13 +23,13 @@ export async function GET(
   return NextResponse.json(collectibles);
 }
 
-// TODO: try with user.userId
 export async function POST(
   request: NextRequest,
   { params }: { params: { userId: string } }
 ): Promise<NextResponse> {
-  const supabase = createClient();
   const { userId } = params;
+
+  const supabase = createClient();
 
   const { collectibles: newCollectibles }: { collectibles: BaseCollectible[] } =
     await request.json();

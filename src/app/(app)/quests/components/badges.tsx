@@ -93,10 +93,10 @@ const BadgeToClaim = ({ badge }: { badge: BadgeType }) => {
     }
 
     const activity = {
-      authUserId: user.authUserId,
       createdAt: new Date().toISOString(),
       details: badge.title,
       type: ActivityType.BADGE_CLAIMED,
+      userId: user.id,
     } as Activity;
 
     (async function updateUser() {

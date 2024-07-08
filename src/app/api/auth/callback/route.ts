@@ -69,11 +69,11 @@ const createUser = async ({
   }
 
   if (users && users.length > 0) {
-    const user = users[0] as UserDb;
+    const { id: userId } = users[0] as UserDb;
 
     const { error: insertStatError } = await supabase
       .from(DbTable.STAT)
-      .insert(generateInitialStats(user.id));
+      .insert(generateInitialStats(userId));
 
     if (insertStatError) {
       console.error(`${DbError.INSERT}: STAT"`, { error: insertStatError });
@@ -82,10 +82,9 @@ const createUser = async ({
     const { error: insertActivityError } = await supabase
       .from(DbTable.ACTIVITY)
       .insert({
-        authUserId,
         details: "account",
         type: ActivityType.ACCOUNT_CREATED,
-        userId: user.id,
+        userId: userId,
       });
 
     if (insertActivityError) {
