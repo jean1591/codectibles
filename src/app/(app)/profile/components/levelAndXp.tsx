@@ -78,6 +78,7 @@ const NextLevelButton = () => {
     jsConfetti.current && jsConfetti.current.addConfetti();
 
     const {
+      id: userId,
       level,
       stats: { xp: xpStat },
     } = user;
@@ -97,10 +98,10 @@ const NextLevelButton = () => {
     } as UserDb;
 
     const activity = {
-      authUserId: user.authUserId,
       createdAt: new Date().toISOString(),
       details: `level ${updatedLevel}`,
       type: ActivityType.LEVEL_UP,
+      userId,
     } as Activity;
 
     (async function updateUser() {

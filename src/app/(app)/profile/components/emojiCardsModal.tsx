@@ -34,7 +34,7 @@ export const EmojiCardsModal = () => {
 
   const onClaimCollectibles = () => {
     (async function updateCollectibles() {
-      await fetch(`/api/collectible/user/${user.authUserId}`, {
+      await fetch(`/api/collectible/user/${user.id}`, {
         method: "POST",
         body: JSON.stringify({ collectibles: collectiblesToClaim }),
         headers: { "Content-Type": "application/json" },
@@ -120,19 +120,20 @@ export const EmojiCardsModal = () => {
                     </button>
                   ) : (
                     <div className="lg:flex items-center justify-end gap-x-4">
-                      <button
+                      <Link
+                        className={classNames(
+                          gradientBg,
+                          "p-2 w-full rounded-lg shadow-md"
+                        )}
+                        href="/collection"
                         onClick={() =>
                           dispatch(setDisplayGetEmojisModal(false))
                         }
-                        className={classNames(
-                          gradientBg,
-                          "p-2 text-lg text-slate-100 font-semibold uppercase rounded-lg w-full shadow-md"
-                        )}
                       >
-                        <Link className="text-nowrap px-4" href="/collection">
+                        <button className="text-lg text-slate-100 font-semibold uppercase text-nowrap px-4">
                           Go to collection
-                        </Link>
-                      </button>
+                        </button>
+                      </Link>
 
                       <button
                         onClick={() =>

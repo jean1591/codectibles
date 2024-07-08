@@ -1,15 +1,15 @@
-import JSConfetti from 'js-confetti'
-
-import { classNames } from "@/utils";
-import { gradientBg } from "./constants";
+import { Resource, Stat, User, UserDb } from "@/app/api/interfaces/user";
 import { useDispatch, useSelector } from "react-redux";
+
+import JSConfetti from "js-confetti";
 import { RootState } from "@/app/lib/store/store";
-import { Stat, Resource, User, UserDb } from "@/app/api/interfaces/user";
+import { classNames } from "@/utils";
 import { computeProgress } from "@/utils/computeProgress";
+import { gradientBg } from "./constants";
 import { setUser } from "@/app/lib/store/features/user/slice";
 
 export const ProgressBarWithTitle = ({ stat }: { stat: Stat }) => {
-  let jsConfetti  = new JSConfetti()
+  let jsConfetti = new JSConfetti();
 
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.user);
@@ -19,7 +19,7 @@ export const ProgressBarWithTitle = ({ stat }: { stat: Stat }) => {
   }
 
   const handleClaimMilestone = () => {
-    jsConfetti.addConfetti()
+    jsConfetti.addConfetti();
 
     const updatedXp: Stat = {
       ...user.stats.xp,

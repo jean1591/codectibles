@@ -5,9 +5,9 @@ export enum ActivityType {
 }
 
 export interface Activity {
-    authUserId: string,
-    createdAt: string;
-    details: string;
-    id: string;
-    type: ActivityType;
+  createdAt: string;
+  details: string;
+  id: string;
+  type: ActivityType;
+  userId: string;
 }

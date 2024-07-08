@@ -1,20 +1,21 @@
 import {
-  PiUserCheck,
-  PiIdentificationBadge,
-  PiArrowUpRight,
-} from "react-icons/pi";
-
-import { classNames } from "@/utils";
-import { IconType } from "react-icons";
-import {
-  Activity as TypeActivity,
   ActivityType,
+  Activity as TypeActivity,
 } from "@/app/api/interfaces/activity";
-import { useEffect } from "react";
+import {
+  PiArrowUpRight,
+  PiIdentificationBadge,
+  PiUserCheck,
+} from "react-icons/pi";
+import { setActivities, setUser } from "@/app/lib/store/features/user/slice";
 import { useDispatch, useSelector } from "react-redux";
-import { setActivities } from "@/app/lib/store/features/user/slice";
-import { RootState } from "@/app/lib/store/store";
+
 import { Activities as ActivitiesSkeleton } from "./skeleton/activities";
+import { IconType } from "react-icons";
+import { RootState } from "@/app/lib/store/store";
+import { User } from "@/app/api/interfaces/user";
+import { classNames } from "@/utils";
+import { useEffect } from "react";
 
 const activityTypeMapper: Record<
   ActivityType,
@@ -43,7 +44,12 @@ export const Activities = () => {
 
   useEffect(() => {
     (async function getActivities() {
-      const activitiesResponse = await fetch("/api/activity");
+      const userResponse = await fetch("/api/user");
+      const user = (await userResponse.json()) as User;
+
+      dispatch(setUser(user));
+
+      const activitiesResponse = await fetch(`/api/activity/user/${user.id}`);
       const activities = (await activitiesResponse.json()) as TypeActivity[];
 
       dispatch(setActivities(activities));
