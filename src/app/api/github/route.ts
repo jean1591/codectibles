@@ -181,6 +181,7 @@ const updateUser = async (
   const updatedUser = {
     fetchedAt: new Date().toISOString(),
     prToClaim,
+    // TOTO: delete this once table STATS is up
     stats: {
       ...stats,
       [Resource.PR]: {
@@ -198,8 +199,6 @@ const updateUser = async (
     },
   } as UserDb;
 
-  // TODO: update stats
-
   const { error: updateUserError } = await supabase
     .from(DbTable.USER)
     .update(updatedUser)
@@ -207,6 +206,36 @@ const updateUser = async (
 
   if (updateUserError) {
     console.error(`${DbError.UPDATE}: USER"`, {
+      error: JSON.stringify(updateUserError, null, 2),
+    });
+  }
+
+  const updatedStats = [
+    {
+      ...stats.pr,
+      value: prToClaim + prClaimed ?? 0,
+    },
+    {
+      ...stats.approves,
+      value: formatedEventTypeCount.approves ?? 0,
+    },
+    {
+      ...stats.comments,
+      value: formatedEventTypeCount.comments ?? 0,
+    },
+  ];
+
+  const { error: updateStatsError } = await supabase
+    .from(DbTable.STAT)
+    .upsert(updatedStats, {
+      onConflict: "id",
+      ignoreDuplicates: false,
+      defaultToNull: false,
+    })
+    .eq("userId", userId);
+
+  if (updateStatsError) {
+    console.error(`${DbError.UPDATE}: STAT"`, {
       error: JSON.stringify(updateUserError, null, 2),
     });
   }

@@ -8,6 +8,7 @@ export const getUserDetails = async (
   supabase: SupabaseClient,
   authUserId: string
 ): Promise<Pick<User, "fetchedAt" | "id" | "stats" | "token" | "username">> => {
+  // TODO: get stats from STATS table
   const { data: users } = await supabase
     .from(DbTable.USER)
     .select("fetchedAt, id, stats, token, username")
