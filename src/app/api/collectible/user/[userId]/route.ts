@@ -1,5 +1,5 @@
 import { BaseCollectible, Collectible } from "@/app/api/interfaces/collectible";
-import { DbError, DbTable } from "../../../interfaces/database";
+import { DbError, DbTable } from "@/app/api/interfaces/database";
 import { NextRequest, NextResponse } from "next/server";
 
 import { createClient } from "@/utils/supabase/server";

@@ -98,7 +98,6 @@ const NextLevelButton = () => {
     } as UserDb;
 
     const activity = {
-      authUserId: user.authUserId,
       createdAt: new Date().toISOString(),
       details: `level ${updatedLevel}`,
       type: ActivityType.LEVEL_UP,
