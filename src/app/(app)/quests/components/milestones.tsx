@@ -1,27 +1,31 @@
-import { useSelector } from "react-redux";
-import { ProgressBarWithTitle } from "../../ui";
-import { RootState } from "@/app/lib/store/store";
 import { Milestones as MilestonesSkeleton } from "./skeleton/milestones";
+import { ProgressBarWithTitle } from "../../ui";
+import { Resource } from "@/app/api/interfaces/user";
+import { RootState } from "@/app/lib/store/store";
+import { useSelector } from "react-redux";
 
 export const Milestones = () => {
-  const { user } = useSelector((state: RootState) => state.user);
+  const { stats } = useSelector((state: RootState) => state.stats);
 
-  if (!user) {
+  if (!stats) {
     return <MilestonesSkeleton />;
   }
 
-  const {
-    stats: { pr, comments, approves },
-  } = user;
+  const prStats = stats.find((stat) => stat.type === Resource.APPROVES);
+  const commentsStats = stats.find((stat) => stat.type === Resource.COMMENTS);
+  const approvesStats = stats.find((stat) => stat.type === Resource.APPROVES);
+  if (!prStats || !commentsStats || !approvesStats) {
+    throw new Error("User have no stats");
+  }
 
   return (
     <div className="bg-slate-100 rounded-lg p-4 lg:p-8 shadow-lg">
-      <ProgressBarWithTitle stat={pr} />
+      <ProgressBarWithTitle stat={prStats} />
       <div className="mt-8">
-        <ProgressBarWithTitle stat={comments} />
+        <ProgressBarWithTitle stat={commentsStats} />
       </div>
       <div className="mt-8">
-        <ProgressBarWithTitle stat={approves} />
+        <ProgressBarWithTitle stat={approvesStats} />
       </div>
     </div>
   );

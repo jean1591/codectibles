@@ -1,7 +1,9 @@
-export const computeProgress = (user: number, previousmilestone: number, nextmilestone: number) => {
-    return Math.ceil(
-        ((user - previousmilestone) /
-            (nextmilestone - previousmilestone)) *
-        100
-    );
-}
+export const computeProgress = (
+  nextMilestone: number,
+  previousMilestone: number,
+  value: number
+) => {
+  return Math.ceil(
+    ((value - previousMilestone) / (nextMilestone - previousMilestone)) * 100
+  );
+};

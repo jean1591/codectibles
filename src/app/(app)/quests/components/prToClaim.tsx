@@ -1,4 +1,4 @@
-import { Stat, User } from "@/app/api/interfaces/user";
+import { Resource, User } from "@/app/api/interfaces/user";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef } from "react";
 
@@ -6,15 +6,18 @@ import JSConfetti from "js-confetti";
 // TODO: put skeleton back
 import { PrToClaim as PrToClaimSkeleton } from "./skeleton/prToClaim";
 import { RootState } from "@/app/lib/store/store";
+import { Stat } from "@/app/api/interfaces/stats";
 import { classNames } from "@/utils";
 import { gradientBg } from "../../ui";
 import { setUser } from "@/app/lib/store/features/user/slice";
+import { updateStat } from "@/app/lib/store/features/stats/slice";
 
 const REWARD_PER_PR = 40;
 
 export const PrToClaim = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.user);
+  const { stats } = useSelector((state: RootState) => state.stats);
 
   const jsConfetti = useRef<JSConfetti | null>(null);
 
@@ -22,7 +25,7 @@ export const PrToClaim = () => {
     jsConfetti.current = new JSConfetti();
   }, []);
 
-  if (!user) {
+  if (!stats || !user) {
     return <></>;
   }
 
@@ -31,15 +34,19 @@ export const PrToClaim = () => {
   const handleClaimPr = () => {
     jsConfetti.current && jsConfetti.current.addConfetti();
 
+    const xpStats = stats.find((stat) => stat.type === Resource.XP);
+    if (!xpStats) {
+      throw new Error("User have no XP stats");
+    }
+
     const updatedXp: Stat = {
-      ...user.stats.xp,
-      user: user.stats.xp.user + prToClaim * REWARD_PER_PR,
+      ...xpStats,
+      value: xpStats.value + prToClaim * REWARD_PER_PR,
     };
 
     (async function prClaimedUpdate() {
       const prClaimedPayload = {
-        // TODO: use state.stats when available
-        updatedXpValue: user.stats.xp.user + prToClaim * REWARD_PER_PR,
+        updatedXpValue: xpStats.value + prToClaim * REWARD_PER_PR,
       };
 
       await fetch(`/api/user/${user.id}/pr-claimed`, {
@@ -49,14 +56,13 @@ export const PrToClaim = () => {
       });
     })();
 
-    // TODO: change state with stats from db table and not from user
     const stateUser: User = {
       ...user,
       prToClaim: 0,
-      stats: { ...user.stats, xp: updatedXp },
     };
 
     dispatch(setUser(stateUser));
+    dispatch(updateStat(updatedXp));
   };
 
   if (prToClaim === 0) {

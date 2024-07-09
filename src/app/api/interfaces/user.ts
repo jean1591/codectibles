@@ -1,66 +1,51 @@
-import { ConventionalCommitType } from "./github";
+import { Stat } from "./stats";
 
-export type User = Omit<UserDb, 'badges'> & {
-    badges: {
-        unlocked: Badge[];
-        locked: Badge[];
-    }
+export interface User {
+  authUserId: string;
+  fetchedAt: string;
+  id: string;
+  level: number;
+  prToClaim: number;
+  token: string;
+  username: string;
+}
+
+export interface UserWithRelations extends User {
+  stats: Stat[];
 }
 
 export interface UserDb {
-    authUserId: string,
-    badges: Badge[];
-    fetchedAt: string,
-    id: string;
-    level: number;
-    prToClaim: number;
-    stats: Stats;
-    token: string;
-    username: string;
-}
-
-export interface Badge {
-    description: string;
-    icon: string;
-    id: string;
-    reward: number;
-    rewardType: RewardType;
-    threshold: number;
-    title: string;
-    type: ConventionalCommitType;
-    unlocked: boolean;
-    unlockedAt: string | null;
+  authUserId: string;
+  fetchedAt: string;
+  id: string;
+  level: number;
+  prToClaim: number;
+  token: string;
+  username: string;
 }
 
 export enum RewardType {
-    XP = "XP",
-    COINS = "coins"
+  XP = "XP",
+  COINS = "coins",
 }
 
 export interface Reward {
-    type: RewardType;
-    value: number;
+  type: RewardType;
+  value: number;
 }
 
-export interface Stats {
-    approves: Stat;
-    comments: Stat;
-    pr: Stat;
-    xp: Stat;
-}
-
-export interface Stat {
-    id: Resource;
-    nextmilestone: number;
-    previousmilestone: number;
-    reward: number;
-    rewardType: RewardType;
-    user: number;
+export interface StatLegacy {
+  id: Resource;
+  nextmilestone: number;
+  previousmilestone: number;
+  reward: number;
+  rewardType: RewardType;
+  user: number;
 }
 
 export enum Resource {
-    APPROVES = 'approves',
-    COMMENTS = 'comments',
-    PR = 'pr',
-    XP = 'xp',
+  APPROVES = "approves",
+  COMMENTS = "comments",
+  PR = "pr",
+  XP = "xp",
 }

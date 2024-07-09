@@ -2,7 +2,7 @@ import { Activity, ActivityType } from "@/app/api/interfaces/activity";
 import {
   Badge as BadgeType,
   RewardType,
-  Stat,
+  StatLegacy,
   User,
   UserDb,
 } from "@/app/api/interfaces/user";
@@ -83,7 +83,7 @@ const BadgeToClaim = ({ badge }: { badge: BadgeType }) => {
     };
 
     if (badge.rewardType === RewardType.XP) {
-      const updatedXp: Stat = {
+      const updatedXp: StatLegacy = {
         ...user.stats.xp,
         user: user.stats.xp.user + badge.reward,
       };

@@ -1,51 +1,44 @@
-import { Resource, Stat, User, UserDb } from "@/app/api/interfaces/user";
 import { useDispatch, useSelector } from "react-redux";
 
 import JSConfetti from "js-confetti";
+import { Resource } from "@/app/api/interfaces/user";
 import { RootState } from "@/app/lib/store/store";
+import { Stat } from "@/app/api/interfaces/stats";
 import { classNames } from "@/utils";
 import { computeProgress } from "@/utils/computeProgress";
 import { gradientBg } from "./constants";
-import { setUser } from "@/app/lib/store/features/user/slice";
+import { updateStat } from "@/app/lib/store/features/stats/slice";
 
 export const ProgressBarWithTitle = ({ stat }: { stat: Stat }) => {
   let jsConfetti = new JSConfetti();
 
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.user);
+  const { stats } = useSelector((state: RootState) => state.stats);
 
-  if (!user) {
+  if (!stats || !user) {
     return <></>;
   }
 
   const handleClaimMilestone = () => {
     jsConfetti.addConfetti();
 
-    const { id: userId, stats } = user;
+    const { id: userId } = user;
 
-    const updatedXp: Stat = {
-      ...user.stats.xp,
-      user: user.stats.xp.user + stat.reward,
-    };
-
-    const updatedStat: Stat = {
-      ...stat,
-      nextmilestone: stat.nextmilestone * 2,
-      previousmilestone: stat.nextmilestone,
-    };
+    const xpStats = stats.find((stat) => stat.type === Resource.XP);
+    if (!xpStats) {
+      throw new Error("User have no XP stats");
+    }
 
     (async function milestoneUpdate() {
       const milestonePayload = {
         xp: {
-          // TODO: use state.stats when available
-          value: stats.xp.user + stat.reward,
+          value: xpStats.value + stat.reward,
         },
         milestone: {
-          // TODO: use state.stats when available
-          type: stat.id,
-          nextMilestone: stat.nextmilestone * 2,
-          // TODO: use state.stats when available
-          previousMilestone: stat.nextmilestone,
+          type: stat.type,
+          nextMilestone: stat.nextMilestone * 2,
+          previousMilestone: stat.nextMilestone,
         },
       };
 
@@ -56,27 +49,35 @@ export const ProgressBarWithTitle = ({ stat }: { stat: Stat }) => {
       });
     })();
 
-    const stateUser: User = {
-      ...user,
-      stats: { ...user.stats, xp: updatedXp, [stat.id]: updatedStat },
+    const updatedXp: Stat = {
+      ...xpStats,
+      value: xpStats.value + stat.reward,
     };
 
-    dispatch(setUser(stateUser));
+    const updatedStat: Stat = {
+      ...stat,
+      nextMilestone: stat.nextMilestone * 2,
+      previousMilestone: stat.nextMilestone,
+    };
+
+    // TODO: confirm if this works
+    dispatch(updateStat(updatedXp));
+    dispatch(updateStat(updatedStat));
   };
 
   const progress = computeProgress(
-    stat.user,
-    stat.previousmilestone,
-    stat.nextmilestone
+    stat.nextMilestone,
+    stat.previousMilestone,
+    stat.value
   );
 
   return (
     <div>
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-start gap-x-4 text-xl font-medium text-left">
-          <p>{statTypeToTitle(stat.id)}</p>
+          <p>{statTypeToTitle(stat.type)}</p>
           <span className="inline-flex items-center rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700 ring-1 ring-inset ring-slate-600/20">
-            {stat.user}
+            {stat.value}
           </span>
         </div>
         {progress >= 100 ? (
@@ -87,17 +88,17 @@ export const ProgressBarWithTitle = ({ stat }: { stat: Stat }) => {
               "text-slate-100 py-1 px-4 rounded-md text-base text-right animate-bounce"
             )}
           >
-            {`+ ${stat.reward} ${stat.rewardType}`}
+            {`+ ${stat.reward} XP`}
           </button>
         ) : (
-          <p className="text-base text-right">{`+ ${stat.reward} ${stat.rewardType}`}</p>
+          <p className="text-base text-right">{`+ ${stat.reward} XP`}</p>
         )}
       </div>
 
       <div className="mt-4">
         <ProgressBar
-          lowerBound={stat.previousmilestone.toString()}
-          upperBound={stat.nextmilestone.toString()}
+          lowerBound={stat.previousMilestone.toString()}
+          upperBound={stat.nextMilestone.toString()}
           progress={progress}
         />
       </div>

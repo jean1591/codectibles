@@ -8,9 +8,10 @@ import {
   eventTypes,
 } from "../interfaces/github";
 import { NextRequest, NextResponse } from "next/server";
-import { Resource, Stats, UserDb } from "../interfaces/user";
+import { Resource, UserDb } from "../interfaces/user";
 import { getPrType, getUserDetails } from "../utils/github";
 
+import { Stat } from "../interfaces/stats";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/utils/supabase/server";
 
@@ -136,11 +137,7 @@ const insertNewPr = async (
   }
 };
 
-const updateUser = async (
-  supabase: SupabaseClient,
-  userId: string,
-  stats: Stats
-) => {
+const updateUser = async (supabase: SupabaseClient, userId: string) => {
   /* PR */
   const { data: claimedCount } = await supabase
     .from(DbTable.PR)
@@ -181,22 +178,6 @@ const updateUser = async (
   const updatedUser = {
     fetchedAt: new Date().toISOString(),
     prToClaim,
-    // TOTO: delete this once table STATS is up
-    stats: {
-      ...stats,
-      [Resource.PR]: {
-        ...stats.pr,
-        user: prToClaim + prClaimed ?? 0,
-      },
-      [Resource.APPROVES]: {
-        ...stats.approves,
-        user: formatedEventTypeCount.approves ?? 0,
-      },
-      [Resource.COMMENTS]: {
-        ...stats.comments,
-        user: formatedEventTypeCount.comments ?? 0,
-      },
-    },
   } as UserDb;
 
   const { error: updateUserError } = await supabase
