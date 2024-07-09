@@ -1,6 +1,6 @@
 import { Activity, ActivityType } from "@/app/api/interfaces/activity";
 import { ProgressBar, gradientBg, gradientText } from "../../ui";
-import { Stat, User, UserDb } from "@/app/api/interfaces/user";
+import { Stat, User } from "@/app/api/interfaces/user";
 import {
   addActivity,
   setCollectiblesToClaim,
@@ -91,11 +91,22 @@ const NextLevelButton = () => {
       previousmilestone: xpStat.nextmilestone,
     };
 
-    const updatedUser = {
-      authUserId: user.authUserId,
-      level: updatedLevel,
-      stats: { ...user.stats, xp: updatedXp },
-    } as UserDb;
+    (async function levelUpUpdate() {
+      const levelUpPayload = {
+        level: updatedLevel,
+        xp: {
+          nextMilestone: updatedLevel ** 2 * 10,
+          // TODO: use state.stats when available
+          previousMilestone: xpStat.nextmilestone,
+        },
+      };
+
+      await fetch(`/api/user/${userId}/level-up`, {
+        method: "PUT",
+        body: JSON.stringify(levelUpPayload),
+        headers: { "Content-Type": "application/json" },
+      });
+    })();
 
     const activity = {
       createdAt: new Date().toISOString(),
@@ -103,20 +114,6 @@ const NextLevelButton = () => {
       type: ActivityType.LEVEL_UP,
       userId,
     } as Activity;
-
-    (async function updateUser() {
-      await fetch("/api/user", {
-        method: "PUT",
-        body: JSON.stringify({ user: updatedUser }),
-        headers: { "Content-Type": "application/json" },
-      });
-
-      await fetch("/api/activity", {
-        method: "POST",
-        body: JSON.stringify({ activity }),
-        headers: { "Content-Type": "application/json" },
-      });
-    })();
 
     const stateUser: User = {
       ...user,
