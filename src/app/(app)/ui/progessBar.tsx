@@ -21,6 +21,8 @@ export const ProgressBarWithTitle = ({ stat }: { stat: Stat }) => {
   const handleClaimMilestone = () => {
     jsConfetti.addConfetti();
 
+    const { id: userId, stats } = user;
+
     const updatedXp: Stat = {
       ...user.stats.xp,
       user: user.stats.xp.user + stat.reward,
@@ -30,18 +32,26 @@ export const ProgressBarWithTitle = ({ stat }: { stat: Stat }) => {
       ...stat,
       nextmilestone: stat.nextmilestone * 2,
       previousmilestone: stat.nextmilestone,
-      reward: 100,
     };
 
-    const updatedUser = {
-      authUserId: user.authUserId,
-      stats: { ...user.stats, xp: updatedXp, [stat.id]: updatedStat },
-    } as UserDb;
+    (async function milestoneUpdate() {
+      const milestonePayload = {
+        xp: {
+          // TODO: use state.stats when available
+          value: stats.xp.user + stat.reward,
+        },
+        milestone: {
+          // TODO: use state.stats when available
+          type: stat.id,
+          nextMilestone: stat.nextmilestone * 2,
+          // TODO: use state.stats when available
+          previousMilestone: stat.nextmilestone,
+        },
+      };
 
-    (async function updateUser() {
-      await fetch("/api/user", {
+      await fetch(`/api/user/${userId}/milestone`, {
         method: "PUT",
-        body: JSON.stringify({ user: updatedUser }),
+        body: JSON.stringify(milestonePayload),
         headers: { "Content-Type": "application/json" },
       });
     })();
