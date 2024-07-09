@@ -2,12 +2,14 @@
 
 import { useDispatch, useSelector } from "react-redux";
 
+import { Badges } from "./components/badges";
 import { EmojiCardsModal } from "../profile/components/emojiCardsModal";
 import { LevelAndXp } from "../profile/components/levelAndXp";
 import { Milestones } from "./components/milestones";
 import { PrToClaim } from "./components/prToClaim";
 import { RootState } from "@/app/lib/store/store";
 import { UserWithRelations } from "@/app/api/interfaces/user";
+import { setBadges } from "@/app/lib/store/features/badges/slice";
 import { setStats } from "@/app/lib/store/features/stats/slice";
 import { setUser } from "@/app/lib/store/features/user/slice";
 import { useEffect } from "react";
@@ -28,6 +30,7 @@ export default function Quests() {
         (await userWithRelationsResponse.json()) as UserWithRelations;
 
       dispatch(setUser(user));
+      dispatch(setBadges(user.badges));
       dispatch(setStats(user.stats));
     })();
   }, []);
@@ -40,7 +43,9 @@ export default function Quests() {
         <Milestones />
       </div>
 
-      <div className="flex-1">{/* <Badges /> */}</div>
+      <div className="flex-1">
+        <Badges />
+      </div>
 
       {displayGetEmojisModal && <EmojiCardsModal />}
     </div>

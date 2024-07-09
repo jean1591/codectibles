@@ -2,6 +2,8 @@ import { DbError, DbTable } from "../interfaces/database";
 import { NextRequest, NextResponse } from "next/server";
 import { User, UserWithRelations } from "../interfaces/user";
 
+import { badges } from "../badges/constants/badges";
+import { computeLockedAndUnlockedBadges } from "../utils/badges";
 import { createClient } from "@/utils/supabase/server";
 
 export async function GET(
@@ -22,7 +24,8 @@ export async function GET(
   const { data: users } = await supabase
     .from(DbTable.USER)
     .select(
-      "authUserId, fetchedAt, id, level, prToClaim, token, username, stats(*)"
+      // TODO: change userBadges by badges once badges table replaced
+      "authUserId, fetchedAt, id, level, prToClaim, token, username, userBadges(*), stats(*)"
     )
     .eq("authUserId", authUser.id);
 
@@ -30,27 +33,28 @@ export async function GET(
     throw new Error(`No users found for id ${authUser.id}`);
   }
 
-  const user = users[0] as UserWithRelations;
+  // TODO: create method to abstract logic
+  // Compute user badges
+  const { data: prTypeCount } = await supabase
+    .from(DbTable.PR)
+    .select("prType, prType.count()")
+    .eq("userId", users[0].id);
+
+  const claimed = users[0].userBadges;
+  const claimedTitles: string[] = claimed.map(({ title }) => title);
+  const { locked, unlocked } = computeLockedAndUnlockedBadges(
+    claimedTitles,
+    prTypeCount ?? []
+  );
+
+  const user = {
+    ...users[0],
+    badges: {
+      claimed,
+      locked,
+      unlocked,
+    },
+  } as UserWithRelations;
 
   return NextResponse.json(user);
-}
-
-// TODO: create user badges table and delete this endpoint
-export async function PUT(request: NextRequest): Promise<NextResponse> {
-  const supabase = createClient();
-
-  const { user }: { user: User } = await request.json();
-
-  const { error: updateUserError } = await supabase
-    .from(DbTable.USER)
-    .update(user)
-    .eq("authUserId", user.authUserId);
-
-  if (updateUserError) {
-    console.error(`${DbError.UPDATE}: USER"`, {
-      error: JSON.stringify(updateUserError, null, 2),
-    });
-  }
-
-  return NextResponse.json({ success: true });
 }
