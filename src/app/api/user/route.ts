@@ -52,6 +52,7 @@ export async function GET(request: NextRequest): Promise<NextResponse<User>> {
   return NextResponse.json(user);
 }
 
+// TODO: create badges table and delete this endpoint
 export async function PUT(request: NextRequest): Promise<NextResponse> {
   const supabase = createClient();
 

@@ -99,6 +99,7 @@ const BadgeToClaim = ({ badge }: { badge: BadgeType }) => {
       userId: user.id,
     } as Activity;
 
+    // TODO: create badges table
     (async function updateUser() {
       await fetch("/api/user", {
         method: "PUT",
