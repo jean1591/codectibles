@@ -38,7 +38,7 @@ export async function GET(request: NextRequest): Promise<NextResponse<User>> {
   const { data: prTypeCount } = await supabase
     .from(DbTable.PR)
     .select("prType, prType.count()")
-    .eq("authUserId", authUser.id);
+    .eq("userId", dbUser.id);
 
   // TODO: use claimed, unlocked and locked
   const user: User = {

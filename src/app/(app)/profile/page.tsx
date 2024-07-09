@@ -1,15 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { LevelAndXp } from "./components/levelAndXp";
-import { User } from "@/app/api/interfaces/user";
 import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "@/app/lib/store/features/user/slice";
-import { redirect } from "next/navigation";
+import { useEffect, useState } from "react";
+
 import { Activities } from "./components/activities";
 import { Badges } from "./components/badges";
-import { RootState } from "@/app/lib/store/store";
 import { EmojiCardsModal } from "./components/emojiCardsModal";
+import { LevelAndXp } from "./components/levelAndXp";
+import { RootState } from "@/app/lib/store/store";
+import { User } from "@/app/api/interfaces/user";
+import { redirect } from "next/navigation";
+import { setUser } from "@/app/lib/store/features/user/slice";
 
 export default function Profile() {
   const dispatch = useDispatch();
@@ -38,6 +39,7 @@ export default function Profile() {
         return;
       }
 
+      // TODO: change state with stats from db table and not from user
       const userResponse = await fetch("/api/user");
       const user = (await userResponse.json()) as User;
 

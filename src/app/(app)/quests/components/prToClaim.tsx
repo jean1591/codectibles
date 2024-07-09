@@ -1,8 +1,9 @@
-import { Stat, User, UserDb } from "@/app/api/interfaces/user";
+import { Stat, User } from "@/app/api/interfaces/user";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef } from "react";
 
 import JSConfetti from "js-confetti";
+// TODO: put skeleton back
 import { PrToClaim as PrToClaimSkeleton } from "./skeleton/prToClaim";
 import { RootState } from "@/app/lib/store/store";
 import { classNames } from "@/utils";
@@ -35,31 +36,20 @@ export const PrToClaim = () => {
       user: user.stats.xp.user + prToClaim * REWARD_PER_PR,
     };
 
-    const updatedUser = {
-      authUserId: user.authUserId,
-      prToClaim: 0,
-      stats: { ...user.stats, xp: updatedXp },
-    } as UserDb;
+    (async function prClaimedUpdate() {
+      const prClaimedPayload = {
+        // TODO: use state.stats when available
+        updatedXpValue: user.stats.xp.user + prToClaim * REWARD_PER_PR,
+      };
 
-    (async function updateUser() {
-      await fetch("/api/user", {
+      await fetch(`/api/user/${user.id}/pr-claimed`, {
         method: "PUT",
-        body: JSON.stringify({ user: updatedUser }),
+        body: JSON.stringify(prClaimedPayload),
         headers: { "Content-Type": "application/json" },
       });
     })();
 
-    (async function updatePr() {
-      await fetch("/api/github", {
-        method: "PUT",
-        body: JSON.stringify({
-          claimed: true,
-          userId: user.id,
-        }),
-        headers: { "Content-Type": "application/json" },
-      });
-    })();
-
+    // TODO: change state with stats from db table and not from user
     const stateUser: User = {
       ...user,
       prToClaim: 0,
