@@ -24,7 +24,7 @@ export async function GET(
     .eq("authUserId", authUser.id);
 
   if (!users || users.length === 0) {
-    throw new Error(`No users found for id ${authUser.id}`);
+    throw new Error(`No users found for authUserId ${authUser.id}`);
   }
 
   return NextResponse.json({ token: users[0].token });

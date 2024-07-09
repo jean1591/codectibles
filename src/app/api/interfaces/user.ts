@@ -1,4 +1,5 @@
-import { FormatedBadges } from "./badge";
+import { Badge, FormatedBadges } from "./badge";
+
 import { Stat } from "./stats";
 
 export interface User {
@@ -24,6 +25,11 @@ export interface UserDb {
   prToClaim: number;
   token: string;
   username: string;
+}
+
+export interface UserDbWithRelations extends UserDb {
+  badges: Badge[];
+  stats: Stat[];
 }
 
 export enum Resource {

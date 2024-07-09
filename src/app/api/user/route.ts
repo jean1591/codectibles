@@ -1,10 +1,10 @@
-import { DbError, DbTable } from "../interfaces/database";
 import { NextRequest, NextResponse } from "next/server";
-import { User, UserWithRelations } from "../interfaces/user";
 
-import { badges } from "../badges/constants/badges";
+import { DbTable } from "../interfaces/database";
+import { UserWithRelations } from "../interfaces/user";
 import { computeLockedAndUnlockedBadges } from "../utils/badges";
 import { createClient } from "@/utils/supabase/server";
+import { getUserByAuthUserId } from "../utils/user";
 
 export async function GET(
   request: NextRequest
@@ -21,26 +21,15 @@ export async function GET(
 
   const { user: authUser } = session;
 
-  const { data: users } = await supabase
-    .from(DbTable.USER)
-    .select(
-      // TODO: change userBadges by badges once badges table replaced
-      "authUserId, fetchedAt, id, level, prToClaim, token, username, userBadges(*), stats(*)"
-    )
-    .eq("authUserId", authUser.id);
+  const dbUser = await getUserByAuthUserId(supabase, authUser.id);
 
-  if (!users || users.length === 0) {
-    throw new Error(`No users found for id ${authUser.id}`);
-  }
-
-  // TODO: create method to abstract logic
   // Compute user badges
   const { data: prTypeCount } = await supabase
     .from(DbTable.PR)
     .select("prType, prType.count()")
-    .eq("userId", users[0].id);
+    .eq("userId", dbUser.id);
 
-  const claimed = users[0].userBadges;
+  const claimed = dbUser.badges;
   const claimedTitles: string[] = claimed.map(({ title }) => title);
   const { locked, unlocked } = computeLockedAndUnlockedBadges(
     claimedTitles,
@@ -48,7 +37,7 @@ export async function GET(
   );
 
   const user = {
-    ...users[0],
+    ...dbUser,
     badges: {
       claimed,
       locked,

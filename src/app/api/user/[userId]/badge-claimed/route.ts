@@ -22,7 +22,7 @@ export async function PUT(
 
   /* Badges */
   const { error: updateBadgesError } = await supabase
-    .from(DbTable.USER_BADGE)
+    .from(DbTable.BADGE)
     .insert({
       ...omit(badge, "id"),
       unlockedAt: new Date().toISOString(),

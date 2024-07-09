@@ -9,11 +9,11 @@ import {
 } from "../interfaces/github";
 import { NextRequest, NextResponse } from "next/server";
 import { Resource, UserDb } from "../interfaces/user";
-import { getPrType, getUserDetails } from "../utils/github";
 
-import { Stat } from "../interfaces/stats";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/utils/supabase/server";
+import { getPrType } from "../utils/github";
+import { getUserByAuthUserId } from "../utils/user";
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   /* Fetch user data from DB */
@@ -32,10 +32,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   const {
     fetchedAt,
     id: userId,
-    stats,
     token,
     username,
-  } = await getUserDetails(supabase, authUser.id);
+  } = await getUserByAuthUserId(supabase, authUser.id, true);
 
   /* PR */
   const githubPr = await getLatestGithubMergedPr(fetchedAt, token, username);
@@ -48,7 +47,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   await insertNewEvents(supabase, eventsToSave);
 
   /* USER */
-  await updateUser(supabase, userId, stats);
+  await updateUser(supabase, userId);
 
   return NextResponse.json({ success: true });
 }
