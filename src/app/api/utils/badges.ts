@@ -1,24 +1,54 @@
-import { ConventionalCommitType, conventionalCommitType } from "../interfaces/github";
-import { Badge } from "../interfaces/user"
+import {
+  ConventionalCommitType,
+  conventionalCommitType,
+} from "../interfaces/github";
 
-interface PrTypeCount { prType: string; count: number }
+import { Badge } from "../interfaces/badge";
+import { badges } from "../badges/constants/badges";
 
-export const computeUserBadges = (userBadges: Badge[], badges: Badge[], prTypeCount: PrTypeCount[]): Badge[] => {
-    const claimedBadges = userBadges.map(userBadge => userBadge.id)
-    const lockedBadges = badges.filter(badge => !claimedBadges.includes(badge.id))
-
-    return [...getConventionalCommitBadgesToClaim(lockedBadges, prTypeCount)]
+interface PrTypeCount {
+  prType: string;
+  count: number;
 }
 
-const getConventionalCommitBadgesToClaim = (lockedBadges: Badge[], prTypeCount: PrTypeCount[]): Badge[] => {
-    const conventionalCommitBadges = lockedBadges.filter(badge => conventionalCommitType.includes(badge.type))
-
-    // Reformat prTypeCount to be search O(1)
-    const formatedPrTypeCount = prTypeCount.reduce((acc, current) => {
-        return { ...acc, [current.prType]: current.count }
-    }, {} as Record<ConventionalCommitType, number>)
-
-    return conventionalCommitBadges
-        .map(badge => ({ ...badge, unlocked: formatedPrTypeCount[badge.type] >= badge.threshold }))
-        .sort((a, b) => a.threshold - b.threshold);
+interface LockedAndUnlockedBadges {
+  locked: Badge[];
+  unlocked: Badge[];
 }
+
+export const computeLockedAndUnlockedBadges = (
+  claimedTitles: string[],
+  prTypeCount: PrTypeCount[]
+): LockedAndUnlockedBadges => {
+  const lockedBadges = badges.filter(
+    ({ title }) => !claimedTitles.includes(title)
+  );
+
+  return getConventionalCommitBadgesToClaim(lockedBadges, prTypeCount);
+};
+
+const getConventionalCommitBadgesToClaim = (
+  lockedBadges: Badge[],
+  prTypeCount: PrTypeCount[]
+): LockedAndUnlockedBadges => {
+  const conventionalCommitBadges = lockedBadges.filter((badge) =>
+    conventionalCommitType.includes(badge.type)
+  );
+
+  // Reformat prTypeCount to be search O(1)
+  const formatedPrTypeCount = prTypeCount.reduce((acc, current) => {
+    return { ...acc, [current.prType]: current.count };
+  }, {} as Record<ConventionalCommitType, number>);
+
+  return conventionalCommitBadges.reduce(
+    (acc, current) => {
+      if (formatedPrTypeCount[current.type] >= current.threshold) {
+        acc.unlocked.push(current);
+      } else {
+        acc.locked.push(current);
+      }
+      return acc;
+    },
+    { locked: [], unlocked: [] } as LockedAndUnlockedBadges
+  );
+};

@@ -1,15 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { LevelAndXp } from "./components/levelAndXp";
-import { User } from "@/app/api/interfaces/user";
 import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "@/app/lib/store/features/user/slice";
-import { redirect } from "next/navigation";
+import { useEffect, useState } from "react";
+
 import { Activities } from "./components/activities";
 import { Badges } from "./components/badges";
-import { RootState } from "@/app/lib/store/store";
 import { EmojiCardsModal } from "./components/emojiCardsModal";
+import { LevelAndXp } from "./components/levelAndXp";
+import { RootState } from "@/app/lib/store/store";
+import { UserWithRelations } from "@/app/api/interfaces/user";
+import { redirect } from "next/navigation";
+import { setBadges } from "@/app/lib/store/features/badges/slice";
+import { setStats } from "@/app/lib/store/features/stats/slice";
+import { setUser } from "@/app/lib/store/features/user/slice";
 
 export default function Profile() {
   const dispatch = useDispatch();
@@ -38,10 +41,13 @@ export default function Profile() {
         return;
       }
 
-      const userResponse = await fetch("/api/user");
-      const user = (await userResponse.json()) as User;
+      const userWithRelationsResponse = await fetch("/api/user");
+      const user =
+        (await userWithRelationsResponse.json()) as UserWithRelations;
 
       dispatch(setUser(user));
+      dispatch(setBadges(user.badges));
+      dispatch(setStats(user.stats));
     })();
   }, []);
 

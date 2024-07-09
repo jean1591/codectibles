@@ -1,54 +1,55 @@
 import { Activity, ActivityType } from "@/app/api/interfaces/activity";
-import {
-  Badge as BadgeType,
-  RewardType,
-  Stat,
-  User,
-  UserDb,
-} from "@/app/api/interfaces/user";
-import { addActivity, setUser } from "@/app/lib/store/features/user/slice";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef } from "react";
 
+import { Badge } from "@/app/api/interfaces/badge";
 import { Badges as BadgesSkeleton } from "./skeleton/badges";
 import JSConfetti from "js-confetti";
+import { Resource } from "@/app/api/interfaces/user";
 import { RootState } from "@/app/lib/store/store";
+import { Stat } from "@/app/api/interfaces/stats";
+import { addActivity } from "@/app/lib/store/features/user/slice";
+import { claimBadge } from "@/app/lib/store/features/badges/slice";
 import { classNames } from "@/utils";
 import { gradientBg } from "../../ui";
+import { updateStat } from "@/app/lib/store/features/stats/slice";
 
 // TODO: add progress (with % or progres bar)
 export const Badges = () => {
-  const { user } = useSelector((state: RootState) => state.user);
+  const { locked, unlocked } = useSelector((state: RootState) => state.badges);
 
-  if (!user) {
+  if (!locked || !unlocked) {
     return <BadgesSkeleton />;
   }
-
-  const {
-    badges: { locked },
-  } = user;
 
   return (
     <div className="bg-slate-100 rounded-lg p-4 lg:p-8 shadow-lg">
       <p className="text-2xl font-medium">Badges</p>
       <div className="mt-8">
-        {locked.map((badge) => (
-          <div key={badge.id}>
-            {badge.unlocked ? (
+        {unlocked &&
+          unlocked.length > 0 &&
+          unlocked.map((badge) => (
+            <div key={badge.id}>
               <BadgeToClaim badge={badge} />
-            ) : (
-              <Badge badge={badge} />
-            )}
-          </div>
-        ))}
+            </div>
+          ))}
+
+        <div className="mt-2">
+          {locked.map((badge) => (
+            <div key={badge.id}>
+              <BadgeComponent badge={badge} />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
 };
 
-const BadgeToClaim = ({ badge }: { badge: BadgeType }) => {
+const BadgeToClaim = ({ badge }: { badge: Badge }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.user);
+  const { stats } = useSelector((state: RootState) => state.stats);
 
   const jsConfetti = useRef<JSConfetti | null>(null);
 
@@ -56,41 +57,30 @@ const BadgeToClaim = ({ badge }: { badge: BadgeType }) => {
     jsConfetti.current = new JSConfetti();
   }, []);
 
-  if (!user) {
+  if (!stats || !user) {
     return <></>;
   }
 
   const handleClaimBadge = () => {
     jsConfetti.current && jsConfetti.current.addConfetti();
 
-    const updatedUser = {
-      authUserId: user.authUserId,
-      badges: [
-        ...user.badges.unlocked,
-        { ...badge, unlockedAt: new Date(), unlocked: true },
-      ],
-    } as UserDb;
+    const xpStats = stats.find((stat) => stat.type === Resource.XP);
+    if (!xpStats) {
+      throw new Error("User have no XP stats");
+    }
 
-    const stateUser: User = {
-      ...user,
-      badges: {
-        unlocked: [
-          ...user.badges.unlocked,
-          { ...badge, unlockedAt: new Date().toISOString(), unlocked: true },
-        ],
-        locked: user.badges.locked.filter(({ id }) => id !== badge.id),
-      },
-    };
-
-    if (badge.rewardType === RewardType.XP) {
-      const updatedXp: Stat = {
-        ...user.stats.xp,
-        user: user.stats.xp.user + badge.reward,
+    (async function badgeClaimedUpdate() {
+      const badgeClaimedPayload = {
+        badge,
+        updatedXpValue: xpStats.value + badge.reward,
       };
 
-      updatedUser.stats = { ...user.stats, xp: updatedXp };
-      stateUser.stats = { ...user.stats, xp: updatedXp };
-    }
+      await fetch(`/api/user/${user.id}/badge-claimed`, {
+        method: "PUT",
+        body: JSON.stringify(badgeClaimedPayload),
+        headers: { "Content-Type": "application/json" },
+      });
+    })();
 
     const activity = {
       createdAt: new Date().toISOString(),
@@ -99,27 +89,20 @@ const BadgeToClaim = ({ badge }: { badge: BadgeType }) => {
       userId: user.id,
     } as Activity;
 
-    (async function updateUser() {
-      await fetch("/api/user", {
-        method: "PUT",
-        body: JSON.stringify({ user: updatedUser }),
-        headers: { "Content-Type": "application/json" },
-      });
+    const updatedXp: Stat = {
+      ...xpStats,
+      value: xpStats.value + badge.reward,
+    };
 
-      await fetch("/api/activity", {
-        method: "POST",
-        body: JSON.stringify({ activity }),
-        headers: { "Content-Type": "application/json" },
-      });
-    })();
-
+    // TODO: move .slice(0, 10) to slice
     dispatch(
       addActivity({ ...activity, createdAt: activity.createdAt.slice(0, 10) })
     );
-    dispatch(setUser(stateUser));
+    dispatch(updateStat(updatedXp));
+    dispatch(claimBadge(badge));
   };
 
-  const { description, reward, rewardType, title } = badge;
+  const { description, reward, title } = badge;
 
   return (
     <div
@@ -134,15 +117,15 @@ const BadgeToClaim = ({ badge }: { badge: BadgeType }) => {
           <p className="text-xs capitalize">{description}</p>
         </div>
         <div>
-          <p className="text-lg text-nowrap">{`+ ${reward} ${rewardType.toUpperCase()}`}</p>
+          <p className="text-lg text-nowrap">{`+ ${reward} XP`}</p>
         </div>
       </button>
     </div>
   );
 };
 
-const Badge = ({ badge }: { badge: BadgeType }) => {
-  const { description, reward, rewardType, title } = badge;
+const BadgeComponent = ({ badge }: { badge: Badge }) => {
+  const { description, reward, title } = badge;
 
   return (
     <div
@@ -154,7 +137,7 @@ const Badge = ({ badge }: { badge: BadgeType }) => {
           <p className="text-xs capitalize text-slate-600">{description}</p>
         </div>
         <div>
-          <p className="text-lg text-nowrap">{`+ ${reward} ${rewardType.toUpperCase()}`}</p>
+          <p className="text-lg text-nowrap">{`+ ${reward} XP`}</p>
         </div>
       </div>
     </div>

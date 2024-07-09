@@ -1,11 +1,14 @@
-import { DbError, DbTable } from "../interfaces/database";
 import { NextRequest, NextResponse } from "next/server";
-import { User, UserDb } from "../interfaces/user";
 
-import { computeUserBadges } from "../utils/badges";
+import { DbTable } from "../interfaces/database";
+import { UserWithRelations } from "../interfaces/user";
+import { computeLockedAndUnlockedBadges } from "../utils/badges";
 import { createClient } from "@/utils/supabase/server";
+import { getUserByAuthUserId } from "../utils/user";
 
-export async function GET(request: NextRequest): Promise<NextResponse<User>> {
+export async function GET(
+  request: NextRequest
+): Promise<NextResponse<UserWithRelations>> {
   const supabase = createClient();
 
   const {
@@ -18,55 +21,29 @@ export async function GET(request: NextRequest): Promise<NextResponse<User>> {
 
   const { user: authUser } = session;
 
-  const { data: users } = await supabase
-    .from(DbTable.USER)
-    .select("authUserId, badges, id, level, prToClaim, stats, token, username")
-    .eq("authUserId", authUser.id);
+  const dbUser = await getUserByAuthUserId(supabase, authUser.id);
 
-  if (!users || users.length === 0) {
-    throw new Error(`No users found for id ${authUser.id}`);
-  }
-
-  const dbUser = users[0] as UserDb;
-
-  const { data: badges } = await supabase.from(DbTable.BADGE).select("*");
-
-  if (!badges || badges.length === 0) {
-    throw new Error("No badges found");
-  }
-
+  // Compute user badges
   const { data: prTypeCount } = await supabase
     .from(DbTable.PR)
     .select("prType, prType.count()")
-    .eq("authUserId", authUser.id);
+    .eq("userId", dbUser.id);
 
-  // TODO: use claimed, unlocked and locked
-  const user: User = {
+  const claimed = dbUser.badges;
+  const claimedTitles: string[] = claimed.map(({ title }) => title);
+  const { locked, unlocked } = computeLockedAndUnlockedBadges(
+    claimedTitles,
+    prTypeCount ?? []
+  );
+
+  const user = {
     ...dbUser,
     badges: {
-      unlocked: dbUser.badges,
-      locked: computeUserBadges(dbUser.badges, badges, prTypeCount ?? []),
+      claimed,
+      locked,
+      unlocked,
     },
-  };
+  } as UserWithRelations;
 
   return NextResponse.json(user);
-}
-
-export async function PUT(request: NextRequest): Promise<NextResponse> {
-  const supabase = createClient();
-
-  const { user }: { user: User } = await request.json();
-
-  const { error: updateUserError } = await supabase
-    .from(DbTable.USER)
-    .update(user)
-    .eq("authUserId", user.authUserId);
-
-  if (updateUserError) {
-    console.error(`${DbError.UPDATE}: USER"`, {
-      error: JSON.stringify(updateUserError, null, 2),
-    });
-  }
-
-  return NextResponse.json({ success: true });
 }

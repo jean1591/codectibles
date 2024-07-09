@@ -8,11 +8,12 @@ import {
   eventTypes,
 } from "../interfaces/github";
 import { NextRequest, NextResponse } from "next/server";
-import { Resource, Stats, UserDb } from "../interfaces/user";
-import { getPrType, getUserDetails } from "../utils/github";
+import { Resource, UserDb } from "../interfaces/user";
 
 import { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/utils/supabase/server";
+import { getPrType } from "../utils/github";
+import { getUserByAuthUserId } from "../utils/user";
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   /* Fetch user data from DB */
@@ -26,25 +27,27 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     throw new Error("User is not connected");
   }
 
-  const { user } = session;
+  const { user: authUser } = session;
 
-  const { fetchedAt, stats, token, username } = await getUserDetails(
-    supabase,
-    user.id
-  );
+  const {
+    fetchedAt,
+    id: userId,
+    token,
+    username,
+  } = await getUserByAuthUserId(supabase, authUser.id, true);
 
   /* PR */
   const githubPr = await getLatestGithubMergedPr(fetchedAt, token, username);
-  const prToSave = await getPrNotSavedInDb(supabase, user.id, githubPr);
-  await insertNewPr(supabase, user.id, prToSave);
+  const prToSave = await getPrNotSavedInDb(supabase, userId, githubPr);
+  await insertNewPr(supabase, userId, prToSave);
 
   /* EVENTS */
   const events = await getLatestEvents(token, username);
-  const eventsToSave = await getEventsNotSavedInDb(supabase, user.id, events);
-  await insertNewEvents(supabase, user.id, eventsToSave);
+  const eventsToSave = await getEventsNotSavedInDb(supabase, userId, events);
+  await insertNewEvents(supabase, eventsToSave);
 
   /* USER */
-  await updateUser(supabase, user.id, stats);
+  await updateUser(supabase, userId);
 
   return NextResponse.json({ success: true });
 }
@@ -52,13 +55,13 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 export async function PUT(request: NextRequest): Promise<NextResponse> {
   const supabase = createClient();
 
-  const { authUserId, claimed }: { authUserId: string; claimed: boolean } =
+  const { userId, claimed }: { userId: string; claimed: boolean } =
     await request.json();
 
   const { error: updateUserError } = await supabase
     .from(DbTable.PR)
     .update({ claimed })
-    .eq("authUserId", authUserId);
+    .eq("userId", userId);
 
   if (updateUserError) {
     console.error(`${DbError.UPDATE}: PR"`, {
@@ -99,7 +102,7 @@ const getPrNotSavedInDb = async (
   const { data: dbPr } = await supabase
     .from(DbTable.PR)
     .select("prId")
-    .eq("authUserId", userId)
+    .eq("userId", userId)
     .in(
       "prId",
       githubPr.map((pr) => pr.id)
@@ -117,12 +120,14 @@ const insertNewPr = async (
 ) => {
   const { error } = await supabase.from(DbTable.PR).insert(
     prToSave.map((pr) => ({
-      authUserId: userId,
+      // Delete authUserId
+      authUserId: "5864cfb0-88bb-42d1-9b0e-d510d553c498",
       claimed: false,
       prType: getPrType(pr.title),
       mergedAt: pr.pull_request.merged_at,
       prId: pr.id,
       prNumber: pr.number,
+      userId,
     }))
   );
 
@@ -131,16 +136,12 @@ const insertNewPr = async (
   }
 };
 
-const updateUser = async (
-  supabase: SupabaseClient,
-  userId: string,
-  stats: Stats
-) => {
-  /* pr */
+const updateUser = async (supabase: SupabaseClient, userId: string) => {
+  /* PR */
   const { data: claimedCount } = await supabase
     .from(DbTable.PR)
     .select("claimed, claimed.count()")
-    .eq("authUserId", userId);
+    .eq("userId", userId);
 
   if (!claimedCount) {
     throw new Error("No PR found");
@@ -161,7 +162,7 @@ const updateUser = async (
   const { data: eventTypeCount } = await supabase
     .from(DbTable.EVENT)
     .select("type, type.count()")
-    .eq("authUserId", userId);
+    .eq("userId", userId);
 
   if (!eventTypeCount) {
     throw new Error("No events found");
@@ -176,30 +177,51 @@ const updateUser = async (
   const updatedUser = {
     fetchedAt: new Date().toISOString(),
     prToClaim,
-    stats: {
-      ...stats,
-      [Resource.PR]: {
-        ...stats.pr,
-        user: prToClaim + prClaimed ?? 0,
-      },
-      [Resource.APPROVES]: {
-        ...stats.approves,
-        user: formatedEventTypeCount.approves ?? 0,
-      },
-      [Resource.COMMENTS]: {
-        ...stats.comments,
-        user: formatedEventTypeCount.comments ?? 0,
-      },
-    },
   } as UserDb;
 
   const { error: updateUserError } = await supabase
     .from(DbTable.USER)
     .update(updatedUser)
-    .eq("authUserId", userId);
+    .eq("id", userId);
 
   if (updateUserError) {
     console.error(`${DbError.UPDATE}: USER"`, {
+      error: JSON.stringify(updateUserError, null, 2),
+    });
+  }
+
+  /* Stats */
+  const { data: statsDb } = await supabase
+    .from(DbTable.STAT)
+    .select("*")
+    .eq("userId", userId);
+
+  const updatedStats = [
+    {
+      ...statsDb?.find((stat) => stat.type === Resource.PR),
+      value: prToClaim + prClaimed ?? 0,
+    },
+    {
+      ...statsDb?.find((stat) => stat.type === Resource.APPROVES),
+      value: formatedEventTypeCount.approves ?? 0,
+    },
+    {
+      ...statsDb?.find((stat) => stat.type === Resource.COMMENTS),
+      value: formatedEventTypeCount.comments ?? 0,
+    },
+  ];
+
+  const { error: updateStatsError } = await supabase
+    .from(DbTable.STAT)
+    .upsert(updatedStats, {
+      onConflict: "id",
+      ignoreDuplicates: false,
+      defaultToNull: false,
+    })
+    .eq("userId", userId);
+
+  if (updateStatsError) {
+    console.error(`${DbError.UPDATE}: STAT"`, {
       error: JSON.stringify(updateUserError, null, 2),
     });
   }
@@ -231,7 +253,7 @@ const getEventsNotSavedInDb = async (
   const { data: dbEvents } = await supabase
     .from(DbTable.EVENT)
     .select("eventId")
-    .eq("authUserId", userId)
+    .eq("userId", userId)
     .in(
       "eventId",
       events.map(({ id }) => id)
@@ -249,17 +271,18 @@ const getEventsNotSavedInDb = async (
     .filter((event) => isEventPrApproved(event) || isEventPrCommented(event))
     .filter((event) => !dbEventIds.includes(event.id))
     .map((event) => ({
-      authUserId: userId,
+      // Delete authUserId
+      authUserId: "5864cfb0-88bb-42d1-9b0e-d510d553c498",
       createdAt: event.created_at,
       eventId: event.id,
       prId: event.payload.pull_request.id,
       type: isEventPrCommented(event) ? "comments" : "approves",
+      userId,
     }));
 };
 
 const insertNewEvents = async (
   supabase: SupabaseClient,
-  userId: string,
   eventsToSave: DbEvent[]
 ) => {
   const { error } = await supabase.from(DbTable.EVENT).insert(eventsToSave);

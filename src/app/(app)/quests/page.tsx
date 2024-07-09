@@ -1,31 +1,37 @@
 "use client";
 
-import { useEffect } from "react";
-import { User } from "@/app/api/interfaces/user";
 import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "@/app/lib/store/features/user/slice";
-import { LevelAndXp } from "../profile/components/levelAndXp";
-import { PrToClaim } from "./components/prToClaim";
-import { Milestones } from "./components/milestones";
+
 import { Badges } from "./components/badges";
 import { EmojiCardsModal } from "../profile/components/emojiCardsModal";
+import { LevelAndXp } from "../profile/components/levelAndXp";
+import { Milestones } from "./components/milestones";
+import { PrToClaim } from "./components/prToClaim";
 import { RootState } from "@/app/lib/store/store";
+import { UserWithRelations } from "@/app/api/interfaces/user";
+import { setBadges } from "@/app/lib/store/features/badges/slice";
+import { setStats } from "@/app/lib/store/features/stats/slice";
+import { setUser } from "@/app/lib/store/features/user/slice";
+import { useEffect } from "react";
 
 export default function Quests() {
   const dispatch = useDispatch();
   const { displayGetEmojisModal } = useSelector(
     (state: RootState) => state.interactions
   );
-  
+
   useEffect(() => {
     (async function getUser() {
       const prResponse = await fetch("/api/github");
       await prResponse.json();
 
-      const userResponse = await fetch("/api/user");
-      const user = (await userResponse.json()) as User;
+      const userWithRelationsResponse = await fetch("/api/user");
+      const user =
+        (await userWithRelationsResponse.json()) as UserWithRelations;
 
       dispatch(setUser(user));
+      dispatch(setBadges(user.badges));
+      dispatch(setStats(user.stats));
     })();
   }, []);
 

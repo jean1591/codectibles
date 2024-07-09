@@ -1,6 +1,6 @@
 import { Activity, ActivityType } from "@/app/api/interfaces/activity";
 import { ProgressBar, gradientBg, gradientText } from "../../ui";
-import { Stat, User, UserDb } from "@/app/api/interfaces/user";
+import { Resource, User } from "@/app/api/interfaces/user";
 import {
   addActivity,
   setCollectiblesToClaim,
@@ -12,27 +12,30 @@ import { useEffect, useRef } from "react";
 import JSConfetti from "js-confetti";
 import { LevelAndXp as LevelAndXpSkeleton } from "./skeleton/levelAndXp";
 import { RootState } from "@/app/lib/store/store";
+import { Stat } from "@/app/api/interfaces/stats";
 import { classNames } from "@/utils";
+import { computeProgress } from "@/utils/computeProgress";
 import { getRandomEmojis } from "../utils/getRandomEmojis";
 import { setDisplayGetEmojisModal } from "@/app/lib/store/features/interactions/slice";
+import { updateStat } from "@/app/lib/store/features/stats/slice";
 
 export const LevelAndXp = () => {
   const { user } = useSelector((state: RootState) => state.user);
+  const { stats } = useSelector((state: RootState) => state.stats);
 
-  if (!user) {
+  if (!stats || !user) {
     return <LevelAndXpSkeleton />;
   }
 
-  const {
-    level,
-    stats: { xp },
-  } = user;
+  const { level } = user;
 
-  const progress = Math.ceil(
-    ((xp.user - xp.previousmilestone) /
-      (xp.nextmilestone - xp.previousmilestone)) *
-      100
-  );
+  const xpStats = stats.find((stat) => stat.type === Resource.XP);
+  if (!xpStats) {
+    throw new Error("User have no XP stats");
+  }
+  const { nextMilestone, previousMilestone, value } = xpStats;
+
+  const progress = computeProgress(nextMilestone, previousMilestone, value);
 
   return (
     <div className="bg-slate-100 rounded-lg p-4 lg:p-8 shadow-lg">
@@ -46,13 +49,13 @@ export const LevelAndXp = () => {
         >
           {`Level ${level}`}
         </p>
-        {progress >= 100 ? <NextLevelButton /> : <Xp value={xp.user} />}
+        {progress >= 100 ? <NextLevelButton /> : <Xp value={value} />}
       </div>
 
       <div className="mt-4">
         <ProgressBar
-          lowerBound={`${xp.previousmilestone} XP`}
-          upperBound={`${xp.nextmilestone} XP`}
+          lowerBound={`${previousMilestone} XP`}
+          upperBound={`${nextMilestone} XP`}
           progress={progress}
         />
       </div>
@@ -63,6 +66,7 @@ export const LevelAndXp = () => {
 const NextLevelButton = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.user);
+  const { stats } = useSelector((state: RootState) => state.stats);
 
   const jsConfetti = useRef<JSConfetti | null>(null);
 
@@ -70,32 +74,38 @@ const NextLevelButton = () => {
     jsConfetti.current = new JSConfetti();
   }, []);
 
-  if (!user) {
+  if (!stats || !user) {
     return <></>;
   }
 
   const handleClaimLevel = () => {
     jsConfetti.current && jsConfetti.current.addConfetti();
 
-    const {
-      id: userId,
-      level,
-      stats: { xp: xpStat },
-    } = user;
+    const { id: userId, level } = user;
+
+    const xpStats = stats.find((stat) => stat.type === Resource.XP);
+    if (!xpStats) {
+      throw new Error("User have no XP stats");
+    }
+    const { nextMilestone } = xpStats;
 
     const updatedLevel = level + 1;
 
-    const updatedXp: Stat = {
-      ...xpStat,
-      nextmilestone: updatedLevel ** 2 * 10,
-      previousmilestone: xpStat.nextmilestone,
-    };
+    (async function levelUpUpdate() {
+      const levelUpPayload = {
+        level: updatedLevel,
+        xp: {
+          nextMilestone: updatedLevel ** 2 * 10,
+          previousMilestone: nextMilestone,
+        },
+      };
 
-    const updatedUser = {
-      authUserId: user.authUserId,
-      level: updatedLevel,
-      stats: { ...user.stats, xp: updatedXp },
-    } as UserDb;
+      await fetch(`/api/user/${userId}/level-up`, {
+        method: "PUT",
+        body: JSON.stringify(levelUpPayload),
+        headers: { "Content-Type": "application/json" },
+      });
+    })();
 
     const activity = {
       createdAt: new Date().toISOString(),
@@ -104,30 +114,22 @@ const NextLevelButton = () => {
       userId,
     } as Activity;
 
-    (async function updateUser() {
-      await fetch("/api/user", {
-        method: "PUT",
-        body: JSON.stringify({ user: updatedUser }),
-        headers: { "Content-Type": "application/json" },
-      });
-
-      await fetch("/api/activity", {
-        method: "POST",
-        body: JSON.stringify({ activity }),
-        headers: { "Content-Type": "application/json" },
-      });
-    })();
-
     const stateUser: User = {
       ...user,
       level: updatedLevel,
-      stats: { ...user.stats, xp: updatedXp },
+    };
+
+    const updatedXp: Stat = {
+      ...xpStats,
+      nextMilestone: updatedLevel ** 2 * 10,
+      previousMilestone: nextMilestone,
     };
 
     dispatch(
       addActivity({ ...activity, createdAt: activity.createdAt.slice(0, 10) })
     );
     dispatch(setUser(stateUser));
+    dispatch(updateStat(updatedXp));
 
     dispatch(setDisplayGetEmojisModal(true));
     dispatch(setCollectiblesToClaim(getRandomEmojis()));
