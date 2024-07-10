@@ -12,10 +12,10 @@ export const Hero = () => {
     <div className="md:flex items-center justify-between gap-x-4">
       <div className="flex-1">
         <div className="text-5xl font-extrabold text-center md:text-left text-slate-700">
-          <p>Gamify your</p>
-          <p className={classNames(gradientText, gradientBg, "text-5xl pt-2")}>
+          <h1>Gamify your</h1>
+          <h2 className={classNames(gradientText, gradientBg, "text-5xl pt-2")}>
             Github experience !
-          </p>
+          </h2>
         </div>
         <p className="mt-4 text-center md:text-left text-lg">
           Earn rewards for your contributions, collect unique animals, and level
