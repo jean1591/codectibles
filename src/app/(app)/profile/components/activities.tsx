@@ -44,12 +44,14 @@ export const Activities = () => {
 
   useEffect(() => {
     (async function getActivities() {
-      const userResponse = await fetch("/api/user");
+      const userResponse = await fetch("/api/users");
       const user = (await userResponse.json()) as User;
 
       dispatch(setUser(user));
 
-      const activitiesResponse = await fetch(`/api/activity/user/${user.id}`);
+      const activitiesResponse = await fetch(
+        `/api/users/${user.id}/activities`
+      );
       const activities = (await activitiesResponse.json()) as TypeActivity[];
 
       dispatch(setActivities(activities));

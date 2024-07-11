@@ -21,13 +21,13 @@ export default function Collection() {
 
   useEffect(() => {
     (async function getCollectibles() {
-      const userResponse = await fetch("/api/user");
+      const userResponse = await fetch("/api/users");
       const user = (await userResponse.json()) as User;
 
       dispatch(setUser(user));
 
       const collectiblesResponse = await fetch(
-        `/api/collectible/user/${user.id}`
+        `/api/users/${user.id}/collectibles`
       );
       const collectibles = (await collectiblesResponse.json()) as Collectible[];
 

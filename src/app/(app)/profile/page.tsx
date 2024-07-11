@@ -24,7 +24,7 @@ export default function Profile() {
   useEffect(() => {
     (async function getUser() {
       try {
-        const tokenResponse = await fetch("/api/user/token");
+        const tokenResponse = await fetch("/api/users/token");
         const { token } = (await tokenResponse.json()) as {
           token: string | null;
         };
@@ -41,7 +41,7 @@ export default function Profile() {
         return;
       }
 
-      const userWithRelationsResponse = await fetch("/api/user");
+      const userWithRelationsResponse = await fetch("/api/users");
       const user =
         (await userWithRelationsResponse.json()) as UserWithRelations;
 

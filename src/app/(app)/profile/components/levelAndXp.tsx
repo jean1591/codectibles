@@ -100,7 +100,7 @@ const NextLevelButton = () => {
         },
       };
 
-      await fetch(`/api/user/${userId}/level-up`, {
+      await fetch(`/api/users/${userId}/level-up`, {
         method: "PUT",
         body: JSON.stringify(levelUpPayload),
         headers: { "Content-Type": "application/json" },
