@@ -42,7 +42,7 @@ export const ProgressBarWithTitle = ({ stat }: { stat: Stat }) => {
         },
       };
 
-      await fetch(`/api/user/${userId}/milestone`, {
+      await fetch(`/api/users/${userId}/milestone`, {
         method: "PUT",
         body: JSON.stringify(milestonePayload),
         headers: { "Content-Type": "application/json" },

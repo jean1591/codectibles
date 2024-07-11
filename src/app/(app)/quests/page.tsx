@@ -25,7 +25,7 @@ export default function Quests() {
       const prResponse = await fetch("/api/github");
       await prResponse.json();
 
-      const userWithRelationsResponse = await fetch("/api/user");
+      const userWithRelationsResponse = await fetch("/api/users");
       const user =
         (await userWithRelationsResponse.json()) as UserWithRelations;
 

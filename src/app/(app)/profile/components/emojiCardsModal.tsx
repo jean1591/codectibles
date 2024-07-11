@@ -34,7 +34,7 @@ export const EmojiCardsModal = () => {
 
   const onClaimCollectibles = () => {
     (async function updateCollectibles() {
-      await fetch(`/api/user/${user.id}/collectibles`, {
+      await fetch(`/api/users/${user.id}/collectibles`, {
         method: "POST",
         body: JSON.stringify({ collectibles: collectiblesToClaim }),
         headers: { "Content-Type": "application/json" },

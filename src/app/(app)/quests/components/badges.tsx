@@ -75,7 +75,7 @@ const BadgeToClaim = ({ badge }: { badge: Badge }) => {
         updatedXpValue: xpStats.value + badge.reward,
       };
 
-      await fetch(`/api/user/${user.id}/badge-claimed`, {
+      await fetch(`/api/users/${user.id}/badge-claimed`, {
         method: "PUT",
         body: JSON.stringify(badgeClaimedPayload),
         headers: { "Content-Type": "application/json" },

@@ -49,7 +49,7 @@ export const PrToClaim = () => {
         updatedXpValue: xpStats.value + prToClaim * REWARD_PER_PR,
       };
 
-      await fetch(`/api/user/${user.id}/pr-claimed`, {
+      await fetch(`/api/users/${user.id}/pr-claimed`, {
         method: "PUT",
         body: JSON.stringify(prClaimedPayload),
         headers: { "Content-Type": "application/json" },
