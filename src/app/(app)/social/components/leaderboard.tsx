@@ -1,39 +1,20 @@
 import { gradientBg, gradientText } from "../../ui";
 
 import { Rank } from "@/app/api/interfaces/leaderboard";
+import { RootState } from "@/app/lib/store/store";
 import { classNames } from "@/utils";
+import { useSelector } from "react-redux";
 
 export const LeaderBoard = () => {
-  const user = { username: "jean1591" };
-  const { username } = user;
+  const { user } = useSelector((state: RootState) => state.user);
+  const { leaderboard } = useSelector((state: RootState) => state.social);
 
-  const leaderboard: Rank[] = [
-    {
-      rank: "🥇",
-      username: "notjean1591",
-      xp: 1234,
-    },
-    {
-      rank: "🥈",
-      username: "notjean1591",
-      xp: 1234,
-    },
-    {
-      rank: "🥉",
-      username: "notjean1591",
-      xp: 1234,
-    },
-    {
-      rank: 4,
-      username: "notjean1591",
-      xp: 1234,
-    },
-    {
-      rank: 234,
-      username: "jean1591",
-      xp: 34,
-    },
-  ];
+  // TODO: create skeleton
+  if (!leaderboard || !user) {
+    return <>Loading...</>;
+  }
+
+  const { username } = user;
 
   return (
     <div className="bg-slate-100 rounded-lg p-4 lg:p-8 shadow-lg">
