@@ -6,7 +6,12 @@ import { Resource } from "@/app/api/interfaces/user";
 import { createClient } from "@/utils/supabase/server";
 
 interface DbLeaderboard {
-  data: { value: number; users: { username: string } }[];
+  value: number;
+  users: { id: string; username: string };
+}
+
+interface DbLeaderboardWithData {
+  data: DbLeaderboard[];
 }
 
 export async function GET(
@@ -19,16 +24,32 @@ export async function GET(
 
   const { data: dbLeaderboard } = (await supabase
     .from(DbTable.STAT)
-    .select(`value, users(username)`)
+    .select("value, users(id, username)")
     .eq("type", Resource.XP)
     .order("value", { ascending: false })
-    .limit(5)) as unknown as DbLeaderboard;
+    .limit(5)) as unknown as DbLeaderboardWithData;
 
   const leaderboard: Rank[] = dbLeaderboard?.map((user, index) => ({
     username: user.users.username,
     xp: user.value,
     rank: rankGenerator(index + 1),
   }));
+
+  if (!isUserInTopFive(dbLeaderboard, userId)) {
+    const { data: userStats } = (await supabase
+      .from(DbTable.STAT)
+      .select("value, users(id, username)")
+      .eq("userId", userId)
+      .eq("type", Resource.XP)) as unknown as DbLeaderboardWithData;
+
+    // TODO: compute user rank
+    leaderboard.pop();
+    leaderboard.push({
+      username: userStats[0].users.username,
+      xp: userStats[0].value,
+      rank: "?",
+    });
+  }
 
   return NextResponse.json(leaderboard);
 }
@@ -45,3 +66,6 @@ const rankGenerator = (rank: number): number | "🥇" | "🥈" | "🥉" => {
       return rank;
   }
 };
+
+const isUserInTopFive = (dbLeaderboard: DbLeaderboard[], userId: string) =>
+  dbLeaderboard.find(({ users: { id } }) => id === userId);
