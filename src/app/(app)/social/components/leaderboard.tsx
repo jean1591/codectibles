@@ -1,5 +1,6 @@
 import { gradientBg, gradientText } from "../../ui";
 
+import { LeaderBoard as LeaderboardSkeleton } from "./skeleton/leaderboard";
 import { Rank } from "@/app/api/interfaces/leaderboard";
 import { RootState } from "@/app/lib/store/store";
 import { classNames } from "@/utils";
@@ -9,9 +10,8 @@ export const LeaderBoard = () => {
   const { user } = useSelector((state: RootState) => state.user);
   const { leaderboard } = useSelector((state: RootState) => state.social);
 
-  // TODO: create skeleton
   if (!leaderboard || !user) {
-    return <>Loading...</>;
+    return <LeaderboardSkeleton />;
   }
 
   const { username } = user;
