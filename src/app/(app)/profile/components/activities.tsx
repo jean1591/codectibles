@@ -49,7 +49,7 @@ export const Activities = () => {
 
       dispatch(setUser(user));
 
-      const activitiesResponse = await fetch(`/api/activity/user/${user.id}`);
+      const activitiesResponse = await fetch(`/api/user/${user.id}/activities`);
       const activities = (await activitiesResponse.json()) as TypeActivity[];
 
       dispatch(setActivities(activities));
