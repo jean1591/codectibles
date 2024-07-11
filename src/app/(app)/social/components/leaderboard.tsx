@@ -53,8 +53,6 @@ const LeaderboardUser = ({
     <div className="grid grid-cols-4 text-lg font-medium gap-x-4">
       <p
         className={classNames(
-          isCurrentUser ? gradientBg : "",
-          isCurrentUser ? gradientText : "",
           ["🥇", "🥈", "🥉"].includes(rank.toString()) ? "text-xl" : "text-lg",
           "text-left"
         )}
