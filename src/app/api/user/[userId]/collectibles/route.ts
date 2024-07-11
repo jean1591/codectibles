@@ -27,6 +27,7 @@ export async function POST(
   request: NextRequest,
   { params }: { params: { userId: string } }
 ): Promise<NextResponse> {
+  console.log("this route");
   const { userId } = params;
 
   const supabase = createClient();

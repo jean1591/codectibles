@@ -27,7 +27,7 @@ export default function Collection() {
       dispatch(setUser(user));
 
       const collectiblesResponse = await fetch(
-        `/api/collectible/user/${user.id}`
+        `/api/user/${user.id}/collectibles`
       );
       const collectibles = (await collectiblesResponse.json()) as Collectible[];
 
