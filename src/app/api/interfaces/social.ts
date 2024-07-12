@@ -3,3 +3,13 @@ export interface Rank {
   username: string;
   xp: number;
 }
+
+export interface Follow {
+  username: string;
+  xp: number;
+}
+
+export interface Social {
+  leaderboard: Rank[];
+  follows: Follow[];
+}

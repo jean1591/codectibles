@@ -1,9 +1,13 @@
 "use client";
 
+import {
+  setFollows,
+  setLeaderboard,
+} from "@/app/lib/store/features/social/slice";
+
 import { LeaderBoard } from "./components/leaderboard";
-import { Rank } from "@/app/api/interfaces/social";
+import { Social as SocialType } from "@/app/api/interfaces/social";
 import { UserWithRelations } from "@/app/api/interfaces/user";
-import { setLeaderboard } from "@/app/lib/store/features/social/slice";
 import { setUser } from "@/app/lib/store/features/user/slice";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
@@ -19,9 +23,11 @@ export default function Social() {
 
       dispatch(setUser(user));
 
-      const leaderboardResponse = await fetch(`/api/users/${user.id}/social`);
-      const leaderboard = (await leaderboardResponse.json()) as Rank[];
-      dispatch(setLeaderboard(leaderboard));
+      const socialResponse = await fetch(`/api/users/${user.id}/social`);
+      const social = (await socialResponse.json()) as SocialType;
+
+      dispatch(setFollows(social.follows));
+      dispatch(setLeaderboard(social.leaderboard));
     })();
   }, []);
 
