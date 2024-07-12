@@ -1,5 +1,10 @@
 import { DbError, DbTable } from "@/app/api/interfaces/database";
-import { Follow, Rank, Social } from "@/app/api/interfaces/social";
+import {
+  Follow,
+  FriendActivity,
+  Rank,
+  Social,
+} from "@/app/api/interfaces/social";
 import { NextRequest, NextResponse } from "next/server";
 
 import { Resource } from "@/app/api/interfaces/user";
@@ -11,14 +16,14 @@ interface DbLeaderboard {
   users: { id: string; username: string };
 }
 
+interface DbLeaderboardWithData {
+  data: DbLeaderboard[];
+}
 interface DbFollow {
   friendUsername: string;
   level: number;
   username: string;
   xp: number;
-}
-interface DbLeaderboardWithData {
-  data: DbLeaderboard[];
 }
 
 export async function GET(
@@ -30,10 +35,14 @@ export async function GET(
   const supabase = createClient();
 
   const leaderboard = await getLeaderBoard(supabase, userId);
-
   const userFollows = await getUserFollows(supabase, userId);
+  const friendsActivity = await getFriendsActivity(supabase, userId);
 
-  return NextResponse.json({ leaderboard, follows: userFollows });
+  return NextResponse.json({
+    leaderboard,
+    follows: userFollows,
+    friendsActivity,
+  });
 }
 
 const getLeaderBoard = async (
@@ -110,4 +119,24 @@ const getUserFollows = async (
     username: user.friendUsername,
     xp: user.xp,
   }));
+};
+
+const getFriendsActivity = async (
+  supabase: SupabaseClient,
+  userId: string
+): Promise<FriendActivity[]> => {
+  let { data, error: getFriendsActivityError } = (await supabase.rpc(
+    "get_relations_activity",
+    {
+      p_user_id: userId,
+    }
+  )) as unknown as { data: FriendActivity[]; error: Error };
+
+  if (getFriendsActivityError) {
+    console.error(`${DbError.GET_RPC}: USERS"`, {
+      error: JSON.stringify(getFriendsActivityError, null, 2),
+    });
+  }
+
+  return data;
 };

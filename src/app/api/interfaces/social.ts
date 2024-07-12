@@ -1,3 +1,5 @@
+import { ActivityType } from "./activity";
+
 export interface Rank {
   rank: number | "🥇" | "🥈" | "🥉" | "?";
   username: string;
@@ -10,7 +12,16 @@ export interface Follow {
   xp: number;
 }
 
+export interface FriendActivity {
+  activityId: string;
+  createdAt: string;
+  details: string;
+  type: ActivityType;
+  username: string;
+}
+
 export interface Social {
-  leaderboard: Rank[];
   follows: Follow[];
+  friendsActivity: FriendActivity[];
+  leaderboard: Rank[];
 }

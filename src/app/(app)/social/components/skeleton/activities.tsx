@@ -1,6 +1,6 @@
 const fakeActivities = [1, 2, 3, 4, 5];
 
-export const Activities = () => {
+export const FriendsActivity = () => {
   return (
     <div className="bg-white rounded-lg p-4 lg:p-8 shadow-lg">
       <p className="text-2xl font-medium">Activities</p>

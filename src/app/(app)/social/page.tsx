@@ -2,11 +2,12 @@
 
 import {
   setFollows,
+  setFriendsActivity,
   setLeaderboard,
 } from "@/app/lib/store/features/social/slice";
 
 import { Following } from "./components/following";
-import { FriendsActivity } from "./components/followsActivity";
+import { FriendsActivity } from "./components/friendsActivity";
 import { LeaderBoard } from "./components/leaderboard";
 import { Social as SocialType } from "@/app/api/interfaces/social";
 import { UserWithRelations } from "@/app/api/interfaces/user";
@@ -28,8 +29,9 @@ export default function Social() {
       const socialResponse = await fetch(`/api/users/${user.id}/social`);
       const social = (await socialResponse.json()) as SocialType;
 
-      dispatch(setFollows(social.follows));
       dispatch(setLeaderboard(social.leaderboard));
+      dispatch(setFollows(social.follows));
+      dispatch(setFriendsActivity(social.friendsActivity));
     })();
   }, []);
 
