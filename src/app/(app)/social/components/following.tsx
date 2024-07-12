@@ -1,4 +1,5 @@
 import { Follow } from "@/app/api/interfaces/social";
+import { Following as FollowingSkeleton } from "./skeleton/following";
 import Link from "next/link";
 import { RootState } from "@/app/lib/store/store";
 import { classNames } from "@/utils";
@@ -8,9 +9,8 @@ import { useSelector } from "react-redux";
 export const Following = () => {
   const { follows } = useSelector((state: RootState) => state.social);
 
-  // TODO: create skeleton
   if (!follows) {
-    return <>Loading...</>;
+    return <FollowingSkeleton />;
   }
 
   return (
