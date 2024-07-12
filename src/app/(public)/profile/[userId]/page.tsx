@@ -76,9 +76,9 @@ export default function UserProfile({
           <p className="text-xl font-medium">Badges</p>
 
           <div className="mt-4 flex items-center justify-start flex-wrap gap-2">
-            {profile.badges.map((icon) => (
+            {profile.badges.map(({ icon, id }) => (
               <div
-                key={icon}
+                key={id}
                 className={classNames(
                   gradientBg,
                   "flex items-center justify-center h-16 w-16 border-2 border-slate-500 rounded-lg shadow-md"
@@ -89,14 +89,15 @@ export default function UserProfile({
             ))}
           </div>
         </div>
+
         {/* COLLECTION */}
         <div className="mt-16 bg-white rounded-lg p-4 w-full shadow-lg">
           <p className="text-xl font-medium">Collection</p>
 
           <div className="mt-4 flex items-center justify-start flex-wrap gap-2">
-            {profile.collectibles.map(({ icon, quality }) => (
+            {profile.collectibles.map(({ icon, id, quality }) => (
               <div
-                key={icon}
+                key={id}
                 className={classNames(
                   qualityToThemeMapper[quality],
                   "flex items-center justify-center h-16 w-16 border-2 border-slate-500 rounded-lg shadow-md"

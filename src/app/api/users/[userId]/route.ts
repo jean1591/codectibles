@@ -17,7 +17,7 @@ export async function GET(
   const { data: users } = await supabase
     .from(DbTable.USER)
     .select(
-      "username, level, badges(icon), collectibles(icon, quality), stats(type, value), createdAt"
+      "username, level, badges(icon,id), collectibles(icon, id, quality), stats(type, value), createdAt"
     )
     .eq("id", userId);
 
@@ -30,9 +30,10 @@ export async function GET(
     username: user.username,
     level: user.level,
     createdAt: formatDate(user.createdAt),
-    badges: user.badges.map(({ icon }) => icon),
-    collectibles: user.collectibles.map(({ icon, quality }) => ({
+    badges: user.badges.map(({ icon, id }) => ({ icon, id })),
+    collectibles: user.collectibles.map(({ icon, id, quality }) => ({
       icon,
+      id,
       quality: quality as Quality,
     })),
     xp: user.stats.find((stat) => stat.type === Resource.XP)?.value ?? 0,
