@@ -3,6 +3,7 @@
 import { gradientBg, gradientText } from "@/app/(app)/ui";
 import { useDispatch, useSelector } from "react-redux";
 
+import { ProfileSkeleton } from "./components/skeleton/page";
 import { RootState } from "@/app/lib/store/store";
 import { UserProfile as TypeUserProfile } from "@/app/api/interfaces/social";
 import { classNames } from "@/utils";
@@ -30,7 +31,7 @@ export default function UserProfile({
   }, []);
 
   if (!profile) {
-    return <>Loading...</>;
+    return <ProfileSkeleton />;
   }
 
   return (
