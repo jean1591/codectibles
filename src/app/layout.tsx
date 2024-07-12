@@ -45,7 +45,7 @@ export default function RootLayout({
     <StoreProvider>
       <html lang="fr" className="scroll-smooth">
         <body
-          className={classNames(inter.className, "bg-slate-200 text-slate-800")}
+          className={classNames(inter.className, "bg-slate-100 text-slate-800")}
         >
           {children}
           <Analytics />

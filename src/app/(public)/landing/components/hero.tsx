@@ -51,14 +51,14 @@ const PrToClaim = () => {
   };
 
   return (
-    <div className="bg-slate-100 rounded-lg p-4 md:p-8 shadow-lg">
+    <div className="bg-white rounded-lg p-4 md:p-8 shadow-lg">
       <div className="flex items-center justify-between">
         <p className="text-xl font-medium text-left">3 new PR merged !</p>
         <button
           onClick={handleClaimPr}
           className={classNames(
             gradientBg,
-            "text-slate-100 py-1 px-4 rounded-md text-base text-right animate-bounce"
+            "text-white py-1 px-4 rounded-md text-base text-right animate-bounce"
           )}
         >
           + 120 XP

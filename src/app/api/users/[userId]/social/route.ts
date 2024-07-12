@@ -1,8 +1,14 @@
+import { DbError, DbTable } from "@/app/api/interfaces/database";
+import {
+  Follow,
+  FriendActivity,
+  Rank,
+  Social,
+} from "@/app/api/interfaces/social";
 import { NextRequest, NextResponse } from "next/server";
 
-import { DbTable } from "@/app/api/interfaces/database";
-import { Rank } from "@/app/api/interfaces/social";
 import { Resource } from "@/app/api/interfaces/user";
+import { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/utils/supabase/server";
 
 interface DbLeaderboard {
@@ -13,15 +19,36 @@ interface DbLeaderboard {
 interface DbLeaderboardWithData {
   data: DbLeaderboard[];
 }
+interface DbFollow {
+  friendUsername: string;
+  level: number;
+  username: string;
+  xp: number;
+}
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { userId: string } }
-): Promise<NextResponse<Rank[]>> {
+): Promise<NextResponse<Social>> {
   const { userId } = params;
 
   const supabase = createClient();
 
+  const leaderboard = await getLeaderBoard(supabase, userId);
+  const userFollows = await getUserFollows(supabase, userId);
+  const friendsActivity = await getFriendsActivity(supabase, userId);
+
+  return NextResponse.json({
+    leaderboard,
+    follows: userFollows,
+    friendsActivity,
+  });
+}
+
+const getLeaderBoard = async (
+  supabase: SupabaseClient,
+  userId: string
+): Promise<Rank[]> => {
   const { data: dbLeaderboard } = (await supabase
     .from(DbTable.STAT)
     .select("value, users(id, username)")
@@ -51,8 +78,8 @@ export async function GET(
     });
   }
 
-  return NextResponse.json(leaderboard);
-}
+  return leaderboard;
+};
 
 const rankGenerator = (rank: number): number | "🥇" | "🥈" | "🥉" => {
   switch (rank) {
@@ -69,3 +96,47 @@ const rankGenerator = (rank: number): number | "🥇" | "🥈" | "🥉" => {
 
 const isUserInTopFive = (dbLeaderboard: DbLeaderboard[], userId: string) =>
   dbLeaderboard.find(({ users: { id } }) => id === userId);
+
+const getUserFollows = async (
+  supabase: SupabaseClient,
+  userId: string
+): Promise<Follow[]> => {
+  let { data, error: getUserRelationsError } = (await supabase.rpc(
+    "get_user_relations",
+    {
+      p_user_id: userId,
+    }
+  )) as unknown as { data: DbFollow[]; error: Error };
+
+  if (getUserRelationsError) {
+    console.error(`${DbError.GET_RPC}: USERS"`, {
+      error: JSON.stringify(getUserRelationsError, null, 2),
+    });
+  }
+
+  return data.map((user) => ({
+    level: user.level,
+    username: user.friendUsername,
+    xp: user.xp,
+  }));
+};
+
+const getFriendsActivity = async (
+  supabase: SupabaseClient,
+  userId: string
+): Promise<FriendActivity[]> => {
+  let { data, error: getFriendsActivityError } = (await supabase.rpc(
+    "get_relations_activity",
+    {
+      p_user_id: userId,
+    }
+  )) as unknown as { data: FriendActivity[]; error: Error };
+
+  if (getFriendsActivityError) {
+    console.error(`${DbError.GET_RPC}: USERS"`, {
+      error: JSON.stringify(getFriendsActivityError, null, 2),
+    });
+  }
+
+  return data;
+};

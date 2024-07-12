@@ -50,7 +50,7 @@ export const Features = () => {
         {features.map(({ icon, title, description }) => (
           <div
             key={title}
-            className="mt-8 md:mt-0 p-8 bg-slate-100 rounded-lg text-left flex-1 shadow-lg"
+            className="mt-8 md:mt-0 p-8 bg-white rounded-lg text-left flex-1 shadow-lg"
           >
             <div className="flex md:block items-center justify-start gap-x-8">
               <p className="text-5xl md:text-6xl">{icon}</p>

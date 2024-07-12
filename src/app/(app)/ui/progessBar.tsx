@@ -76,7 +76,7 @@ export const ProgressBarWithTitle = ({ stat }: { stat: Stat }) => {
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-start gap-x-4 text-xl font-medium text-left">
           <p>{statTypeToTitle(stat.type)}</p>
-          <span className="inline-flex items-center rounded-md bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700 ring-1 ring-inset ring-slate-600/20">
+          <span className="inline-flex items-center rounded-md bg-white px-2 py-1 text-xs font-medium text-slate-700 ring-1 ring-inset ring-slate-600/20">
             {stat.value}
           </span>
         </div>

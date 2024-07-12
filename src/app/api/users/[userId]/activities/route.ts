@@ -11,6 +11,7 @@ export async function GET(
 
   const supabase = createClient();
 
+  // TODO: limit activities to 100 most recent
   const { data: activities } = await supabase
     .from(DbTable.ACTIVITY)
     .select("*")

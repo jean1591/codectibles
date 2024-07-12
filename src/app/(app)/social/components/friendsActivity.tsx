@@ -1,50 +1,28 @@
-import { setActivities, setUser } from "@/app/lib/store/features/user/slice";
-import { useDispatch, useSelector } from "react-redux";
-
-import { Activities as ActivitiesSkeleton } from "./skeleton/activities";
+import { FriendActivity } from "@/app/api/interfaces/social";
+import { FriendsActivity as FriendsActivitySkeleton } from "./skeleton/activities";
 import { RootState } from "@/app/lib/store/store";
-import { Activity as TypeActivity } from "@/app/api/interfaces/activity";
-import { User } from "@/app/api/interfaces/user";
-import { activityTypeMapper } from "../utils/activityTypeMapper";
+import { activityTypeMapper } from "../../profile/utils/activityTypeMapper";
 import { classNames } from "@/utils";
-import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
-export const Activities = () => {
-  const dispatch = useDispatch();
-  const { activities } = useSelector((state: RootState) => state.user);
+export const FriendsActivity = () => {
+  const { friendsActivity } = useSelector((state: RootState) => state.social);
 
-  useEffect(() => {
-    (async function getActivities() {
-      const userResponse = await fetch("/api/users");
-      const user = (await userResponse.json()) as User;
-
-      dispatch(setUser(user));
-
-      const activitiesResponse = await fetch(
-        `/api/users/${user.id}/activities`
-      );
-      const activities = (await activitiesResponse.json()) as TypeActivity[];
-
-      dispatch(setActivities(activities));
-    })();
-  }, []);
-
-  if (!activities) {
-    return <ActivitiesSkeleton />;
+  if (!friendsActivity) {
+    return <FriendsActivitySkeleton />;
   }
-
   return (
     <div className="bg-white rounded-lg p-4 lg:p-8 shadow-lg">
-      <p className="text-2xl font-medium">Activities</p>
+      <p className="text-2xl font-medium">Friends activity</p>
 
       <div className="mt-8 flow-root max-h-96 overflow-scroll">
         <ul role="list" className="-mb-8">
-          {activities.map((activity, activityIdx) => (
+          {friendsActivity.map((activity, activityIdx) => (
             <Activity
-              key={activity.id}
+              key={activity.activityId}
               activity={activity}
               activityIdx={activityIdx}
-              activitiesLength={activities.length}
+              activitiesLength={friendsActivity.length}
             />
           ))}
         </ul>
@@ -58,7 +36,7 @@ const Activity = ({
   activityIdx,
   activitiesLength,
 }: {
-  activity: TypeActivity;
+  activity: FriendActivity;
   activityIdx: number;
   activitiesLength: number;
 }) => {
@@ -71,7 +49,7 @@ const Activity = ({
         {activityIdx !== activitiesLength - 1 ? (
           <span className="absolute left-4 top-4 -ml-px h-full w-0.5 bg-slate-300" />
         ) : null}
-        <div className="relative flex space-x-3">
+        <div className="relative flex items-center space-x-3">
           <div>
             <span
               className={classNames(
@@ -82,8 +60,9 @@ const Activity = ({
               <Icon className="h-5 w-5 text-white" />
             </span>
           </div>
-          <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
+          <div className="flex min-w-0 flex-1 justify-between space-x-4">
             <div>
+              <p className="font-medium">{activity.username}</p>
               <p className="text-sm text-slate-500">
                 {activityDetails.content}{" "}
                 <span className="font-medium text-slate-900">
@@ -92,7 +71,7 @@ const Activity = ({
               </p>
             </div>
             <div className="whitespace-nowrap text-right text-sm text-slate-500">
-              <p>{activity.createdAt}</p>
+              <p>{activity.createdAt.slice(0, 10)}</p>
             </div>
           </div>
         </div>
