@@ -1,5 +1,5 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { Rank } from "@/app/api/interfaces/leaderboard";
+import { Rank } from "@/app/api/interfaces/social";
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface SocialSlice {

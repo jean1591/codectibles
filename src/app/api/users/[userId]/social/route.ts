@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { DbTable } from "@/app/api/interfaces/database";
-import { Rank } from "@/app/api/interfaces/leaderboard";
+import { Rank } from "@/app/api/interfaces/social";
 import { Resource } from "@/app/api/interfaces/user";
 import { createClient } from "@/utils/supabase/server";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { LeaderBoard } from "./components/leaderboard";
-import { Rank } from "@/app/api/interfaces/leaderboard";
+import { Rank } from "@/app/api/interfaces/social";
 import { UserWithRelations } from "@/app/api/interfaces/user";
 import { setLeaderboard } from "@/app/lib/store/features/social/slice";
 import { setUser } from "@/app/lib/store/features/user/slice";
@@ -19,9 +19,7 @@ export default function Social() {
 
       dispatch(setUser(user));
 
-      const leaderboardResponse = await fetch(
-        `/api/users/${user.id}/leaderboard`
-      );
+      const leaderboardResponse = await fetch(`/api/users/${user.id}/social`);
       const leaderboard = (await leaderboardResponse.json()) as Rank[];
       dispatch(setLeaderboard(leaderboard));
     })();

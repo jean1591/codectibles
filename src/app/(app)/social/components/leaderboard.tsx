@@ -1,7 +1,7 @@
 import { gradientBg, gradientText } from "../../ui";
 
 import { LeaderBoard as LeaderboardSkeleton } from "./skeleton/leaderboard";
-import { Rank } from "@/app/api/interfaces/leaderboard";
+import { Rank } from "@/app/api/interfaces/social";
 import { RootState } from "@/app/lib/store/store";
 import { classNames } from "@/utils";
 import { useSelector } from "react-redux";
@@ -47,7 +47,7 @@ const LeaderboardUser = ({
   loggedUsername: string;
 }) => {
   const { rank, username, xp } = leaderboardUser;
-  const isCurrentUser = username === loggedUsername;
+  const isLoggedUser = username === loggedUsername;
 
   return (
     <div className="grid grid-cols-4 text-lg font-medium gap-x-4">
@@ -62,8 +62,8 @@ const LeaderboardUser = ({
       <div className="col-span-2">
         <p
           className={classNames(
-            isCurrentUser ? gradientBg : "",
-            isCurrentUser ? gradientText : "",
+            isLoggedUser ? gradientBg : "",
+            isLoggedUser ? gradientText : "",
             "text-left"
           )}
         >
@@ -72,8 +72,8 @@ const LeaderboardUser = ({
       </div>
       <p
         className={classNames(
-          isCurrentUser ? gradientBg : "",
-          isCurrentUser ? gradientText : "",
+          isLoggedUser ? gradientBg : "",
+          isLoggedUser ? gradientText : "",
           "text-right"
         )}
       >
