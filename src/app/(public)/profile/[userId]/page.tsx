@@ -1,29 +1,37 @@
 "use client";
 
 import { gradientBg, gradientText } from "@/app/(app)/ui";
+import { useDispatch, useSelector } from "react-redux";
 
-import { badges } from "@/app/api/badges/constants/badges";
+import { RootState } from "@/app/lib/store/store";
+import { UserProfile as TypeUserProfile } from "@/app/api/interfaces/social";
 import { classNames } from "@/utils";
-import { getRandomEmojis } from "@/app/(app)/profile/utils/getRandomEmojis";
 import { qualityToThemeMapper } from "@/app/(app)/collection/utils/mappers";
+import { setProfile } from "@/app/lib/store/features/social/slice";
 import { useEffect } from "react";
-
-const fakeBadges = badges.slice(0, 25);
-const fakeCollectibles = getRandomEmojis(20);
 
 export default function UserProfile({
   params,
 }: {
   params: { userId: string };
 }) {
+  const dispatch = useDispatch();
+  const { profile } = useSelector((state: RootState) => state.social);
+
   const { userId } = params;
 
   useEffect(() => {
     (async function getUser() {
-      const userResponse = await fetch(`/api/users/${userId}`);
-      const user = await userResponse.json();
+      const userProfileResponse = await fetch(`/api/users/${userId}`);
+      const userProfile = (await userProfileResponse.json()) as TypeUserProfile;
+
+      dispatch(setProfile(userProfile));
     })();
   }, []);
+
+  if (!profile) {
+    return <>Loading...</>;
+  }
 
   return (
     <div className="mt-20">
@@ -42,18 +50,19 @@ export default function UserProfile({
               "mt-8 text-3xl font-semibold"
             )}
           >
-            jean1591
+            {profile.username}
           </p>
-          <p className="mt-2 text-base text-slate-500">2020-01-01</p>
+          <p className="mt-2 text-base text-slate-500">{profile.createdAt}</p>
         </div>
+
         {/* STATS */}
         <div className="mt-16 flex items-center justify-between gap-x-4">
           <div className="bg-white rounded-lg p-4 w-full shadow-lg">
-            <p className="text-xl font-medium">12</p>
+            <p className="text-xl font-medium">{profile.level}</p>
             <p className="text-base">Level</p>
           </div>
           <div className="bg-white rounded-lg p-4 w-full shadow-lg">
-            <p className="text-xl font-medium">1234</p>
+            <p className="text-xl font-medium">{profile.xp}</p>
             <p className="text-base">XP</p>
           </div>
           <div className="bg-white rounded-lg p-4 w-full shadow-lg">
@@ -61,12 +70,13 @@ export default function UserProfile({
             <p className="text-base">Rank</p>
           </div>
         </div>
+
         {/* BADGES */}
         <div className="mt-16 bg-white rounded-lg p-4 w-full shadow-lg">
           <p className="text-xl font-medium">Badges</p>
 
           <div className="mt-4 flex items-center justify-start flex-wrap gap-2">
-            {fakeBadges.map(({ icon }) => (
+            {profile.badges.map((icon) => (
               <div
                 key={icon}
                 className={classNames(
@@ -84,7 +94,7 @@ export default function UserProfile({
           <p className="text-xl font-medium">Collection</p>
 
           <div className="mt-4 flex items-center justify-start flex-wrap gap-2">
-            {fakeCollectibles.map(({ icon, quality }) => (
+            {profile.collectibles.map(({ icon, quality }) => (
               <div
                 key={icon}
                 className={classNames(

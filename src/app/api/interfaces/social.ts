@@ -1,4 +1,5 @@
 import { ActivityType } from "./activity";
+import { Quality } from "./collectible";
 
 export interface Rank {
   rank: number | "🥇" | "🥈" | "🥉" | "?";
@@ -19,6 +20,15 @@ export interface FriendActivity {
   details: string;
   type: ActivityType;
   username: string;
+}
+
+export interface UserProfile {
+  username: string;
+  level: number;
+  createdAt: string;
+  badges: string[];
+  collectibles: { icon: string; quality: Quality }[];
+  xp: number;
 }
 
 export interface Social {
