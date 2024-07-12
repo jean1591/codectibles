@@ -67,7 +67,7 @@ export const PrToClaim = () => {
 
   if (prToClaim === 0) {
     return (
-      <div className="bg-slate-100 rounded-lg p-4 lg:p-8 shadow-lg">
+      <div className="bg-white rounded-lg p-4 lg:p-8 shadow-lg">
         <div className="flex items-center justify-between">
           <p className="text-xl font-medium text-left">No new merged PR</p>
         </div>
@@ -76,7 +76,7 @@ export const PrToClaim = () => {
   }
 
   return (
-    <div className="bg-slate-100 rounded-lg p-4 lg:p-8 shadow-lg">
+    <div className="bg-white rounded-lg p-4 lg:p-8 shadow-lg">
       <div className="flex items-center justify-between">
         <p className="text-xl font-medium text-left">{`${prToClaim} new PR merged`}</p>
         <button

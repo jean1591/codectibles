@@ -4,7 +4,7 @@ const fakeFollows = [1, 2, 3];
 
 export const Following = () => {
   return (
-    <div className="bg-slate-100 rounded-lg p-4 lg:p-8 shadow-lg">
+    <div className="bg-white rounded-lg p-4 lg:p-8 shadow-lg">
       <p className="text-2xl font-medium">Following</p>
 
       <div className="mt-8">
@@ -12,7 +12,7 @@ export const Following = () => {
           {fakeFollows.map((user, index) => (
             <div
               key={user}
-              className={classNames(index === 0 ? "pb-4" : "py-4")}
+              className={classNames(index === 0 ? "pb-2" : "py-2")}
             >
               <Friend />
             </div>

@@ -23,7 +23,7 @@ export const Badges = () => {
   }
 
   return (
-    <div className="bg-slate-100 rounded-lg p-4 lg:p-8 shadow-lg">
+    <div className="bg-white rounded-lg p-4 lg:p-8 shadow-lg">
       <p className="text-2xl font-medium">Badges</p>
       <div className="mt-8">
         {unlocked &&
@@ -131,7 +131,7 @@ const BadgeComponent = ({ badge }: { badge: Badge }) => {
     <div
       className={classNames(gradientBg, "rounded-lg p-[2px] mt-2 shadow-md")}
     >
-      <div className="flex items-center justify-between p-4 bg-slate-100 rounded-lg">
+      <div className="flex items-center justify-between p-4 bg-white rounded-lg">
         <div>
           <p className="text-lg font-medium capitalize">{title}</p>
           <p className="text-xs capitalize text-slate-600">{description}</p>

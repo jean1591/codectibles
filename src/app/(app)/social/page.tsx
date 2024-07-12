@@ -6,6 +6,7 @@ import {
 } from "@/app/lib/store/features/social/slice";
 
 import { Following } from "./components/following";
+import { FriendsActivity } from "./components/followsActivity";
 import { LeaderBoard } from "./components/leaderboard";
 import { Social as SocialType } from "@/app/api/interfaces/social";
 import { UserWithRelations } from "@/app/api/interfaces/user";
@@ -34,12 +35,13 @@ export default function Social() {
 
   return (
     <div className="lg:flex items-start justify-center gap-4 space-y-4 lg:space-y-0">
-      <div className="flex-1">
+      <div className="flex-1 space-y-4">
         <LeaderBoard />
       </div>
 
       <div className="lg:flex-col flex-1 space-y-4">
         <Following />
+        <FriendsActivity />
       </div>
     </div>
   );

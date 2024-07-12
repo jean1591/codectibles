@@ -5,6 +5,7 @@ import { RootState } from "@/app/lib/store/store";
 import { classNames } from "@/utils";
 import { useSelector } from "react-redux";
 
+// TODO: make component smaller in height (less padding)
 // TODO: create title component for Following, Leaderboard, Badges, ...
 export const Following = () => {
   const { follows } = useSelector((state: RootState) => state.social);
@@ -14,7 +15,7 @@ export const Following = () => {
   }
 
   return (
-    <div className="bg-slate-100 rounded-lg p-4 lg:p-8 shadow-lg">
+    <div className="bg-white rounded-lg p-4 lg:p-8 shadow-lg">
       <p className="text-2xl font-medium">Following</p>
 
       <div className="mt-8">
@@ -22,7 +23,7 @@ export const Following = () => {
           {follows.map((user, index) => (
             <div
               key={user.username}
-              className={classNames(index === 0 ? "pb-4" : "py-4")}
+              className={classNames(index === 0 ? "pb-2" : "py-2")}
             >
               <Friend user={user} />
             </div>
@@ -33,6 +34,7 @@ export const Following = () => {
   );
 };
 
+// TODO: add level
 const Friend = ({ user }: { user: Follow }) => {
   const { username, xp } = user;
 

@@ -4,7 +4,7 @@ const fakeLeaderboard = [1, 2, 3, 4, 5];
 
 export const LeaderBoard = () => {
   return (
-    <div className="bg-slate-100 rounded-lg p-4 lg:p-8 shadow-lg">
+    <div className="bg-white rounded-lg p-4 lg:p-8 shadow-lg">
       <p className="text-2xl font-medium">Leaderboard</p>
 
       <div className="mt-8">

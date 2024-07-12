@@ -38,7 +38,7 @@ export const LevelAndXp = () => {
   const progress = computeProgress(nextMilestone, previousMilestone, value);
 
   return (
-    <div className="bg-slate-100 rounded-lg p-4 lg:p-8 shadow-lg">
+    <div className="bg-white rounded-lg p-4 lg:p-8 shadow-lg">
       <div className="flex items-center justify-between">
         <p
           className={classNames(

@@ -2,7 +2,7 @@ const fakeActivities = [1, 2, 3, 4, 5];
 
 export const Activities = () => {
   return (
-    <div className="bg-slate-100 rounded-lg p-4 lg:p-8 shadow-lg">
+    <div className="bg-white rounded-lg p-4 lg:p-8 shadow-lg">
       <p className="text-2xl font-medium">Activities</p>
 
       <div className="mt-8 flow-root max-h-96 overflow-scroll">
@@ -42,7 +42,7 @@ const Activity = ({
               Activity type and details
             </p>
             <p className="bg-slate-300 text-slate-300 whitespace-nowrap text-right text-sm">
-            Activity date
+              Activity date
             </p>
           </div>
         </div>
