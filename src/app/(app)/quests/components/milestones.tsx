@@ -11,7 +11,7 @@ export const Milestones = () => {
     return <MilestonesSkeleton />;
   }
 
-  const prStats = stats.find((stat) => stat.type === Resource.APPROVES);
+  const prStats = stats.find((stat) => stat.type === Resource.PR);
   const commentsStats = stats.find((stat) => stat.type === Resource.COMMENTS);
   const approvesStats = stats.find((stat) => stat.type === Resource.APPROVES);
   if (!prStats || !commentsStats || !approvesStats) {
