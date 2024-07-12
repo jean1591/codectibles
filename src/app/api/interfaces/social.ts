@@ -5,6 +5,7 @@ export interface Rank {
 }
 
 export interface Follow {
+  level: number;
   username: string;
   xp: number;
 }

@@ -5,6 +5,7 @@ import {
   setLeaderboard,
 } from "@/app/lib/store/features/social/slice";
 
+import { Following } from "./components/following";
 import { LeaderBoard } from "./components/leaderboard";
 import { Social as SocialType } from "@/app/api/interfaces/social";
 import { UserWithRelations } from "@/app/api/interfaces/user";
@@ -37,8 +38,9 @@ export default function Social() {
         <LeaderBoard />
       </div>
 
-      {/* Following / Followers */}
-      <div className="lg:flex-col flex-1 space-y-4"></div>
+      <div className="lg:flex-col flex-1 space-y-4">
+        <Following />
+      </div>
     </div>
   );
 }
