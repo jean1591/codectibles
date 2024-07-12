@@ -1,10 +1,9 @@
 "use client";
 
 import Link from "next/link";
-
 import { classNames } from "@/utils";
-import { usePathname } from "next/navigation";
 import { navigation } from "./constants";
+import { usePathname } from "next/navigation";
 
 export const Navbar = () => {
   const pathname = usePathname();
@@ -18,7 +17,7 @@ export const Navbar = () => {
           href={href}
           className={classNames(
             page === label
-              ? "bg-slate-700 text-slate-100"
+              ? "bg-slate-500 text-white"
               : "bg-none hover:bg-slate-700 text-slate-600 hover:text-slate-100",
             "px-4 py-2 rounded-lg text-base font-medium uppercase"
           )}
