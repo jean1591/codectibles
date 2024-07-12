@@ -1,17 +1,16 @@
 "use client";
 
 import Link from "next/link";
-
 import { classNames } from "@/utils";
-import { usePathname } from "next/navigation";
 import { navigation } from "./constants";
+import { usePathname } from "next/navigation";
 
 export const NavbarFooter = () => {
   const pathname = usePathname();
   const page = pathname.split("/").at(-1);
 
   return (
-    <div className="flex items-center justify-center gap-x-2 bg-slate-300 w-full text-sm">
+    <div className="flex items-center justify-center gap-x-2 bg-slate-300 w-full text-xs">
       {navigation.map(({ href, label }) => (
         <Link
           key={label}

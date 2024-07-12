@@ -5,4 +5,5 @@ export const navigation = [
   { href: "/profile", label: "profile" },
   { href: "/quests", label: "quests" },
   { href: "/collection", label: "collection" },
+  // { href: "/social", label: "social" },
 ];
