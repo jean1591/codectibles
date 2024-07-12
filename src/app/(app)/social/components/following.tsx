@@ -36,11 +36,11 @@ export const Following = () => {
 
 // TODO: add level
 const Friend = ({ user }: { user: Follow }) => {
-  const { username, xp } = user;
+  const { id, username, xp } = user;
 
   return (
     <Link
-      href={`/profile/${username}`}
+      href={`/profile/${id}`}
       target="_blank"
       className="flex items-center justify-between text-lg gap-x-4"
     >

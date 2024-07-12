@@ -1,9 +1,12 @@
+"use client";
+
 import { gradientBg, gradientText } from "@/app/(app)/ui";
 
 import { badges } from "@/app/api/badges/constants/badges";
 import { classNames } from "@/utils";
 import { getRandomEmojis } from "@/app/(app)/profile/utils/getRandomEmojis";
 import { qualityToThemeMapper } from "@/app/(app)/collection/utils/mappers";
+import { useEffect } from "react";
 
 const fakeBadges = badges.slice(0, 25);
 const fakeCollectibles = getRandomEmojis(20);
@@ -11,9 +14,16 @@ const fakeCollectibles = getRandomEmojis(20);
 export default function UserProfile({
   params,
 }: {
-  params: { username: string };
+  params: { userId: string };
 }) {
-  const { username } = params;
+  const { userId } = params;
+
+  useEffect(() => {
+    (async function getUser() {
+      const userResponse = await fetch(`/api/users/${userId}`);
+      const user = await userResponse.json();
+    })();
+  }, []);
 
   return (
     <div className="mt-20">
@@ -32,7 +42,7 @@ export default function UserProfile({
               "mt-8 text-3xl font-semibold"
             )}
           >
-            {username}
+            jean1591
           </p>
           <p className="mt-2 text-base text-slate-500">2020-01-01</p>
         </div>
