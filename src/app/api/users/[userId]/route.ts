@@ -1,10 +1,20 @@
+import { DbError, DbTable } from "@/app/api/interfaces/database";
 import { NextRequest, NextResponse } from "next/server";
 
-import { DbTable } from "@/app/api/interfaces/database";
 import { Quality } from "../../interfaces/collectible";
 import { Resource } from "../../interfaces/user";
 import { UserProfile } from "../../interfaces/social";
 import { createClient } from "@/utils/supabase/server";
+
+// TODO: use username as route params
+// TODO: get activity
+
+interface DbUserRank {
+  id: string;
+  uuid: string;
+  rank: number;
+  xp: number;
+}
 
 export async function GET(
   request: NextRequest,
@@ -26,6 +36,21 @@ export async function GET(
   }
   const user = users[0];
 
+  let { data: userRanks, error: getUserRankError } = (await supabase.rpc(
+    "get_user_rank",
+    {
+      p_user_id: userId,
+    }
+  )) as unknown as { data: DbUserRank[]; error: Error };
+
+  if (getUserRankError) {
+    console.error(`${DbError.GET_RPC}: USERS"`, {
+      error: JSON.stringify(getUserRankError, null, 2),
+    });
+  }
+
+  const rank = userRanks[0];
+
   return NextResponse.json({
     username: user.username,
     level: user.level,
@@ -36,6 +61,7 @@ export async function GET(
       id,
       quality: quality as Quality,
     })),
+    rank: rank.rank,
     xp: user.stats.find((stat) => stat.type === Resource.XP)?.value ?? 0,
   });
 }

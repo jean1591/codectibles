@@ -72,7 +72,7 @@ export default function UserProfile({
             <p className="text-base">XP</p>
           </div>
           <div className="bg-white rounded-lg p-4 w-full shadow-lg">
-            <p className="text-xl font-medium">#1</p>
+            <p className="text-xl font-medium">#{profile.rank}</p>
             <p className="text-base">Rank</p>
           </div>
         </div>

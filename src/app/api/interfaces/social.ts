@@ -28,6 +28,7 @@ export interface UserProfile {
   createdAt: string;
   badges: { icon: string; id: string }[];
   collectibles: { icon: string; id: string; quality: Quality }[];
+  rank: number;
   xp: number;
 }
 
