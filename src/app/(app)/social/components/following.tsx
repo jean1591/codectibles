@@ -34,9 +34,8 @@ export const Following = () => {
   );
 };
 
-// TODO: add user level
 const Friend = ({ user }: { user: Follow }) => {
-  const { id, username, xp } = user;
+  const { level, username, xp } = user;
 
   return (
     <Link
@@ -44,8 +43,11 @@ const Friend = ({ user }: { user: Follow }) => {
       target="_blank"
       className="flex items-center justify-between text-lg gap-x-4"
     >
-      <div>
+      <div className="flex items-center justify-start gap-x-4">
         <p className="text-left">{username}</p>
+        <span className="inline-flex items-center rounded-md bg-white px-2 py-1 text-xs font-medium text-slate-700 ring-1 ring-inset ring-slate-600/20">
+          Level {level}
+        </span>
       </div>
       <p className="text-right">{xp} XP</p>
     </Link>
