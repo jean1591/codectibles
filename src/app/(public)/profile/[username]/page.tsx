@@ -3,7 +3,7 @@
 import { gradientBg, gradientText } from "@/app/(app)/ui";
 import { useDispatch, useSelector } from "react-redux";
 
-import { ProfileSkeleton } from "./components/skeleton/page";
+import { ProfileSkeleton } from "./components/skeleton/userProfile";
 import { RootState } from "@/app/lib/store/store";
 import { UserProfile as TypeUserProfile } from "@/app/api/interfaces/social";
 import { classNames } from "@/utils";
@@ -20,7 +20,6 @@ export default function UserProfile({
   const { profile } = useSelector((state: RootState) => state.social);
 
   const { username } = params;
-  console.log("🚀 ~ username:", username);
 
   useEffect(() => {
     (async function getUser() {
@@ -59,7 +58,9 @@ export default function UserProfile({
           >
             {profile.username}
           </p>
-          <p className="mt-2 text-base text-slate-500">{profile.createdAt}</p>
+          <p className="mt-2 text-base text-slate-500">
+            Joined {profile.createdAt}
+          </p>
         </div>
 
         {/* STATS */}
