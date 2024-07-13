@@ -7,6 +7,7 @@ import { UserProfile } from "../../interfaces/social";
 import { createClient } from "@/utils/supabase/server";
 
 // TODO: get activity
+// TODO: use RPC table for supabase.rpc
 
 interface DbUserRank {
   id: string;
@@ -24,43 +25,43 @@ export async function GET(
 
   const supabase = createClient();
 
-  const { data: users } = await supabase
+  const { data: friends } = await supabase
     .from(DbTable.USER)
     .select(
-      "id, username, level, badges(icon,id), collectibles(icon, id, quality), stats(type, value), createdAt"
+      "createdAt, id, level, username, badges(icon,id), collectibles(icon, id, quality), stats(type, value)"
     )
     .eq("username", username);
 
-  if (!users || users.length === 0) {
+  if (!friends || friends.length === 0) {
     throw new Error(`No users found for username ${username}`);
   }
-  const user = users[0];
+  const friend = friends[0];
 
-  let { data: userRanks, error: getUserRankError } = (await supabase.rpc(
+  let { data: friendRanks, error: getFriendRanksError } = (await supabase.rpc(
     "get_user_rank",
     {
-      p_user_id: user.id,
+      p_user_id: friend.id,
     }
   )) as unknown as { data: DbUserRank[]; error: Error };
 
-  if (getUserRankError) {
+  if (getFriendRanksError) {
     console.error(`${DbError.GET_RPC}: USERS"`, {
-      error: JSON.stringify(getUserRankError, null, 2),
+      error: JSON.stringify(getFriendRanksError, null, 2),
     });
   }
 
   return NextResponse.json({
-    username: user.username,
-    level: user.level,
-    createdAt: formatDate(user.createdAt),
-    badges: user.badges.map(({ icon, id }) => ({ icon, id })),
-    collectibles: user.collectibles.map(({ icon, id, quality }) => ({
+    username: friend.username,
+    level: friend.level,
+    createdAt: formatDate(friend.createdAt),
+    badges: friend.badges.map(({ icon, id }) => ({ icon, id })),
+    collectibles: friend.collectibles.map(({ icon, id, quality }) => ({
       icon,
       id,
       quality: quality as Quality,
     })),
-    rank: userRanks[0].rank,
-    xp: user.stats.find((stat) => stat.type === Resource.XP)?.value ?? 0,
+    rank: friendRanks[0].rank,
+    xp: friend.stats.find((stat) => stat.type === Resource.XP)?.value ?? 0,
   });
 }
 
