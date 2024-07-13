@@ -10,8 +10,8 @@ import { createClient } from "@/utils/supabase/server";
 
 interface DbUserRank {
   id: string;
-  uuid: string;
   rank: number;
+  username: string;
   xp: number;
 }
 
@@ -49,8 +49,6 @@ export async function GET(
     });
   }
 
-  const rank = userRanks[0];
-
   return NextResponse.json({
     username: user.username,
     level: user.level,
@@ -61,7 +59,7 @@ export async function GET(
       id,
       quality: quality as Quality,
     })),
-    rank: rank.rank,
+    rank: userRanks[0].rank,
     xp: user.stats.find((stat) => stat.type === Resource.XP)?.value ?? 0,
   });
 }
