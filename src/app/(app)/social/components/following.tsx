@@ -34,10 +34,11 @@ export const Following = () => {
   );
 };
 
-// TODO: add level
+// TODO: add user level
 const Friend = ({ user }: { user: Follow }) => {
   const { id, username, xp } = user;
 
+  // TODO: use user username instead of id to have it in the url
   return (
     <Link
       href={`/profile/${id}`}

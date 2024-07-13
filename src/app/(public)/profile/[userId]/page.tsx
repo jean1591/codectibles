@@ -40,7 +40,12 @@ export default function UserProfile({
         {/* PROFILE */}
         <div className="text-center">
           <div className="flex items-center justify-center">
-            <p className="h-32 w-32 text-7xl rounded-full bg-slate-500 p-8">
+            <p
+              className={classNames(
+                gradientBg,
+                "h-32 w-32 text-7xl rounded-full p-8"
+              )}
+            >
               🦖
             </p>
           </div>
