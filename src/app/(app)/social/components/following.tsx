@@ -38,10 +38,9 @@ export const Following = () => {
 const Friend = ({ user }: { user: Follow }) => {
   const { id, username, xp } = user;
 
-  // TODO: use user username instead of id to have it in the url
   return (
     <Link
-      href={`/profile/${id}`}
+      href={`/profile/${username}`}
       target="_blank"
       className="flex items-center justify-between text-lg gap-x-4"
     >

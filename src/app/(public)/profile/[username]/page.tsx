@@ -14,16 +14,17 @@ import { useEffect } from "react";
 export default function UserProfile({
   params,
 }: {
-  params: { userId: string };
+  params: { username: string };
 }) {
   const dispatch = useDispatch();
   const { profile } = useSelector((state: RootState) => state.social);
 
-  const { userId } = params;
+  const { username } = params;
+  console.log("🚀 ~ username:", username);
 
   useEffect(() => {
     (async function getUser() {
-      const userProfileResponse = await fetch(`/api/users/${userId}`);
+      const userProfileResponse = await fetch(`/api/users/${username}`);
       const userProfile = (await userProfileResponse.json()) as TypeUserProfile;
 
       dispatch(setProfile(userProfile));
