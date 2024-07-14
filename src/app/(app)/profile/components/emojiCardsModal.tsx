@@ -24,7 +24,7 @@ export const EmojiCardsModal = () => {
   const { displayGetEmojisModal } = useSelector(
     (state: RootState) => state.interactions
   );
-  const { user, collectiblesToClaim, collectibles } = useSelector(
+  const { user, collectiblesToClaim } = useSelector(
     (state: RootState) => state.user
   );
 

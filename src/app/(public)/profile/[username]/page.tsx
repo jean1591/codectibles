@@ -17,12 +17,12 @@ export default function UserProfile({
   params: { username: string };
 }) {
   const dispatch = useDispatch();
-  const { profile } = useSelector((state: RootState) => state.social);
-
   const { username } = params;
 
+  const { profile } = useSelector((state: RootState) => state.social);
+
   useEffect(() => {
-    (async function getUser() {
+    (async function getUserProfile() {
       const userProfileResponse = await fetch(`/api/users/${username}`);
       const userProfile = (await userProfileResponse.json()) as TypeUserProfile;
 
