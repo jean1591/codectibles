@@ -41,6 +41,7 @@ export async function GET(
       id,
       quality: quality as Quality,
     })),
+    id: friend.id,
     isRelation,
     rank: friendRank,
     xp: friend.stats.find((stat) => stat.type === Resource.XP)?.value ?? 0,
@@ -91,17 +92,8 @@ const getUserRank = async (
 
 const getIsRelation = async (
   supabase: SupabaseClient,
-  userId: string
+  friendId: string
 ): Promise<boolean> => {
-  const { data: relations } = await supabase
-    .from(DbTable.RELATION)
-    .select("followId")
-    .eq("userId", userId);
-
-  if (!relations) {
-    throw new Error(`No relations found for userId ${userId}`);
-  }
-
   const {
     data: { session },
   } = await supabase.auth.getSession();
@@ -112,7 +104,16 @@ const getIsRelation = async (
 
   const { user: authUser } = session;
 
-  const loggedInUser = await getUserByAuthUserId(supabase, authUser.id);
+  const { id: userId } = await getUserByAuthUserId(supabase, authUser.id);
 
-  return !!relations.find(({ followId }) => followId === loggedInUser.id);
+  const { data: relations } = await supabase
+    .from(DbTable.RELATION)
+    .select("followId")
+    .eq("userId", userId);
+
+  if (!relations) {
+    throw new Error(`No relations found for userId ${userId}`);
+  }
+
+  return !!relations.find(({ followId }) => followId === friendId);
 };

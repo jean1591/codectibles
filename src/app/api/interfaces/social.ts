@@ -23,13 +23,14 @@ export interface FriendActivity {
 }
 
 export interface UserProfile {
-  username: string;
-  level: number;
-  createdAt: string;
   badges: { icon: string; id: string }[];
   collectibles: { icon: string; id: string; quality: Quality }[];
+  createdAt: string;
+  id: string;
   isRelation: boolean;
+  level: number;
   rank: number;
+  username: string;
   xp: number;
 }
 
@@ -37,4 +38,9 @@ export interface Social {
   follows: Follow[];
   friendsActivity: FriendActivity[];
   leaderboard: Rank[];
+}
+
+export enum FollowAction {
+  ADD = "add",
+  DELETE = "delete",
 }

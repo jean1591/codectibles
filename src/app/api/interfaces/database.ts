@@ -10,6 +10,7 @@ export enum DbTable {
 }
 
 export enum DbError {
+  DELETE = "Error deleting data",
   GET_RPC = "Error fetching data with RPC",
   INSERT = "Error inserting data",
   UPDATE = "Error updating data",

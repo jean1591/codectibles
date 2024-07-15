@@ -1,14 +1,17 @@
 "use client";
 
+import { FollowAction, Social } from "@/app/api/interfaces/social";
 import { gradientBg, gradientText } from "@/app/(app)/ui";
+import { setFollows, setProfile } from "@/app/lib/store/features/social/slice";
 import { useDispatch, useSelector } from "react-redux";
 
 import { ProfileSkeleton } from "./components/skeleton/userProfile";
 import { RootState } from "@/app/lib/store/store";
 import { UserProfile as TypeUserProfile } from "@/app/api/interfaces/social";
+import { UserWithRelations } from "@/app/api/interfaces/user";
 import { classNames } from "@/utils";
 import { qualityToThemeMapper } from "@/app/(app)/collection/utils/mappers";
-import { setProfile } from "@/app/lib/store/features/social/slice";
+import { setUser } from "@/app/lib/store/features/user/slice";
 import { useEffect } from "react";
 
 export default function UserProfile({
@@ -19,10 +22,22 @@ export default function UserProfile({
   const dispatch = useDispatch();
   const { username } = params;
 
-  const { profile } = useSelector((state: RootState) => state.social);
+  const { user } = useSelector((state: RootState) => state.user);
+  const { follows, profile } = useSelector((state: RootState) => state.social);
 
   useEffect(() => {
     (async function getUserProfile() {
+      const userWithRelationsResponse = await fetch("/api/users");
+      const user =
+        (await userWithRelationsResponse.json()) as UserWithRelations;
+
+      dispatch(setUser(user));
+
+      const socialResponse = await fetch(`/api/users/${user.id}/social`);
+      const social = (await socialResponse.json()) as Social;
+
+      dispatch(setFollows(social.follows));
+
       const userProfileResponse = await fetch(`/api/users/${username}`);
       const userProfile = (await userProfileResponse.json()) as TypeUserProfile;
 
@@ -30,9 +45,57 @@ export default function UserProfile({
     })();
   }, []);
 
-  if (!profile) {
+  if (!follows || !profile || !user) {
     return <ProfileSkeleton />;
   }
+
+  const handleOnFollow = () => {
+    const relationPayload = {
+      action: "",
+      followId: profile.id,
+      userId: user.id,
+    };
+
+    // Unfollow
+    if (profile.isRelation) {
+      relationPayload.action = FollowAction.DELETE;
+
+      dispatch(
+        setFollows([
+          ...follows.filter(({ username }) => username !== profile.username),
+        ])
+      );
+
+      dispatch(setProfile({ ...profile, isRelation: false }));
+    }
+
+    // Follow
+    if (!profile.isRelation) {
+      relationPayload.action = FollowAction.ADD;
+
+      dispatch(
+        setFollows([
+          ...follows,
+          {
+            id: profile.id,
+            level: profile.level,
+            username: profile.username,
+            xp: profile.xp,
+          },
+        ])
+      );
+
+      dispatch(setProfile({ ...profile, isRelation: true }));
+    }
+
+    (async function addRelation() {
+      await fetch(`/api/users/${user.id}/follow`, {
+        method: "PUT",
+        body: JSON.stringify(relationPayload),
+        headers: { "Content-Type": "application/json" },
+      });
+    })();
+  };
 
   return (
     <div className="mt-20">
@@ -49,15 +112,33 @@ export default function UserProfile({
               🦖
             </p>
           </div>
-          <p
-            className={classNames(
-              gradientText,
-              gradientBg,
-              "mt-8 text-3xl font-semibold"
-            )}
-          >
-            {profile.username}
-          </p>
+          <div className="relative">
+            <p
+              className={classNames(
+                gradientText,
+                gradientBg,
+                "mt-8 text-3xl font-semibold"
+              )}
+            >
+              {profile.username}
+            </p>
+            <div className="static sm:absolute sm:top-1/2 flex items-center justify-center sm:justify-end mt-2 sm:mt-0 w-full text-sm">
+              <button
+                onClick={handleOnFollow}
+                className={classNames(
+                  profile.isRelation
+                    ? "bg-none border border-slate-500"
+                    : gradientBg,
+                  profile.isRelation
+                    ? "bg-none border border-slate-500 text-slate-500"
+                    : "text-white hover:text-slate-100",
+                  " px-4 py-2 font-semibold uppercase rounded-md shadow-md hover:shadow-2xl"
+                )}
+              >
+                {profile.isRelation ? "Following" : "Follow"}
+              </button>
+            </div>
+          </div>
           <p className="mt-2 text-base text-slate-500">
             Joined {profile.createdAt}
           </p>
