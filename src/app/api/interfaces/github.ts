@@ -81,8 +81,6 @@ export interface Reactions {
 }
 
 export interface DbEvent {
-  // Delete authUserId
-  authUserId: string;
   createdAt: string;
   eventId: string;
   prId: number;

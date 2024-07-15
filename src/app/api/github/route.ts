@@ -120,8 +120,6 @@ const insertNewPr = async (
 ) => {
   const { error } = await supabase.from(DbTable.PR).insert(
     prToSave.map((pr) => ({
-      // Delete authUserId
-      authUserId: "5864cfb0-88bb-42d1-9b0e-d510d553c498",
       claimed: false,
       prType: getPrType(pr.title),
       mergedAt: pr.pull_request.merged_at,
@@ -245,6 +243,12 @@ const getLatestEvents = async (
   return events.filter(({ type }) => eventTypes.includes(type));
 };
 
+const isEventPrApproved = (event: Event) =>
+  event.type === EventTypes.PULL_REQUEST_REVIEW_EVENT &&
+  event.payload.review.state === "approved";
+const isEventPrCommented = (event: Event) =>
+  event.type === EventTypes.PULL_REQUEST_REVIEW_COMMENT_EVENT;
+
 const getEventsNotSavedInDb = async (
   supabase: SupabaseClient,
   userId: string,
@@ -261,18 +265,10 @@ const getEventsNotSavedInDb = async (
   const dbEventIds =
     dbEvents?.map((event: { eventId: string }) => event.eventId) ?? [];
 
-  const isEventPrApproved = (event: Event) =>
-    event.type === EventTypes.PULL_REQUEST_REVIEW_EVENT &&
-    event.payload.review.state === "approved";
-  const isEventPrCommented = (event: Event) =>
-    event.type === EventTypes.PULL_REQUEST_REVIEW_COMMENT_EVENT;
-
   return events
     .filter((event) => isEventPrApproved(event) || isEventPrCommented(event))
     .filter((event) => !dbEventIds.includes(event.id))
     .map((event) => ({
-      // Delete authUserId
-      authUserId: "5864cfb0-88bb-42d1-9b0e-d510d553c498",
       createdAt: event.created_at,
       eventId: event.id,
       prId: event.payload.pull_request.id,
