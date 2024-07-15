@@ -21,6 +21,7 @@ interface DbLeaderboardWithData {
 }
 interface DbFollow {
   friendUsername: string;
+  userId: string;
   level: number;
   username: string;
   xp: number;
@@ -115,6 +116,7 @@ const getUserFollows = async (
   }
 
   return data.map((user) => ({
+    id: user.userId,
     level: user.level,
     username: user.friendUsername,
     xp: user.xp,

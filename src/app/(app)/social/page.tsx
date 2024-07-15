@@ -19,7 +19,7 @@ export default function Social() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    (async function getLeaderBoard() {
+    (async function getSocial() {
       const userWithRelationsResponse = await fetch("/api/users");
       const user =
         (await userWithRelationsResponse.json()) as UserWithRelations;
