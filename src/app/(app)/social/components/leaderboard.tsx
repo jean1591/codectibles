@@ -1,6 +1,7 @@
 import { gradientBg, gradientText } from "../../ui";
 
 import { LeaderBoard as LeaderboardSkeleton } from "./skeleton/leaderboard";
+import Link from "next/link";
 import { Rank } from "@/app/api/interfaces/social";
 import { RootState } from "@/app/lib/store/store";
 import { classNames } from "@/utils";
@@ -50,7 +51,11 @@ const LeaderboardUser = ({
   const isLoggedUser = username === loggedUsername;
 
   return (
-    <div className="grid grid-cols-4 text-lg font-medium gap-x-4">
+    <Link
+      href={`https://www.codectibles.fr/profile/${username}`}
+      target="_blank"
+      className="grid grid-cols-4 text-lg font-medium gap-x-4"
+    >
       <p
         className={classNames(
           ["🥇", "🥈", "🥉"].includes(rank.toString()) ? "text-xl" : "text-lg",
@@ -79,6 +84,6 @@ const LeaderboardUser = ({
       >
         {xp} XP
       </p>
-    </div>
+    </Link>
   );
 };
