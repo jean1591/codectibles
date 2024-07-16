@@ -54,7 +54,7 @@ const LeaderboardUser = ({
     <Link
       href={`https://www.codectibles.fr/profile/${username}`}
       target="_blank"
-      className="grid grid-cols-4 text-lg font-medium gap-x-4"
+      className="grid grid-cols-8 text-lg font-medium gap-x-4"
     >
       <p
         className={classNames(
@@ -64,7 +64,7 @@ const LeaderboardUser = ({
       >
         {rank}
       </p>
-      <div className="col-span-2">
+      <div className="col-span-4 md:col-span-5">
         <p
           className={classNames(
             isLoggedUser ? gradientBg : "",
@@ -79,7 +79,7 @@ const LeaderboardUser = ({
         className={classNames(
           isLoggedUser ? gradientBg : "",
           isLoggedUser ? gradientText : "",
-          "text-right"
+          "text-right col-span-3 md:col-span-2"
         )}
       >
         {xp} XP
