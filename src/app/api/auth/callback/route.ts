@@ -71,6 +71,7 @@ const createUser = async ({
   if (users && users.length > 0) {
     const { id: userId } = users[0] as UserDb;
 
+    // STATS
     const { error: insertStatError } = await supabase
       .from(DbTable.STAT)
       .insert(generateInitialStats(userId));
@@ -79,6 +80,7 @@ const createUser = async ({
       console.error(`${DbError.INSERT}: STAT"`, { error: insertStatError });
     }
 
+    // ACTIVITIES
     const { error: insertActivityError } = await supabase
       .from(DbTable.ACTIVITY)
       .insert({
@@ -90,6 +92,21 @@ const createUser = async ({
     if (insertActivityError) {
       console.error(`${DbError.INSERT}: ACTIVITY"`, {
         error: insertActivityError,
+      });
+    }
+
+    // RELATIONS
+    const jean1591UserId = "e777ab9b-95ea-4ee9-b365-e4e57a569db7";
+    const { error: insertRelationError } = await supabase
+      .from(DbTable.RELATION)
+      .insert({
+        userId,
+        followId: jean1591UserId,
+      });
+
+    if (insertRelationError) {
+      console.error(`${DbError.INSERT}: RELATION"`, {
+        error: insertRelationError,
       });
     }
   }
