@@ -1,15 +1,12 @@
 import { conventionalCommitType } from "../interfaces/github";
 
 export const getPrType = (title: string): string | null => {
-  try {
-    const prType = title.split(":")[0];
-
-    if (conventionalCommitType.includes(prType)) {
-      return prType;
-    } else {
-      return null;
+  for (let conventionalCommit of conventionalCommitType) {
+    const regex = new RegExp(`^${conventionalCommit}[\\(/:]`);
+    if (regex.test(title)) {
+      return conventionalCommit;
     }
-  } catch (error) {
-    return null;
   }
+
+  return null;
 };
