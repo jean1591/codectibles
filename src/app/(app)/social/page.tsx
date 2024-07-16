@@ -9,6 +9,7 @@ import {
 import { Following } from "./components/following";
 import { FriendsActivity } from "./components/friendsActivity";
 import { LeaderBoard } from "./components/leaderboard";
+import { SearchFriends } from "./components/searchFriends";
 import { Social as SocialType } from "@/app/api/interfaces/social";
 import { UserWithRelations } from "@/app/api/interfaces/user";
 import { setUser } from "@/app/lib/store/features/user/slice";
@@ -36,14 +37,18 @@ export default function Social() {
   }, []);
 
   return (
-    <div className="lg:flex items-start justify-center gap-4 space-y-4 lg:space-y-0">
-      <div className="flex-1 space-y-4">
-        <LeaderBoard />
-      </div>
+    <div>
+      <SearchFriends />
 
-      <div className="lg:flex-col flex-1 space-y-4">
-        <Following />
-        <FriendsActivity />
+      <div className="mt-4 lg:flex items-start justify-center gap-4 space-y-4 lg:space-y-0">
+        <div className="flex-1 space-y-4">
+          <LeaderBoard />
+        </div>
+
+        <div className="lg:flex-col flex-1 space-y-4">
+          <Following />
+          <FriendsActivity />
+        </div>
       </div>
     </div>
   );
