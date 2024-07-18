@@ -29,7 +29,7 @@ export const allAnimalEmojis = [
   { icon: "🦆", label: "duck", type: CollectibleType.ANIMALS },
   { icon: "🦉", label: "owl", type: CollectibleType.ANIMALS },
   { icon: "🦊", label: "fox", type: CollectibleType.ANIMALS },
-  { icon: "🦙", label: "llama", type: CollectibleType.ANIMALS },
+  { icon: "🦙", label: "lama", type: CollectibleType.ANIMALS },
   { icon: "🦞", label: "lobster", type: CollectibleType.ANIMALS },
   { icon: "🦤", label: "dodo", type: CollectibleType.ANIMALS },
   { icon: "🦦", label: "otter", type: CollectibleType.ANIMALS },
