@@ -31,15 +31,7 @@ export default function Collection() {
       );
       const collectibles = (await collectiblesResponse.json()) as Collectible[];
 
-      const formatedCollectibles = collectibles.map((collectible) => ({
-        ...collectible,
-        icon:
-          user.id === "161b45a2-7380-40b3-9a90-bf2e094cc0b1"
-            ? "🐛"
-            : collectible.icon,
-      }));
-
-      dispatch(setCollectibles(formatedCollectibles));
+      dispatch(setCollectibles(collectibles));
     })();
   }, []);
 
