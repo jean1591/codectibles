@@ -1,11 +1,11 @@
 import { ConventionalCommitType } from "./github";
 
 export interface Badge {
+  condition: (params?: any) => boolean;
   description: string;
   icon: string;
   id: string;
   reward: number;
-  threshold: number;
   title: string;
   type: ConventionalCommitType;
 }
@@ -23,3 +23,5 @@ export interface FormatedBadges {
 export interface DbBadge extends UserBadge {
   userId: string;
 }
+
+export type PrCountType = Record<ConventionalCommitType, number>;

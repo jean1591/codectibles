@@ -1,5 +1,6 @@
-import { Badge, FormatedBadges } from "./badge";
+import { FormatedBadges, UserBadge } from "./badge";
 
+import { Collectible } from "./collectible";
 import { Stat } from "./stats";
 
 export interface User {
@@ -28,7 +29,8 @@ export interface UserDb {
 }
 
 export interface UserDbWithRelations extends UserDb {
-  badges: Badge[];
+  badges: UserBadge[];
+  collectibles: Collectible[];
   stats: Stat[];
 }
 

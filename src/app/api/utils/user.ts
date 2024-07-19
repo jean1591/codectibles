@@ -11,7 +11,7 @@ export const getUserByAuthUserId = async (
   const { data: users } = await supabase
     .from(DbTable.USER)
     .select(
-      "authUserId, fetchedAt, id, level, prToClaim, token, username, badges(*), stats(*)"
+      "authUserId, fetchedAt, id, level, prToClaim, token, username, badges(*), collectibles(*), stats(*)"
     )
     .eq("authUserId", authUserId);
 

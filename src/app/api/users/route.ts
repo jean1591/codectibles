@@ -29,10 +29,11 @@ export async function GET(
     .select("prType, prType.count()")
     .eq("userId", dbUser.id);
 
-  const claimed = dbUser.badges;
+  const { badges: claimed, collectibles } = dbUser;
   const claimedTitles: string[] = claimed.map(({ title }) => title);
   const { locked, unlocked } = computeLockedAndUnlockedBadges(
     claimedTitles,
+    collectibles,
     prTypeCount ?? []
   );
 
