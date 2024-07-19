@@ -1,14 +1,16 @@
 "use client";
 
-import { Collectible, CollectibleType } from "@/app/api/interfaces/collectible";
 import { setCollectibles, setUser } from "@/app/lib/store/features/user/slice";
 import { useDispatch, useSelector } from "react-redux";
 
+import { CollectibleType } from "@/app/api/interfaces/collectible";
 import { Library } from "./components/library";
 import { Library as LibrarySkeleton } from "./components/skeleton/library";
 import { RootState } from "@/app/lib/store/store";
-import { User } from "@/app/api/interfaces/user";
+import { UserWithRelations } from "@/app/api/interfaces/user";
 import { allAnimalEmojis } from "@/app/api/collectible/constants/collectibles";
+import { setBadges } from "@/app/lib/store/features/badges/slice";
+import { setStats } from "@/app/lib/store/features/stats/slice";
 import { useEffect } from "react";
 
 export default function Collection() {
@@ -22,16 +24,12 @@ export default function Collection() {
   useEffect(() => {
     (async function getCollectibles() {
       const userResponse = await fetch("/api/users");
-      const user = (await userResponse.json()) as User;
+      const user = (await userResponse.json()) as UserWithRelations;
 
       dispatch(setUser(user));
-
-      const collectiblesResponse = await fetch(
-        `/api/users/${user.id}/collectibles`
-      );
-      const collectibles = (await collectiblesResponse.json()) as Collectible[];
-
-      dispatch(setCollectibles(collectibles));
+      dispatch(setBadges(user.badges));
+      dispatch(setStats(user.stats));
+      dispatch(setCollectibles(user.collectibles));
     })();
   }, []);
 

@@ -15,6 +15,7 @@ export interface User {
 
 export interface UserWithRelations extends User {
   badges: FormatedBadges;
+  collectibles: Collectible[];
   stats: Stat[];
 }
 

@@ -4,25 +4,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { createClient } from "@/utils/supabase/server";
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { userId: string } }
-): Promise<NextResponse> {
-  const supabase = createClient();
-  const { userId } = params;
-
-  const { data: collectibles } = await supabase
-    .from(DbTable.COLLECTIBLE)
-    .select("*")
-    .eq("userId", userId);
-
-  if (!collectibles) {
-    throw new Error(`No collectibles found for userId ${userId}`);
-  }
-
-  return NextResponse.json(collectibles);
-}
-
 export async function POST(
   request: NextRequest,
   { params }: { params: { userId: string } }

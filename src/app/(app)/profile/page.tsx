@@ -1,5 +1,6 @@
 "use client";
 
+import { setCollectibles, setUser } from "@/app/lib/store/features/user/slice";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
@@ -12,7 +13,6 @@ import { UserWithRelations } from "@/app/api/interfaces/user";
 import { redirect } from "next/navigation";
 import { setBadges } from "@/app/lib/store/features/badges/slice";
 import { setStats } from "@/app/lib/store/features/stats/slice";
-import { setUser } from "@/app/lib/store/features/user/slice";
 
 export default function Profile() {
   const dispatch = useDispatch();
@@ -48,6 +48,7 @@ export default function Profile() {
       dispatch(setUser(user));
       dispatch(setBadges(user.badges));
       dispatch(setStats(user.stats));
+      dispatch(setCollectibles(user.collectibles));
     })();
   }, []);
 
