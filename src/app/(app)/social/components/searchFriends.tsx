@@ -12,7 +12,7 @@ export const SearchFriends = () => {
       if (!isSearchEmpty(search)) {
         window.open(`https://www.codectibles.fr/profile/${search}`, "_blank");
       } else {
-        console.log("Invalid input: cannot be empty");
+        console.error("Invalid input: cannot be empty");
       }
     }
   };

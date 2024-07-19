@@ -21,7 +21,7 @@ export default async function LoginPage() {
     });
 
     if (error) {
-      console.log(error);
+      console.error(error);
     } else {
       return redirect(data.url);
     }
