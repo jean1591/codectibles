@@ -5,6 +5,7 @@ import { Resource } from "@/app/api/interfaces/user";
 import { RootState } from "@/app/lib/store/store";
 import { Stat } from "@/app/api/interfaces/stats";
 import { classNames } from "@/utils";
+import { computeNextLevel } from "@/utils/computeNextLevel";
 import { computeProgress } from "@/utils/computeProgress";
 import { gradientBg } from "./constants";
 import { updateStat } from "@/app/lib/store/features/stats/slice";
@@ -30,6 +31,8 @@ export const ProgressBarWithTitle = ({ stat }: { stat: Stat }) => {
       throw new Error("User have no XP stats");
     }
 
+    const nextLevel = computeNextLevel(stat.nextMilestone);
+
     (async function milestoneUpdate() {
       const milestonePayload = {
         xp: {
@@ -37,7 +40,7 @@ export const ProgressBarWithTitle = ({ stat }: { stat: Stat }) => {
         },
         milestone: {
           type: stat.type,
-          nextMilestone: stat.nextMilestone * 2,
+          nextMilestone: nextLevel,
           previousMilestone: stat.nextMilestone,
         },
       };
@@ -56,7 +59,7 @@ export const ProgressBarWithTitle = ({ stat }: { stat: Stat }) => {
 
     const updatedStat: Stat = {
       ...stat,
-      nextMilestone: stat.nextMilestone * 2,
+      nextMilestone: nextLevel,
       previousMilestone: stat.nextMilestone,
     };
 
