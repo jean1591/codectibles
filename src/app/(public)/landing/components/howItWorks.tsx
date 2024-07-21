@@ -16,7 +16,7 @@ const steps: Step[] = [
   {
     title: "Save it in the app 💾",
     description:
-      "Enter your GitHub token in the app to link your GitHub activity with our reward system. Your token is encrypted before being saved in our DB.",
+      "Enter your GitHub token in the app to link your GitHub activity with our reward system. Your token is hashed before being saved in our DB.",
   },
   {
     title: "Merge, comment and approve PR 🧑‍💻",
@@ -24,9 +24,9 @@ const steps: Step[] = [
       "Continue your regular GitHub workflow by merging pull requests, commenting on issues, and approving PRs.",
   },
   {
-    title: "Collect XP and animals 🏆",
+    title: "Collect XP and emojis 🏆",
     description:
-      "Earn coins and experience points (XP) for each contribution, and use them to collect unique animals and level up.",
+      "Earn coins and experience points (XP) for each contribution, and use them to collect unique emojis and level up.",
   },
 ];
 

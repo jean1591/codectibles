@@ -3,6 +3,7 @@
 import { gradientBg, gradientText } from "@/app/(app)/ui";
 import { useEffect, useRef } from "react";
 
+import Image from "next/image";
 import JSConfetti from "js-confetti";
 import Link from "next/link";
 import { classNames } from "@/utils";
@@ -18,7 +19,7 @@ export const Hero = () => {
           </h2>
         </div>
         <p className="mt-4 text-center md:text-left text-lg">
-          Earn rewards for your contributions, collect unique animals, and level
+          Earn rewards for your contributions, collect unique emojis, and level
           up your coding journey.
         </p>
 
@@ -33,6 +34,16 @@ export const Hero = () => {
       </div>
 
       <div className="mt-16 md:mt-0 flex-1">
+        <div className="flex items-start justify-end">
+          <p className="mt-2">Click me !</p>
+          <Image
+            src="/arrow.png"
+            width={75}
+            height={75}
+            alt="pointing arrow"
+            className="-ml-4 mr-12 -mb-4 md:-mb-8 md:mr-20"
+          />
+        </div>
         <PrToClaim />
       </div>
     </div>

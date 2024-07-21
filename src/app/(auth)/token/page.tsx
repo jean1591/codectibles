@@ -32,7 +32,7 @@ export default function TokenPage() {
         </h2>
 
         <p className="mt-8 text-center text-lg font-medium leading-5 tracking-tight">
-          Your token will be encrypted before being saved in DB
+          Your token will be hashed before being saved in DB
         </p>
 
         <div className="mt-8 flex items-center justify-center">
@@ -97,7 +97,7 @@ export default function TokenPage() {
           handled ?
         </p>
         <p className="mt-4 text-lg">
-          Your token is encrypted as if it were a password before being saved in
+          Your token is hashed as if it were a password before being saved in
           DB. We do not use your token for other purposes than getting your
           latest activities, we only use metadata such as id and dates.
         </p>

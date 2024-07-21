@@ -16,7 +16,7 @@ const features: TypeFeature[] = [
   },
   {
     icon: "🦖",
-    title: "Collect unique animals",
+    title: "Collect unique emojis",
     description:
       "Earn coins and collect a variety of animal emojis, from common pets to legendary creatures.",
   },
